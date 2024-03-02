@@ -15,6 +15,8 @@ public class CircleMenuController : MonoBehaviour
     public TextMeshProUGUI CircleMenuItemLabel;
     public List<GameObject> CirlceMenuItems = new List<GameObject>();
 
+    private int selectedItem = 0;
+
     private void Start()
     {
         CirleMenuObject.active = false;
@@ -25,11 +27,6 @@ public class CircleMenuController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             CirleMenuObject.active = true;
-        }
-
-        if (Input.GetKeyUp(KeyCode.F))
-        {
-            CirleMenuObject.active = false;
         }
 
         if (Input.GetKey(KeyCode.F))
@@ -49,11 +46,16 @@ public class CircleMenuController : MonoBehaviour
             highlightAngle += 360 / CirlceMenuItems.Count;
             HighlightRootObject.transform.rotation = Quaternion.Euler(0, 0, highlightAngle);
 
-            int selectedItem = (int)Mathf.Round(angle / itemChangeAngle);
-            
+            selectedItem = (int)Mathf.Round(angle / itemChangeAngle);
             selectedItem = selectedItem % (CirlceMenuItems.Count);
 
             CircleMenuItemLabel.text = CirlceMenuItems[selectedItem].name;
+        }
+
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            Debug.Log(CirlceMenuItems[selectedItem]);
+            CirleMenuObject.active = false;
         }
     }
 }
