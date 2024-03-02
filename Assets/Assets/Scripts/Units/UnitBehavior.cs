@@ -179,10 +179,11 @@ public class UnitBehavior : MonoBehaviour
         }
 
         List<GameObject> selectedUnits = hero.GetComponent<FormationController>().selectedUnits;
-        followTarget = hero;
+        //followTarget = hero;
 
         bool jeUzVParte = false;
 
+        //TODO: tohle pryè
         if (selectedUnits.Count != 0)
         {
             foreach (GameObject followingUnit in selectedUnits)

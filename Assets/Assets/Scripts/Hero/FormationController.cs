@@ -13,6 +13,7 @@ public class FormationController : MonoBehaviour
     private List<GameObject> formationPointsList = new List<GameObject>();
 
     [SerializeField] public List<GameObject> selectedUnits = new List<GameObject>();
+    [SerializeField] public List<GameObject> followingUnits = new List<GameObject>();
     public Vector2 playerPosition;
 
     [Header("Formation Settings")]
@@ -53,11 +54,13 @@ public class FormationController : MonoBehaviour
         prepniFormaci();
         manipulateCircleFormationSpacing();
         srovnejJednotky();
+
+        //controlSelectedUnits();
     }
 
     public void srovnejJednotky()
     {
-        int requiredPoints = selectedUnits.Count;
+        int requiredPoints = followingUnits.Count;
 
         // Ovìøení, zda je potøeba pøidat nebo odebrat body formace
         if (requiredPoints > formationPointsList.Count)
@@ -319,6 +322,15 @@ public class FormationController : MonoBehaviour
         {
             spacingCircle--;
         }
+    }
+
+    /* Metoda ktera po stisknuti praveho tlacitka prikaze vybranym jednotkam udelat akci */
+    private void controlSelectedUnits()
+    {
+        //tady se bude skenovat raycast, ktery na zaklade typu raycastu udela akci
+        // friendly unit/building/player -> defend
+        // enemy unit/building/player -> attack
+        // ground -> move
     }
 
     private void OnDrawGizmos()

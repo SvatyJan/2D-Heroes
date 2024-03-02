@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class CircleMenuController : MonoBehaviour
     public GameObject CursorRootObject;
     public GameObject HighlightRootObject;
 
-    public Vector2 mousePosition;
+    private Vector2 mousePosition;
     public Camera cam;
 
     public TextMeshProUGUI CircleMenuItemLabel;
@@ -45,9 +46,11 @@ public class CircleMenuController : MonoBehaviour
             angle = angle % 360;
 
             float highlightAngle = Mathf.Round(angle / itemChangeAngle) * itemChangeAngle;
+            highlightAngle += 360 / CirlceMenuItems.Count;
             HighlightRootObject.transform.rotation = Quaternion.Euler(0, 0, highlightAngle);
 
             int selectedItem = (int)Mathf.Round(angle / itemChangeAngle);
+            
             selectedItem = selectedItem % (CirlceMenuItems.Count);
 
             CircleMenuItemLabel.text = CirlceMenuItems[selectedItem].name;
