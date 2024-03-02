@@ -43,6 +43,7 @@ public class FormationController : MonoBehaviour
 
     void Start()
     {
+        ray = new Ray(transform.position, transform.forward);
         formation = Formation.CIRCLE;
     }
 
@@ -51,8 +52,10 @@ public class FormationController : MonoBehaviour
     {
         playerPosition = transform.position;
 
-        prepniFormaci();
-        manipulateCircleFormationSpacing();
+        checkForColliders();
+
+        //prepniFormaci();
+        //manipulateCircleFormationSpacing();
         srovnejJednotky();
 
         //controlSelectedUnits();
@@ -337,5 +340,23 @@ public class FormationController : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(new Vector3(playerPosition.x, playerPosition.y, 0), collectUnitDistance);
+    }
+
+    // Metoda, která se volá, když myš pøejede nad objekt
+    void OnMouseEnter()
+    {
+        // Zkontroluj, zda má objekt tag "Player Flag"
+        if (gameObject.CompareTag("Player") || gameObject.CompareTag("Player Unit") || gameObject.CompareTag("Player Structure"))
+        {
+            // Zmìò kurzor na customCursor
+            Cursor.SetCursor(defendCursor, Vector2.zero, CursorMode.Auto);
+        }
+    }
+
+    // Metoda, která se volá, když myš opustí objekt
+    void OnMouseExit()
+    {
+        // Vrátí kurzor na defaultní kurzor
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 }
