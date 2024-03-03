@@ -210,7 +210,11 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.collider != null && hit.collider.gameObject != null)
             {
-                if(hit.collider.gameObject.tag == "Player Flag" || hit.collider.gameObject.tag == "Player Structure")
+                if(hit.collider.gameObject.tag == "Player Flag"
+                    || hit.collider.gameObject.tag == "Player Structure"
+                    || hit.collider.gameObject.tag == "Player"
+                    || hit.collider.gameObject.tag == "Player Unit"
+                    )
                 {
                     List<GameObject> selectedUnits = GetComponent<FormationController>().selectedUnits;
                     List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();

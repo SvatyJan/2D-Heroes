@@ -49,6 +49,9 @@ public class UnitBehavior : MonoBehaviour
     [SerializeField] float directionY;
     Vector2 movement;
 
+    [SerializeField] GameObject highlightCircle;
+    public bool isHighlighted = false;
+
     private void Start()
     {
         formation = Formation.CIRCLE;
@@ -59,6 +62,7 @@ public class UnitBehavior : MonoBehaviour
     void Update()
     {
         GetMovementDirection();
+        checkForHighlight();
 
         if (behavior == Behavior.IDLE)
         {
@@ -200,6 +204,7 @@ public class UnitBehavior : MonoBehaviour
         if (!jeUzVParte)
         {
             selectedUnits.Add(this.gameObject);
+            this.isHighlighted = true;
         }
     }
 
@@ -211,6 +216,7 @@ public class UnitBehavior : MonoBehaviour
         {
             behavior = Behavior.IDLE;
             selectedUnits.Remove(this.gameObject);
+            this.isHighlighted = false;
         }
     }
 
@@ -246,6 +252,18 @@ public class UnitBehavior : MonoBehaviour
         else
         {
             animator.SetFloat("Speed", 0);
+        }
+    }
+
+    private void checkForHighlight()
+    {
+        if (isHighlighted == true)
+        {
+            highlightCircle.active = true;
+        }
+        else
+        {
+            highlightCircle.active = false;
         }
     }
 

@@ -491,6 +491,7 @@ MonoBehaviour:
   formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
   collectUnitDistance: 5
   selectedUnits: []
+  followingUnits: []
   playerPosition: {x: 0, y: 0}
   startX: -2
   startY: -2
@@ -541,13 +542,9 @@ MonoBehaviour:
   CirleMenuObject: {fileID: 0}
   CursorRootObject: {fileID: 0}
   HighlightRootObject: {fileID: 0}
-  mousePosition: {x: 0, y: 0}
   cam: {fileID: 1858540596056266194}
   CircleMenuItemLabel: {fileID: 0}
   CirlceMenuItems:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
