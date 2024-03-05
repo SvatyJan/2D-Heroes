@@ -21,11 +21,11 @@ public class UnitBehavior : MonoBehaviour
 
     public enum Formation
     {
-        CIRCLE,
-        FRONT,
-        BACK,
-        LEFT,
-        RIGHT
+        CIRCLE = 1,
+        FRONT = 2,
+        BACK = 3,
+        LEFT = 4,
+        RIGHT = 5
     }
     public Formation formation;
 
@@ -38,7 +38,6 @@ public class UnitBehavior : MonoBehaviour
     public string[] followTags = { "Player" };
 
     [SerializeField] float moveSpeed;
-    [SerializeField] float followKeepDistance = 3f;
     [SerializeField] float guardKeepDistance = 0f;
     [SerializeField] float attackFollowRadius = 5f;
     [SerializeField] float attackRadius = 2f;
@@ -179,10 +178,10 @@ public class UnitBehavior : MonoBehaviour
         //zjistim nejdriv jestli uz v nejake parte nahodou nejsem
         if(defendingTarget != null)
         {
-            defendingTarget.GetComponent<StructureFormationController>().selectedUnits.Remove(this.gameObject);
+            defendingTarget = null;
         }
 
-        List<GameObject> selectedUnits = hero.GetComponent<FormationController>().selectedUnits;
+        List<GameObject> selectedUnits = hero.GetComponent<UnitController>().selectedUnits;
         //followTarget = hero;
 
         bool jeUzVParte = false;
@@ -210,7 +209,7 @@ public class UnitBehavior : MonoBehaviour
 
     public void RemoveFromGroup(GameObject hero)
     {
-        List<GameObject> selectedUnits = hero.GetComponent<FormationController>().selectedUnits;
+        List<GameObject> selectedUnits = hero.GetComponent<UnitController>().selectedUnits;
 
         if (selectedUnits.Count != 0)
         {
@@ -259,13 +258,19 @@ public class UnitBehavior : MonoBehaviour
     {
         if (isHighlighted == true)
         {
-            highlightCircle.active = true;
+            highlightCircle.SetActive(true);
         }
         else
         {
-            highlightCircle.active = false;
+            highlightCircle.SetActive(false);
         }
     }
+
+    public void SetFormation(Formation chaningFormation)
+    {
+        this.formation = chaningFormation;
+    }
+
 
     private void OnDrawGizmos()
     {

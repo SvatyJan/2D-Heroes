@@ -57,7 +57,6 @@ public class StructureFormationController : MonoBehaviour
             for (int i = 0; i < additionalPoints; i++)
             {
                 GameObject formationPoint = Instantiate(formationPointPrefab, Vector2.zero, Quaternion.identity);
-                formationPoint.transform.SetParent(MainFormationPoint.transform);
                 formationPointsList.Add(formationPoint);
             }
         }

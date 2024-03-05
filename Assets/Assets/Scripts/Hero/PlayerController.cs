@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
         {
             unitSelectorGameObject = Instantiate(unitSelectorTemplate);
             unitSelectorGameObject.transform.parent = this.gameObject.transform;
-            unitSelectorGameObject.active = false;
+            unitSelectorGameObject.SetActive(false);
             unitSelectorBool = true;
         }
 
@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
         {
             unitDeselectorGameObject = Instantiate(unitDeselectorTemplate);
             unitDeselectorGameObject.transform.parent = this.gameObject.transform;
-            unitDeselectorGameObject.active = false;
+            unitDeselectorGameObject.SetActive(false);
             unitDeselectorBool = true;
         }
 
@@ -142,22 +142,22 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(shift) && Input.GetKey(space))
         {
             animator.SetBool("Pointing", true);
-            unitDeselectorGameObject.active = true;
+            unitDeselectorGameObject.SetActive(true);
             unitDeselectorGameObject.transform.position = mousePosition;
-            unitSelectorGameObject.active = false;
+            unitSelectorGameObject.SetActive(false);
         }
         else if (Input.GetKey(space))
         {
             animator.SetBool("Pointing", true);
-            unitSelectorGameObject.active = true;
+            unitSelectorGameObject.SetActive(true);
             unitSelectorGameObject.transform.position = mousePosition;
-            unitDeselectorGameObject.active = false;
+            unitDeselectorGameObject.SetActive(false);
         }
         else
         {
             animator.SetBool("Pointing", false);
-            unitSelectorGameObject.active = false;
-            unitDeselectorGameObject.active = false;
+            unitSelectorGameObject.SetActive(false);
+            unitDeselectorGameObject.SetActive(false);
             Destroy(unitSelectorGameObject);
             Destroy(unitDeselectorGameObject);
             unitSelectorBool = false;
@@ -212,11 +212,10 @@ public class PlayerController : MonoBehaviour
             {
                 if(hit.collider.gameObject.tag == "Player Flag"
                     || hit.collider.gameObject.tag == "Player Structure"
-                    || hit.collider.gameObject.tag == "Player"
                     || hit.collider.gameObject.tag == "Player Unit"
                     )
                 {
-                    List<GameObject> selectedUnits = GetComponent<FormationController>().selectedUnits;
+                    List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
                     List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
                     for (int i = 0; i < selectedUnits.Count; i++)
                     {
@@ -230,6 +229,24 @@ public class PlayerController : MonoBehaviour
                         unitToRemove.GetComponent<UnitBehavior>().followTarget = hit.collider.gameObject;
                         unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
                         unitToRemove.GetComponent<UnitBehavior>().defendingTarget = hit.collider.gameObject;
+                    }
+                }
+                else if (hit.collider.gameObject.tag == "Player")
+                {
+                    List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
+                    List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
+                    for (int i = 0; i < selectedUnits.Count; i++)
+                    {
+                        unitsToRemoveFromGroup.Add(selectedUnits[i]);
+                        
+                    }
+                    foreach (var unitToRemove in unitsToRemoveFromGroup)
+                    {
+                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromGroup(this.gameObject);
+                        unitToRemove.GetComponent<UnitBehavior>().followTarget = hit.collider.gameObject;
+                        unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
+                        unitToRemove.GetComponent<UnitBehavior>().defendingTarget = hit.collider.gameObject;
+                        hit.collider.gameObject.GetComponent<UnitController>().followingUnits.Add(unitToRemove);
                     }
                 }
             }

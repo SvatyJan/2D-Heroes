@@ -213,8 +213,7 @@ public class FootmanBehavior : AUnit
 
     public override void AddToGroup()
     {
-        float collectUnitDistance = followTarget.GetComponent<FormationController>().collectUnitDistance;
-        List<GameObject> followingUnits = followTarget.GetComponent<FormationController>().selectedUnits;
+        List<GameObject> followingUnits = followTarget.GetComponent<UnitController>().selectedUnits;
 
         bool jeUzVParte = false;
 
@@ -231,7 +230,7 @@ public class FootmanBehavior : AUnit
         }
 
         // Pokud jednotka ještì není v kolekci a je v dosahu hrdiny, pøidá se do kolekce
-        if (!jeUzVParte && Vector2.Distance(transform.position, followTarget.transform.position) <= collectUnitDistance)
+        if (!jeUzVParte)
         {
             followingUnits.Add(this.gameObject);
             Debug.Log(this.name + " se pøidává k tvé partì!");

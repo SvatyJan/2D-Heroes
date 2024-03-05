@@ -19,14 +19,14 @@ public class CircleMenuController : MonoBehaviour
 
     private void Start()
     {
-        CirleMenuObject.active = false;
+        CirleMenuObject.SetActive(false);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            CirleMenuObject.active = true;
+            CirleMenuObject.SetActive(true);
         }
 
         if (Input.GetKey(KeyCode.F))
@@ -54,8 +54,8 @@ public class CircleMenuController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.F))
         {
-            Debug.Log(CirlceMenuItems[selectedItem]);
-            CirleMenuObject.active = false;
+            CirlceMenuItems[selectedItem].GetComponent<FormationChanger>().ChangeFormation(this.gameObject);
+            CirleMenuObject.SetActive(false);
         }
     }
 }

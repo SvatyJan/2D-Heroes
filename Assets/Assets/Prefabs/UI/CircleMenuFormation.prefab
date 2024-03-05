@@ -328,8 +328,9 @@ GameObject:
   - component: {fileID: 5198212163479750697}
   - component: {fileID: 515319048865069680}
   - component: {fileID: 2331078099337848078}
+  - component: {fileID: 7854163421864093323}
   m_Layer: 5
-  m_Name: MenuItem (3)
+  m_Name: Circle formation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,7 +384,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 587d1c93849c3f04791bd7d502171628, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9aa212013e383304a8e1498cc749fa95, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -393,6 +394,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7854163421864093323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857239870742235786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e185316a548ddf4418d33dd5adb16042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  formation: 1
 --- !u!1 &2317302048170070221
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,7 +507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.5882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -597,8 +611,9 @@ GameObject:
   - component: {fileID: 6772519307387785469}
   - component: {fileID: 1999989820429691675}
   - component: {fileID: 1690878091682728980}
+  - component: {fileID: 7609194185357073766}
   m_Layer: 5
-  m_Name: MenuItem (4)
+  m_Name: Rightwing formation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -652,7 +667,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c4d81dfcd44967d4bb86c9b648104982, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4ff02c5ae7158244bafc64ba160f4183, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -662,6 +677,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7609194185357073766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3293482720554748114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e185316a548ddf4418d33dd5adb16042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  formation: 5
 --- !u!1 &4297716747865616743
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,8 +701,9 @@ GameObject:
   - component: {fileID: 6447387865009969200}
   - component: {fileID: 3585540891280722667}
   - component: {fileID: 3759481605370661662}
+  - component: {fileID: 4342300282797464339}
   m_Layer: 5
-  m_Name: MenuItem (1)
+  m_Name: Leftwing formation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -728,7 +757,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a0c50f8c41b95274c98078d32b5f7c65, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3c519c10b76e9534bb285b2dfe6bcb1e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -738,6 +767,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4342300282797464339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4297716747865616743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e185316a548ddf4418d33dd5adb16042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  formation: 4
 --- !u!1 &4562459011090291149
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,8 +904,9 @@ GameObject:
   - component: {fileID: 242666324919078037}
   - component: {fileID: 6789990987964079208}
   - component: {fileID: 7241429069186017165}
+  - component: {fileID: 864867543281459655}
   m_Layer: 5
-  m_Name: MenuItem (2)
+  m_Name: Backward formation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -917,7 +960,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6bfedd6da4b137d42b9b1631d4fb9cd2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: df20e37bc409359498cf18e8d631ca3f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -927,6 +970,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &864867543281459655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6076078007283987454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e185316a548ddf4418d33dd5adb16042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  formation: 3
 --- !u!1 &7487989849894574075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1014,8 +1070,9 @@ GameObject:
   - component: {fileID: 4792917309965181077}
   - component: {fileID: 5765580559798825385}
   - component: {fileID: 256695359563811091}
+  - component: {fileID: 2922165696855578016}
   m_Layer: 5
-  m_Name: MenuItem
+  m_Name: Forward formation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1069,7 +1126,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bd83e643587b7654e8987f49c48c6045, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cba612a9c1843d94a89e513c27d9016c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1079,3 +1136,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2922165696855578016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8623409813429127333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e185316a548ddf4418d33dd5adb16042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  formation: 2
