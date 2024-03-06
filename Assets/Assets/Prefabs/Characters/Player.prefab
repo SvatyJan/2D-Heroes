@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 5757847949633642110}
   - component: {fileID: 3536639781850955944}
   - component: {fileID: 4286115427929416431}
+  - component: {fileID: 5491149112654017043}
   m_Layer: 6
   m_Name: Character
   m_TagString: Player
@@ -311,7 +312,7 @@ MonoBehaviour:
   directionY: 0
   unitSelectorTemplate: {fileID: 3456194971739890190, guid: ca9dc203a7c3975458c2691ff204ef6b, type: 3}
   unitDeselectorTemplate: {fileID: 3456194971739890190, guid: f300b4555714770448441f5e3d98ae00, type: 3}
-  flagTemplate: {fileID: 6337316695491201311, guid: 7e01c145f7f351642b23136c095bf5f1, type: 3}
+  flagTemplate: {fileID: 7498577422845404506, guid: ff39f13509669b54ba23fd5438c1ae84, type: 3}
   maxFlags: 3
   flagList: []
 --- !u!50 &3330377137499774000
@@ -489,17 +490,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainFormationPoint: {fileID: 2143634623864308975}
   formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
-  collectUnitDistance: 5
   selectedUnits: []
   followingUnits: []
-  playerPosition: {x: 0, y: 0}
   startX: -2
   startY: -2
   spacingX: 1
   spacingY: -1
   maxUnitsInRow: 5
   spacingCircle: 3
-  maxUnitsInCircle: 10
+  playerPosition: {x: 0, y: 0}
   formation: 0
 --- !u!114 &5757847949633642110
 MonoBehaviour:
@@ -550,3 +549,22 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &5491149112654017043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920888206443744980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc09a384a100ec04393906e59b029a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainFormationPoint: {fileID: 8920888206443744980}
+  formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
+  selectedUnits: []
+  structurePosition: {x: 0, y: 0}
+  spacingCircle: 3
+  maxUnitsInCircle: 10
+  formation: 0

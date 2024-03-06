@@ -29,13 +29,11 @@ public class UnitBehavior : MonoBehaviour
     }
     public Formation formation;
 
-    public GameObject defendingTarget;
-
     public GameObject followTarget;
     public GameObject attackTarget;
 
     public string[] attackTags = { "Enemy Unit", "Enemy" };
-    public string[] followTags = { "Player" };
+    public string[] followTags = { "Player", "Player Unit", "Player Structure", "Player Flag" };
 
     [SerializeField] float moveSpeed;
     [SerializeField] float guardKeepDistance = 0f;
@@ -175,12 +173,6 @@ public class UnitBehavior : MonoBehaviour
 
     public void AddToGroup(GameObject hero)
     {
-        //zjistim nejdriv jestli uz v nejake parte nahodou nejsem
-        if(defendingTarget != null)
-        {
-            defendingTarget = null;
-        }
-
         List<GameObject> selectedUnits = hero.GetComponent<UnitController>().selectedUnits;
         //followTarget = hero;
 
@@ -207,9 +199,9 @@ public class UnitBehavior : MonoBehaviour
         }
     }
 
-    public void RemoveFromGroup(GameObject hero)
+    public void RemoveFromHeroGroup(GameObject controllingObject)
     {
-        List<GameObject> selectedUnits = hero.GetComponent<UnitController>().selectedUnits;
+        List<GameObject> selectedUnits = controllingObject.GetComponent<UnitController>().selectedUnits;
 
         if (selectedUnits.Count != 0)
         {
@@ -221,12 +213,29 @@ public class UnitBehavior : MonoBehaviour
 
     public void defendNewTarget(GameObject newTarget)
     {
-        behavior = Behavior.GUARD;
-        followTarget = newTarget; //tenhle target actually musí být vytvoøený bod z toho objektu
         if(newTarget.tag == "Player Structure" || newTarget.tag == "Player Flag")
         {
-            newTarget.GetComponent<StructureFormationController>().selectedUnits.Add(this.gameObject);
+            //Zjisti jestli už nìco nebrání. Smaž ho z toho bývalého objektu a dej mu idle.
+            if(followTarget != null)
+            {
+                followTarget.GetComponent<ObjectFormationController>().RemoveUnit(this.gameObject);
+                this.RemoveFromHeroGroup(followTarget);
+                Debug.Log("new " + followTarget);
+            }
+
+            followTarget = newTarget;
+            behavior = Behavior.GUARD;
+            //Pøidá se hráèi do following units a zaøadí se do pøíslušné kategorie formace.
+            newTarget.GetComponent<ObjectFormationController>().selectedUnits.Add(this.gameObject);
         }
+        /*if(newTarget.tag == "Player Unit")
+        {
+            newTarget.GetComponent<ObjectFormationController>().selectedUnits.Add(this.gameObject);
+        }
+        if(newTarget.tag == "Player")
+        {
+            newTarget.GetComponent<ObjectFormationController>().selectedUnits.Add(this.gameObject);
+        }*/
     }
 
     public void GetMovementDirection()

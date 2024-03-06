@@ -11,7 +11,7 @@ public class UnitDeselector : MonoBehaviour
         if (unit.tag == "Player Unit")
         {
             GameObject hero = this.transform.parent.gameObject;
-            unit.GetComponent<UnitBehavior>().RemoveFromGroup(hero);
+            unit.GetComponent<UnitBehavior>().RemoveFromHeroGroup(hero);
         }
         else if(unit.tag == "Player Flag")
         {

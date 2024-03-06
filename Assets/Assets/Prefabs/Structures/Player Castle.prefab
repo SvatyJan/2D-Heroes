@@ -97,6 +97,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4176222671749765591}
     m_Modifications:
+    - target: {fileID: 868537710468787499, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: formation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1325361333806223569, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
       propertyPath: m_Name
       value: Player Tower (3)
@@ -278,7 +282,7 @@ MonoBehaviour:
   structurePosition: {x: 0, y: 0}
   spacingCircle: 5
   maxUnitsInCircle: 10
-  formation: 0
+  formation: 1
 --- !u!4 &7923965628029785284 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8795744704890192682, guid: 909170199e0fa2c4789001870d8af1ce, type: 3}
@@ -292,6 +296,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4176222671749765591}
     m_Modifications:
+    - target: {fileID: 868537710468787499, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: formation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1325361333806223569, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
       propertyPath: m_Name
       value: Player Tower (1)
@@ -375,6 +383,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4176222671749765591}
     m_Modifications:
+    - target: {fileID: 868537710468787499, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: formation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1325361333806223569, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
       propertyPath: m_Name
       value: Player Tower
@@ -458,6 +470,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4176222671749765591}
     m_Modifications:
+    - target: {fileID: 868537710468787499, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: formation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1325361333806223569, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
       propertyPath: m_Name
       value: Player Tower (2)

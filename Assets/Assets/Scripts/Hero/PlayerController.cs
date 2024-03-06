@@ -217,21 +217,19 @@ public class PlayerController : MonoBehaviour
                 {
                     List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
                     List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
+
                     for (int i = 0; i < selectedUnits.Count; i++)
                     {
                         unitsToRemoveFromGroup.Add(selectedUnits[i]);
                     }
 
-                    // Iterace pøes nový seznam a provedení zmìn
                     foreach (var unitToRemove in unitsToRemoveFromGroup)
                     {
-                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromGroup(this.gameObject);
-                        unitToRemove.GetComponent<UnitBehavior>().followTarget = hit.collider.gameObject;
+                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromHeroGroup(this.gameObject);
                         unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
-                        unitToRemove.GetComponent<UnitBehavior>().defendingTarget = hit.collider.gameObject;
                     }
                 }
-                else if (hit.collider.gameObject.tag == "Player")
+                /*else if (hit.collider.gameObject.tag == "Player")
                 {
                     List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
                     List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
@@ -248,7 +246,7 @@ public class PlayerController : MonoBehaviour
                         unitToRemove.GetComponent<UnitBehavior>().defendingTarget = hit.collider.gameObject;
                         hit.collider.gameObject.GetComponent<UnitController>().followingUnits.Add(unitToRemove);
                     }
-                }
+                }*/
             }
             else
             {

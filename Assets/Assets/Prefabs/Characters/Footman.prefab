@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 3331416807996477037}
   - component: {fileID: 2972967235923510027}
   - component: {fileID: 8005862675878672984}
+  - component: {fileID: 3378347301987294886}
   m_Layer: 7
   m_Name: Footman
   m_TagString: Player Unit
@@ -308,7 +309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behavior: 0
   stance: 0
-  formation: 0
+  formation: 1
   defendingTarget: {fileID: 0}
   followTarget: {fileID: 0}
   attackTarget: {fileID: 0}
@@ -318,7 +319,6 @@ MonoBehaviour:
   followTags:
   - Player
   moveSpeed: 3
-  followKeepDistance: 3
   guardKeepDistance: 0
   attackFollowRadius: 5
   attackRadius: 2
@@ -326,3 +326,22 @@ MonoBehaviour:
   directionY: 0
   highlightCircle: {fileID: 4062418303808143613}
   isHighlighted: 0
+--- !u!114 &3378347301987294886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5167884835933477276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc09a384a100ec04393906e59b029a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainFormationPoint: {fileID: 5167884835933477276}
+  formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
+  selectedUnits: []
+  structurePosition: {x: 0, y: 0}
+  spacingCircle: 3
+  maxUnitsInCircle: 10
+  formation: 0

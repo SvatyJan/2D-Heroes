@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnitBehavior;
 
-public class StructureFormationController : MonoBehaviour
+public class ObjectFormationController : MonoBehaviour
 {
     public GameObject MainFormationPoint;
     [SerializeField] public GameObject formationPointPrefab;
@@ -104,5 +104,10 @@ public class StructureFormationController : MonoBehaviour
                 followingUnit.GetComponent<UnitBehavior>().behavior = Behavior.ATTACK;
             }
         }
+    }
+
+    public void RemoveUnit(GameObject unit)
+    {
+        selectedUnits.Remove(unit);
     }
 }
