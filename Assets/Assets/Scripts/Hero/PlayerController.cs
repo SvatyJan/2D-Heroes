@@ -215,17 +215,27 @@ public class PlayerController : MonoBehaviour
                     || hit.collider.gameObject.tag == "Player Unit"
                     )
                 {
-                    List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
+
+                    Debug.Log(hit.collider.gameObject.name);
+                    List<GameObject> objectSelectedUnits = hit.collider.gameObject.GetComponent<ObjectFormationController>().selectedUnits;
+                    List<GameObject> playerSelectedUnits = GetComponent<UnitController>().selectedUnits;
                     List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
 
-                    for (int i = 0; i < selectedUnits.Count; i++)
+                    Debug.Log(playerSelectedUnits.Count);
+
+                    for (int i = 0; i < playerSelectedUnits.Count; i++)
                     {
-                        unitsToRemoveFromGroup.Add(selectedUnits[i]);
+                        unitsToRemoveFromGroup.Add(playerSelectedUnits[i]);
                     }
+
+                    Debug.Log(playerSelectedUnits.Count);
 
                     foreach (var unitToRemove in unitsToRemoveFromGroup)
                     {
                         unitToRemove.GetComponent<UnitBehavior>().RemoveFromHeroGroup(this.gameObject);
+
+                        //TODO: tohle fix
+                        //Ziskej old target
                         unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
                     }
                 }

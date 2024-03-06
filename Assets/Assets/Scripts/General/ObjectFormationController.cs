@@ -58,6 +58,7 @@ public class ObjectFormationController : MonoBehaviour
             {
                 GameObject formationPoint = Instantiate(formationPointPrefab, Vector2.zero, Quaternion.identity);
                 formationPointsList.Add(formationPoint);
+                formationPoint.transform.parent = transform;
             }
         }
         else if (requiredPoints < formationPointsList.Count)
@@ -109,5 +110,10 @@ public class ObjectFormationController : MonoBehaviour
     public void RemoveUnit(GameObject unit)
     {
         selectedUnits.Remove(unit);
+    }
+
+    public void AddUnit(GameObject unit)
+    {
+        selectedUnits.Add(unit);
     }
 }
