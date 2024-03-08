@@ -90,6 +90,33 @@ public class UnitBehavior : MonoBehaviour
         }
     }
 
+
+    public void AddToGroup(GameObject controllingObject)
+    {
+        if(followTarget != null)
+        {
+            followTarget.GetComponent<ObjectFormationController>().RemoveUnit(this.gameObject);
+        }
+        controllingObject.GetComponent<ObjectFormationController>().AddUnit(this.gameObject);
+    }
+
+    public void RemoveFromGroup(GameObject controllingObject)
+    {
+        controllingObject.GetComponent<UnitController>().RemoveSelectedUnit(this.gameObject);
+        followTarget = null;
+        this.isHighlighted = false;
+    }
+
+    public Formation GetFormation()
+    {
+        return formation;
+    }
+
+    public void SetFormation(Formation formation)
+    {
+        this.formation = formation;
+    }
+
     public void Idle()
     {
         animator.SetFloat("Speed", 0);
@@ -171,71 +198,29 @@ public class UnitBehavior : MonoBehaviour
         return false;
     }
 
-    public void AddToGroup(GameObject hero)
-    {
-        List<GameObject> selectedUnits = hero.GetComponent<UnitController>().selectedUnits;
-        //followTarget = hero;
-
-        bool jeUzVParte = false;
-
-        //TODO: tohle pryè
-        if (selectedUnits.Count != 0)
-        {
-            foreach (GameObject followingUnit in selectedUnits)
-            {
-                if (this.name == followingUnit.name)
-                {
-                    jeUzVParte = true;
-                    break;
-                }
-            }
-        }
-
-        // Pokud jednotka ještì není v kolekci, pøidá se do kolekce
-        if (!jeUzVParte)
-        {
-            selectedUnits.Add(this.gameObject);
-            this.isHighlighted = true;
-        }
-    }
-
-    public void RemoveFromHeroGroup(GameObject controllingObject)
-    {
-        List<GameObject> selectedUnits = controllingObject.GetComponent<UnitController>().selectedUnits;
-
-        if (selectedUnits.Count != 0)
-        {
-            behavior = Behavior.IDLE;
-            selectedUnits.Remove(this.gameObject);
-            this.isHighlighted = false;
-        }
-    }
-
     public void defendNewTarget(GameObject newTarget)
     {
-        if(newTarget.tag == "Player Structure" || newTarget.tag == "Player Flag")
+        if(followTarget != null)
         {
-            //Zjisti jestli už nìco nebrání. Smaž ho z toho bývalého objektu a dej mu idle.
-            if(followTarget != null)
+            if(followTarget.tag == "PlayerMainFormationPoint")
+            {
+                GameObject followTargetParent = followTarget.GetComponentInParent<GameObject>();
+                followTargetParent.GetComponent<ObjectFormationController>().RemoveUnit(this.gameObject);
+                followTargetParent.GetComponent<ObjectFormationController>().RecalculateFormations();
+            }
+            else
             {
                 followTarget.GetComponent<ObjectFormationController>().RemoveUnit(this.gameObject);
-                this.RemoveFromHeroGroup(followTarget);
-                Debug.Log("new " + followTarget);
+                followTarget.GetComponent<ObjectFormationController>().RecalculateFormations();
             }
-
+        }
+        if(!newTarget.GetComponent<ObjectFormationController>().GetFollowingUnits().Contains(this.gameObject))
+        {
             followTarget = newTarget;
             behavior = Behavior.GUARD;
-            //Pøidá se hráèi do following units a zaøadí se do pøíslušné kategorie formace.
-            newTarget.GetComponent<ObjectFormationController>().selectedUnits.Add(this.gameObject);
+            newTarget.GetComponent<ObjectFormationController>().GetFollowingUnits().Add(this.gameObject);
+            newTarget.GetComponent<ObjectFormationController>().RecalculateFormations();
         }
-        /*if(newTarget.tag == "Player Unit")
-        {
-            newTarget.GetComponent<ObjectFormationController>().selectedUnits.Add(this.gameObject);
-        }
-        if(newTarget.tag == "Player")
-        {
-            newTarget.GetComponent<ObjectFormationController>().selectedUnits.Add(this.gameObject);
-        }*/
     }
 
     public void GetMovementDirection()
@@ -275,16 +260,8 @@ public class UnitBehavior : MonoBehaviour
         }
     }
 
-    public void SetFormation(Formation chaningFormation)
-    {
-        this.formation = chaningFormation;
-    }
-
-
     private void OnDrawGizmos()
     {
-        /*Gizmos.color = Color.green;        
-        Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y,0), keepDistance);*/
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackFollowRadius);
         Gizmos.color = Color.magenta;

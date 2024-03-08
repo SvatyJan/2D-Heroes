@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -213,40 +214,32 @@ public class PlayerController : MonoBehaviour
                 if(hit.collider.gameObject.tag == "Player Flag"
                     || hit.collider.gameObject.tag == "Player Structure"
                     || hit.collider.gameObject.tag == "Player Unit"
+                    || hit.collider.gameObject.tag == "Player"
                     )
                 {
-                    List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
-                    List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
+                    List<GameObject> selectedUnits = GetComponent<UnitController>().GetSelectedUnits();
 
-                    for (int i = 0; i < selectedUnits.Count; i++)
+                    List<GameObject> addingGroup = new List<GameObject>();
+                    foreach (GameObject selectedUnit in selectedUnits)
                     {
-                        unitsToRemoveFromGroup.Add(selectedUnits[i]);
-                    }
+                        Debug.Log(selectedUnit.GetComponent<UnitBehavior>().followTarget);
+                        //zjisti jestli už má target, jestli ano, tak odendej jednotku z Listu a pøidej jí do nového
+                        if (selectedUnit.GetComponent<UnitBehavior>().followTarget != null)
+                        {
+                            try
+                            {
+                                selectedUnit.GetComponent<UnitBehavior>().followTarget.transform.parent.gameObject.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnit);
+                            }
+                            catch(MissingReferenceException)
+                            {
 
-                    foreach (var unitToRemove in unitsToRemoveFromGroup)
-                    {
-                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromHeroGroup(this.gameObject);
-                        unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
+                            }
+                        }
+                        addingGroup.Add(selectedUnit);
                     }
+                    Debug.Log(addingGroup.Count);
+                    hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnits(addingGroup);
                 }
-                /*else if (hit.collider.gameObject.tag == "Player")
-                {
-                    List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
-                    List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
-                    for (int i = 0; i < selectedUnits.Count; i++)
-                    {
-                        unitsToRemoveFromGroup.Add(selectedUnits[i]);
-                        
-                    }
-                    foreach (var unitToRemove in unitsToRemoveFromGroup)
-                    {
-                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromGroup(this.gameObject);
-                        unitToRemove.GetComponent<UnitBehavior>().followTarget = hit.collider.gameObject;
-                        unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
-                        unitToRemove.GetComponent<UnitBehavior>().defendingTarget = hit.collider.gameObject;
-                        hit.collider.gameObject.GetComponent<UnitController>().followingUnits.Add(unitToRemove);
-                    }
-                }*/
             }
             else
             {

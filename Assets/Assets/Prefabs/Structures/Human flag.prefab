@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -6398330374209185047}
   m_Layer: 0
   m_Name: Human flag
-  m_TagString: Player Structure
+  m_TagString: Player Flag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2484126152761176528
 SpriteRenderer:
@@ -122,11 +122,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainFormationPoint: {fileID: 5250336052789542160, guid: 7e01c145f7f351642b23136c095bf5f1, type: 3}
   formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
-  selectedUnits: []
+  followingUnits: []
   structurePosition: {x: 0, y: 0}
   spacingCircle: 3
   maxUnitsInCircle: 10
-  formation: 0
 --- !u!61 &-6398330374209185047
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -159,7 +158,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.2790899}
+  m_Offset: {x: -0.0076322556, y: 0.24378586}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -170,5 +169,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 3.4258595}
+  m_Size: {x: 1.0562267, y: 2.2602768}
   m_EdgeRadius: 0

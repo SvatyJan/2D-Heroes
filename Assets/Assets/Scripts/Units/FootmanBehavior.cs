@@ -213,7 +213,7 @@ public class FootmanBehavior : AUnit
 
     public override void AddToGroup()
     {
-        List<GameObject> followingUnits = followTarget.GetComponent<UnitController>().selectedUnits;
+        List<GameObject> followingUnits = followTarget.GetComponent<UnitController>().GetSelectedUnits();
 
         bool jeUzVParte = false;
 

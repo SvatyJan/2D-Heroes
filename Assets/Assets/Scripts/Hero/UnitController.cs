@@ -10,16 +10,8 @@ public class UnitController : MonoBehaviour
     [SerializeField] public GameObject formationPointPrefab;
     //private List<GameObject> formationPointsList = new List<GameObject>();
 
-    [SerializeField] public List<GameObject> selectedUnits = new List<GameObject>();
-    [SerializeField] public List<GameObject> followingUnits = new List<GameObject>();
-    
-    [Header("Formation Settings")]
-    [SerializeField] float startX = -4f;
-    [SerializeField] float startY = -4f;
-    [SerializeField] float spacingX = 2f;
-    [SerializeField] float spacingY = 2f;
-    [SerializeField] int maxUnitsInRow = 5;
-    [SerializeField] float spacingCircle = 3f;
+    [SerializeField] private List<GameObject> selectedUnits = new List<GameObject>();    
+    [SerializeField] float formationSpacing = 3f;
 
     public Vector2 playerPosition;
 
@@ -33,37 +25,29 @@ public class UnitController : MonoBehaviour
     }
     public Formation formation;
 
-    private List<GameObject> circleFormationUnits   = new List<GameObject>();
-    private List<GameObject> frontFormationUnits    = new List<GameObject>();
-    private List<GameObject> backFormationUnits     = new List<GameObject>();
-    private List<GameObject> leftFormationUnits     = new List<GameObject>();
-    private List<GameObject> rightFormationUnits    = new List<GameObject>();
-
-    private List<GameObject> circleFormationPointsList = new List<GameObject>();
-
     void Start()
     {
         formation = Formation.CIRCLE;
     }
 
-    void Update()
+    public List<GameObject> GetSelectedUnits()
     {
-        playerPosition = transform.position;
-
-        //manipulateCircleFormationSpacing();
-        srovnejNasledujiciJednotky();
-
-        circleFormationPointsSort();
-        /*frontFormationPointsSort();
-        backFormationPointsSort();
-        leftFormationPointsSort();
-        rightFormationPointsSort();*/
-
-
-        //controlSelectedUnits();
+        return this.selectedUnits;
     }
 
-    public void srovnejNasledujiciJednotky()
+    public void AddSelectUnit(GameObject unit)
+    {
+        selectedUnits.Add(unit);
+        unit.GetComponent<UnitBehavior>().isHighlighted = true;
+    }
+
+    public void RemoveSelectedUnit(GameObject unit)
+    {
+        selectedUnits.Remove(unit);
+        unit.GetComponent<UnitBehavior>().isHighlighted = false;
+    }
+
+    /*public void srovnejNasledujiciJednotky()
     {
         /*int requiredPoints = followingUnits.Count;
 
@@ -89,63 +73,39 @@ public class UnitController : MonoBehaviour
                 formationPointsList.Remove(pointToRemove);
                 Destroy(pointToRemove);
             }
-        }*/
-
-        foreach(GameObject followingUnit in followingUnits)
-        {
-            if(followingUnit.GetComponent<UnitBehavior>().formation == UnitBehavior.Formation.CIRCLE)
-            {
-                circleFormationUnits.Add(followingUnit);
-            }
-            else if (followingUnit.GetComponent<UnitBehavior>().formation == UnitBehavior.Formation.FRONT)
-            {
-                frontFormationUnits.Add(followingUnit);
-            }
-            else if (followingUnit.GetComponent<UnitBehavior>().formation == UnitBehavior.Formation.BACK)
-            {
-                backFormationUnits.Add(followingUnit);
-            }
-            else if (followingUnit.GetComponent<UnitBehavior>().formation == UnitBehavior.Formation.LEFT)
-            {
-                leftFormationUnits.Add(followingUnit);
-            }
-            else if (followingUnit.GetComponent<UnitBehavior>().formation == UnitBehavior.Formation.RIGHT)
-            {
-                rightFormationUnits.Add(followingUnit);
-            }
         }
-    }
+    }*/
 
-    private void circleFormationPointsSort()
-    {
-        getFormationPoints(circleFormationUnits, circleFormationPointsList);
+    /* private void circleFormationPointsSort()
+     {
+         getFormationPoints(circleFormationUnits, circleFormationPointsList);
 
-        int requiredPoints = circleFormationPointsList.Count();
+         int requiredPoints = circleFormationPointsList.Count();
 
-        for (int i = 0; i < requiredPoints; i++)
-        {
-            GameObject followingUnitInCircleFormation = circleFormationUnits[i];
-            GameObject formationPoint = circleFormationPointsList[i];
+         for (int i = 0; i < requiredPoints; i++)
+         {
+             GameObject followingUnitInCircleFormation = circleFormationUnits[i];
+             GameObject formationPoint = circleFormationPointsList[i];
 
-            float angle = i * (2 * Mathf.PI / requiredPoints);
-            float x = Mathf.Cos(angle) * spacingCircle;
-            float y = Mathf.Sin(angle) * spacingCircle;
+             float angle = i * (2 * Mathf.PI / requiredPoints);
+             float x = Mathf.Cos(angle) * spacingCircle;
+             float y = Mathf.Sin(angle) * spacingCircle;
 
-            formationPoint.transform.position = new Vector2(playerPosition.x + x, playerPosition.y + y);
+             formationPoint.transform.position = new Vector2(playerPosition.x + x, playerPosition.y + y);
 
-            // Nastavení cíle a chování vojáka
-            if (followingUnitInCircleFormation.GetComponent<UnitBehavior>().attackTarget == null)
-            {
-                followingUnitInCircleFormation.GetComponent<UnitBehavior>().followTarget = formationPoint;
-                followingUnitInCircleFormation.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
-            }
-            else
-            {
-                //když útoèí na terè
-                followingUnitInCircleFormation.GetComponent<UnitBehavior>().behavior = Behavior.ATTACK;
-            }
-        }
-    }
+             // Nastavení cíle a chování vojáka
+             if (followingUnitInCircleFormation.GetComponent<UnitBehavior>().attackTarget == null)
+             {
+                 followingUnitInCircleFormation.GetComponent<UnitBehavior>().followTarget = formationPoint;
+                 followingUnitInCircleFormation.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
+             }
+             else
+             {
+                 //když útoèí na terè
+                 followingUnitInCircleFormation.GetComponent<UnitBehavior>().behavior = Behavior.ATTACK;
+             }
+         }
+     }*/
 
     /*private void backFormationPointsSort()
     {
@@ -318,7 +278,7 @@ public class UnitController : MonoBehaviour
         }
     }*/
 
-    private void getFormationPoints(List<GameObject> unitsList, List<GameObject> formationPointsList)
+    /*private void getFormationPoints(List<GameObject> unitsList, List<GameObject> formationPointsList)
     {
         int requiredPoints = unitsList.Count();
         // Ovìøení, zda je potøeba pøidat nebo odebrat body formace
@@ -344,7 +304,7 @@ public class UnitController : MonoBehaviour
                 Destroy(pointToRemove);
             }
         }
-    }
+    }*/
 
     public void ChangeFormation(Formation chaningFormation)
     {
@@ -359,11 +319,11 @@ public class UnitController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
-            spacingCircle++;
+            formationSpacing++;
         }
         if (Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            spacingCircle--;
+            formationSpacing--;
         }
     }
 }

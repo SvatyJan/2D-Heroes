@@ -13,7 +13,12 @@ public class UnitSelector : MonoBehaviour
         if (unit.tag == "Player Unit")
         {
             GameObject hero = this.transform.parent.gameObject;
-            unit.GetComponent<UnitBehavior>().AddToGroup(hero);
+
+            List<GameObject> heroSelectedUnits = hero.GetComponent<UnitController>().GetSelectedUnits();
+            if(!heroSelectedUnits.Contains(unit))
+            {
+                hero.GetComponent<UnitController>().AddSelectUnit(unit);
+            }            
         }        
     }
 }
