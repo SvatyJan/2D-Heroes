@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -214,32 +213,50 @@ public class PlayerController : MonoBehaviour
                 if(hit.collider.gameObject.tag == "Player Flag"
                     || hit.collider.gameObject.tag == "Player Structure"
                     || hit.collider.gameObject.tag == "Player Unit"
-                    || hit.collider.gameObject.tag == "Player"
                     )
                 {
-                    List<GameObject> selectedUnits = GetComponent<UnitController>().GetSelectedUnits();
 
-                    List<GameObject> addingGroup = new List<GameObject>();
-                    foreach (GameObject selectedUnit in selectedUnits)
+                    Debug.Log(hit.collider.gameObject.name);
+                    List<GameObject> objectSelectedUnits = hit.collider.gameObject.GetComponent<ObjectFormationController>().selectedUnits;
+                    List<GameObject> playerSelectedUnits = GetComponent<UnitController>().selectedUnits;
+                    List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
+
+                    Debug.Log(playerSelectedUnits.Count);
+
+                    for (int i = 0; i < playerSelectedUnits.Count; i++)
                     {
-                        Debug.Log(selectedUnit.GetComponent<UnitBehavior>().followTarget);
-                        //zjisti jestli už má target, jestli ano, tak odendej jednotku z Listu a pøidej jí do nového
-                        if (selectedUnit.GetComponent<UnitBehavior>().followTarget != null)
-                        {
-                            try
-                            {
-                                selectedUnit.GetComponent<UnitBehavior>().followTarget.transform.parent.gameObject.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnit);
-                            }
-                            catch(MissingReferenceException)
-                            {
-
-                            }
-                        }
-                        addingGroup.Add(selectedUnit);
+                        unitsToRemoveFromGroup.Add(playerSelectedUnits[i]);
                     }
-                    Debug.Log(addingGroup.Count);
-                    hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnits(addingGroup);
+
+                    Debug.Log(playerSelectedUnits.Count);
+
+                    foreach (var unitToRemove in unitsToRemoveFromGroup)
+                    {
+                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromHeroGroup(this.gameObject);
+
+                        //TODO: tohle fix
+                        //Ziskej old target
+                        unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
+                    }
                 }
+                /*else if (hit.collider.gameObject.tag == "Player")
+                {
+                    List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
+                    List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
+                    for (int i = 0; i < selectedUnits.Count; i++)
+                    {
+                        unitsToRemoveFromGroup.Add(selectedUnits[i]);
+                        
+                    }
+                    foreach (var unitToRemove in unitsToRemoveFromGroup)
+                    {
+                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromGroup(this.gameObject);
+                        unitToRemove.GetComponent<UnitBehavior>().followTarget = hit.collider.gameObject;
+                        unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
+                        unitToRemove.GetComponent<UnitBehavior>().defendingTarget = hit.collider.gameObject;
+                        hit.collider.gameObject.GetComponent<UnitController>().followingUnits.Add(unitToRemove);
+                    }
+                }*/
             }
             else
             {
