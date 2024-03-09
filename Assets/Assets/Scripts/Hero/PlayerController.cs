@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+Ôªøusing System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -54,11 +55,6 @@ public class PlayerController : MonoBehaviour
         orderDefend();
     }
 
-    /**
-     * Metoda pro pohyb hrace.
-     * 
-     * return void;
-     * */
     private void Movement()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
@@ -87,11 +83,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /**
-     * Metoda pro snimani pozice kurzoru, ktera resi otaceni postavicky za mysi.
-     * 
-     * return void
-     * */
     private void LookAtMouse()
     {
         mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -111,11 +102,6 @@ public class PlayerController : MonoBehaviour
         if (horizontalFirepointY <= -1) { horizontalFirepointY = -1; }
     }
 
-    /**
-     * Metoda pro snimani zda hrac ukazuje.
-     * 
-     * return void
-     * */
     private void Point()
     {
         //musi existovat jen jeden unitselector
@@ -138,8 +124,8 @@ public class PlayerController : MonoBehaviour
 
         KeyCode space = KeyCode.Space;
         KeyCode shift = KeyCode.LeftShift;
-        
-        if(Input.GetKey(shift) && Input.GetKey(space))
+
+        if (Input.GetKey(shift) && Input.GetKey(space))
         {
             animator.SetBool("Pointing", true);
             unitDeselectorGameObject.SetActive(true);
@@ -165,9 +151,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /**
-     * Metoda pro polozeni vlajky na kurzoru hrace.
-     * */
+    /** Metoda pro polozeni vlajky na kurzoru hrace. */
     private void createFlag()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -198,9 +182,7 @@ public class PlayerController : MonoBehaviour
         Destroy(flag);
     }
 
-    /**
-     * Metoda pro prikazani kontrolujicich jednotek k obrane
-     * */
+    /** Metoda pro prikazani kontrolujicich jednotek k obrane */
     private void orderDefend()
     {
         ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -210,57 +192,41 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.collider != null && hit.collider.gameObject != null)
             {
-                if(hit.collider.gameObject.tag == "Player Flag"
+                if (hit.collider.gameObject.tag == "Player Flag"
                     || hit.collider.gameObject.tag == "Player Structure"
-                    || hit.collider.gameObject.tag == "Player Unit"
+                    || hit.collider.gameObject.tag == "Player"
                     )
                 {
+                    List<GameObject> selectedUnits = GetComponent<UnitController>().GetSelectedUnits();
 
-                    Debug.Log(hit.collider.gameObject.name);
-                    List<GameObject> objectSelectedUnits = hit.collider.gameObject.GetComponent<ObjectFormationController>().selectedUnits;
-                    List<GameObject> playerSelectedUnits = GetComponent<UnitController>().selectedUnits;
-                    List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
-
-                    Debug.Log(playerSelectedUnits.Count);
-
-                    for (int i = 0; i < playerSelectedUnits.Count; i++)
+                    List<GameObject> addingGroup = new List<GameObject>();
+                    foreach (GameObject selectedUnit in selectedUnits)
                     {
-                        unitsToRemoveFromGroup.Add(playerSelectedUnits[i]);
+                        //zjisti jestli u≈æ m√° target, jestli ano, tak odendej jednotku z Listu a p√∏idej j√≠ do nov√©ho
+                        if (selectedUnit.GetComponent<UnitBehavior>().followTarget != null)
+                        {
+                            Debug.Log(selectedUnit.GetComponent<UnitBehavior>().followTarget.name);
+                            try
+                            {
+                                selectedUnit.GetComponent<UnitBehavior>().followTarget.transform.parent.gameObject.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnit);
+                            }
+                            catch (MissingReferenceException e)
+                            {
+                                Debug.Log("Player Controller selhal " + e);
+                            }
+                        }
+                        else
+                        {
+                            //Debug.Log("Jednotka nem√° follow target");
+                        }
+                        addingGroup.Add(selectedUnit);
                     }
-
-                    Debug.Log(playerSelectedUnits.Count);
-
-                    foreach (var unitToRemove in unitsToRemoveFromGroup)
-                    {
-                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromHeroGroup(this.gameObject);
-
-                        //TODO: tohle fix
-                        //Ziskej old target
-                        unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
-                    }
+                    hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnits(addingGroup);
                 }
-                /*else if (hit.collider.gameObject.tag == "Player")
-                {
-                    List<GameObject> selectedUnits = GetComponent<UnitController>().selectedUnits;
-                    List<GameObject> unitsToRemoveFromGroup = new List<GameObject>();
-                    for (int i = 0; i < selectedUnits.Count; i++)
-                    {
-                        unitsToRemoveFromGroup.Add(selectedUnits[i]);
-                        
-                    }
-                    foreach (var unitToRemove in unitsToRemoveFromGroup)
-                    {
-                        unitToRemove.GetComponent<UnitBehavior>().RemoveFromGroup(this.gameObject);
-                        unitToRemove.GetComponent<UnitBehavior>().followTarget = hit.collider.gameObject;
-                        unitToRemove.GetComponent<UnitBehavior>().defendNewTarget(hit.collider.gameObject);
-                        unitToRemove.GetComponent<UnitBehavior>().defendingTarget = hit.collider.gameObject;
-                        hit.collider.gameObject.GetComponent<UnitController>().followingUnits.Add(unitToRemove);
-                    }
-                }*/
             }
             else
             {
-                // é·dn˝ objekt nebyl zasaûen
+                // Zadny objekt nebyl nalezen
             }
         }
     }
