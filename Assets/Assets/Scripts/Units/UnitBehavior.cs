@@ -29,8 +29,8 @@ public class UnitBehavior : MonoBehaviour
     }
     public Formation formation;
 
-    public GameObject followTarget;
-    public GameObject attackTarget;
+    [SerializeField] private GameObject followTarget;
+    [SerializeField] private GameObject attackTarget;
 
     public string[] attackTags = { "Enemy Unit", "Enemy" };
     public string[] followTags = { "Player", "Player Unit", "Player Structure", "Player Flag" };
@@ -90,7 +90,6 @@ public class UnitBehavior : MonoBehaviour
         }
     }
 
-
     public void AddToGroup(GameObject controllingObject)
     {
         if(followTarget != null)
@@ -115,6 +114,26 @@ public class UnitBehavior : MonoBehaviour
     public void SetFormation(Formation formation)
     {
         this.formation = formation;
+    }
+
+    public GameObject GetFollowTarget()
+    {
+        return followTarget;
+    }
+
+    public void SetFollowTarget(GameObject newFollowTarget)
+    {
+        this.followTarget = newFollowTarget;
+    }
+
+    public Behavior GetBehavior()
+    {
+        return behavior;
+    }
+
+    public void SetBehavior(Behavior newBehavior)
+    {
+        this.behavior = newBehavior;
     }
 
     public void Idle()

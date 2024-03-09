@@ -199,29 +199,31 @@ public class PlayerController : MonoBehaviour
                 {
                     List<GameObject> selectedUnits = GetComponent<UnitController>().GetSelectedUnits();
 
-                    List<GameObject> addingGroup = new List<GameObject>();
+                    for (int i = 0; i < selectedUnits.Count(); i++)
+                    {
+                        if(selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget() != null)
+                        {
+                            selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
+                        }
+                        hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnit(selectedUnits[i]);
+                    }
+
+                    /*List<GameObject> addingGroup = new List<GameObject>();
                     foreach (GameObject selectedUnit in selectedUnits)
                     {
-                        //zjisti jestli už má target, jestli ano, tak odendej jednotku z Listu a pøidej jí do nového
-                        if (selectedUnit.GetComponent<UnitBehavior>().followTarget != null)
+                        // Má už follow target?
+                        if(selectedUnit.GetComponent<UnitBehavior>().GetFollowTarget() != null)
                         {
-                            Debug.Log(selectedUnit.GetComponent<UnitBehavior>().followTarget.name);
-                            try
-                            {
-                                selectedUnit.GetComponent<UnitBehavior>().followTarget.transform.parent.gameObject.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnit);
-                            }
-                            catch (MissingReferenceException e)
-                            {
-                                Debug.Log("Player Controller selhal " + e);
-                            }
+                            var oldFollowTarget = selectedUnit.GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>();
+                            oldFollowTarget.RemoveUnit(selectedUnit);
+                            addingGroup.Add(selectedUnit);
                         }
                         else
                         {
-                            //Debug.Log("Jednotka nemá follow target");
+                            addingGroup.Add(selectedUnit);
                         }
-                        addingGroup.Add(selectedUnit);
-                    }
-                    hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnits(addingGroup);
+                    }*/
+                    //hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnits(addingGroup);
                 }
             }
             else
