@@ -126,6 +126,21 @@ MonoBehaviour:
   structurePosition: {x: 0, y: 0}
   spacingCircle: 3
   maxUnitsInCircle: 10
+  maxUnitsInRow: 10
+  startX: 0
+  startY: 0
+  spacingX: 1
+  spacingY: 1
+  circleFormationUnits: []
+  frontFormationUnits: []
+  backFormationUnits: []
+  leftFormationUnits: []
+  rightFormationUnits: []
+  circleformationPointsList: []
+  frontformationPointsList: []
+  backformationPointsList: []
+  leftformationPointsList: []
+  rightformationPointsList: []
 --- !u!61 &-6398330374209185047
 BoxCollider2D:
   m_ObjectHideFlags: 0

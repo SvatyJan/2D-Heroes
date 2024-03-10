@@ -16,6 +16,11 @@ public class ObjectFormationController : MonoBehaviour
     [Header("Formation Settings")]
     [SerializeField] float spacingCircle = 3f;
     [SerializeField] float maxUnitsInCircle = 10;
+    [SerializeField] int maxUnitsInRow = 10;
+    [SerializeField] float startX = 0f;
+    [SerializeField] float startY = 0f;
+    [SerializeField] float spacingX = 1f;
+    [SerializeField] float spacingY = 1f;
 
     [SerializeField] private List<GameObject> circleFormationUnits = new List<GameObject>();
     [SerializeField] private List<GameObject> frontFormationUnits = new List<GameObject>();
@@ -24,6 +29,10 @@ public class ObjectFormationController : MonoBehaviour
     [SerializeField] private List<GameObject> rightFormationUnits = new List<GameObject>();
 
     [SerializeField] private List<GameObject> circleformationPointsList = new List<GameObject>();
+    [SerializeField] private List<GameObject> frontformationPointsList = new List<GameObject>();
+    [SerializeField] private List<GameObject> backformationPointsList = new List<GameObject>();
+    [SerializeField] private List<GameObject> leftformationPointsList = new List<GameObject>();
+    [SerializeField] private List<GameObject> rightformationPointsList = new List<GameObject>();
 
     void Update()
     {
@@ -166,28 +175,29 @@ public class ObjectFormationController : MonoBehaviour
                 }
             }
 
-            SetCircleFormationRecalculatedPointsList();
+            SetFormationRecalculatedPointsList(circleformationPointsList, circleFormationUnits);
             circleFormationPointsSort();
+
+            SetFormationRecalculatedPointsList(frontformationPointsList, frontFormationUnits);
+            frontFormationPointsSort();
         }
     }
 
-    private void SetCircleFormationRecalculatedPointsList()
+    private void SetFormationRecalculatedPointsList(List<GameObject> formationPointsList, List<GameObject> formationUnits)
     {
-        // Zkontrolovat, zda existují nìjaké body a odstranit je
-        foreach (GameObject point in circleformationPointsList)
+        foreach (GameObject point in formationPointsList)
         {
             Destroy(point);
         }
-        // Vyèistit seznam bodù
-        circleformationPointsList.Clear();
 
-        int requiredPoints = circleFormationUnits.Count();
+        formationPointsList.Clear();
+        int requiredPoints = formationUnits.Count();
 
         for (int i = 0; i < requiredPoints; i++)
         {
             GameObject formationPoint = Instantiate(formationPointPrefab, Vector2.zero, Quaternion.identity);
             formationPoint.transform.parent = transform;
-            circleformationPointsList.Add(formationPoint);
+            formationPointsList.Add(formationPoint);
         }
     }
 
@@ -209,5 +219,45 @@ public class ObjectFormationController : MonoBehaviour
             circleFormationfollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(circleFormationPoint);
             circleFormationfollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
         }
+    }
+
+    private void frontFormationPointsSort()
+    {
+        for (int i = 0; i < frontformationPointsList.Count(); i++)
+        {
+            GameObject frontFormationFollowingUnit = frontFormationUnits[i];
+            GameObject formationPoint = frontformationPointsList[i];
+
+            int row = i / maxUnitsInRow;
+            int col = i % maxUnitsInRow;
+
+            float x = startX + (col * spacingX);
+            float y = startY + (row * spacingY);
+
+            Vector3 newPosition = new Vector3(x, y, formationPoint.transform.position.z);
+            formationPoint.transform.position = newPosition;
+
+            frontFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
+            frontFormationFollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
+        }
+
+        /*int unitCount = 0;
+        foreach (GameObject frontformationPoint in frontformationPointsList)
+        {
+            GameObject frontFormationFollowingUnit = frontFormationUnits[unitCount];
+
+            int row = unitCount / maxUnitsInRow;
+            int col = unitCount % maxUnitsInRow;
+
+            float x = startX + (col * spacingX);
+            float y = startY + (row * spacingY);
+
+            frontformationPoint.transform.position = new Vector3((float)x, (float)y, 0);
+
+            frontFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(frontformationPoint);
+            frontFormationFollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
+
+            unitCount++;
+        }*/
     }
 }

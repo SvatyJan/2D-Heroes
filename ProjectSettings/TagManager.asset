@@ -14,6 +14,7 @@ TagManager:
   - Enemy Structure
   - Player Flag
   - Enemy Flag
+  - Formation Point
   layers:
   - Default
   - TransparentFX

@@ -47,65 +47,6 @@ public class UnitController : MonoBehaviour
         unit.GetComponent<UnitBehavior>().isHighlighted = false;
     }
 
-    /*public void srovnejNasledujiciJednotky()
-    {
-        /*int requiredPoints = followingUnits.Count;
-
-        // Ovìøení, zda je potøeba pøidat nebo odebrat body formace
-        if (requiredPoints > formationPointsList.Count)
-        {
-            int additionalPoints = requiredPoints - formationPointsList.Count;
-
-            for (int i = 0; i < additionalPoints; i++)
-            {
-                GameObject formationPoint = Instantiate(formationPointPrefab, Vector2.zero, Quaternion.identity);
-                formationPoint.transform.SetParent(MainFormationPoint.transform);
-                formationPointsList.Add(formationPoint);
-            }
-        }
-        else if (requiredPoints < formationPointsList.Count)
-        {
-            int pointsToRemove = formationPointsList.Count - requiredPoints;
-
-            for (int i = 0; i < pointsToRemove; i++)
-            {
-                GameObject pointToRemove = formationPointsList[formationPointsList.Count - 1];
-                formationPointsList.Remove(pointToRemove);
-                Destroy(pointToRemove);
-            }
-        }
-    }*/
-
-    /* private void circleFormationPointsSort()
-     {
-         getFormationPoints(circleFormationUnits, circleFormationPointsList);
-
-         int requiredPoints = circleFormationPointsList.Count();
-
-         for (int i = 0; i < requiredPoints; i++)
-         {
-             GameObject followingUnitInCircleFormation = circleFormationUnits[i];
-             GameObject formationPoint = circleFormationPointsList[i];
-
-             float angle = i * (2 * Mathf.PI / requiredPoints);
-             float x = Mathf.Cos(angle) * spacingCircle;
-             float y = Mathf.Sin(angle) * spacingCircle;
-
-             formationPoint.transform.position = new Vector2(playerPosition.x + x, playerPosition.y + y);
-
-             // Nastavení cíle a chování vojáka
-             if (followingUnitInCircleFormation.GetComponent<UnitBehavior>().attackTarget == null)
-             {
-                 followingUnitInCircleFormation.GetComponent<UnitBehavior>().followTarget = formationPoint;
-                 followingUnitInCircleFormation.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
-             }
-             else
-             {
-                 //když útoèí na terè
-                 followingUnitInCircleFormation.GetComponent<UnitBehavior>().behavior = Behavior.ATTACK;
-             }
-         }
-     }*/
 
     /*private void backFormationPointsSort()
     {

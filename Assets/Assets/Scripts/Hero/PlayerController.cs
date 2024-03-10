@@ -207,23 +207,6 @@ public class PlayerController : MonoBehaviour
                         }
                         hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnit(selectedUnits[i]);
                     }
-
-                    /*List<GameObject> addingGroup = new List<GameObject>();
-                    foreach (GameObject selectedUnit in selectedUnits)
-                    {
-                        // Má už follow target?
-                        if(selectedUnit.GetComponent<UnitBehavior>().GetFollowTarget() != null)
-                        {
-                            var oldFollowTarget = selectedUnit.GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>();
-                            oldFollowTarget.RemoveUnit(selectedUnit);
-                            addingGroup.Add(selectedUnit);
-                        }
-                        else
-                        {
-                            addingGroup.Add(selectedUnit);
-                        }
-                    }*/
-                    //hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnits(addingGroup);
                 }
             }
             else
