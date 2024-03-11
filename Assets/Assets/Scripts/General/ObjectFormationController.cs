@@ -234,30 +234,11 @@ public class ObjectFormationController : MonoBehaviour
             float x = startX + (col * spacingX);
             float y = startY + (row * spacingY);
 
-            Vector3 newPosition = new Vector3(x, y, formationPoint.transform.position.z);
-            formationPoint.transform.position = newPosition;
+            Vector3 newPosition = new Vector3(x, y, 0);
+            formationPoint.transform.position = transform.position + newPosition;
 
             frontFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
             frontFormationFollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
         }
-
-        /*int unitCount = 0;
-        foreach (GameObject frontformationPoint in frontformationPointsList)
-        {
-            GameObject frontFormationFollowingUnit = frontFormationUnits[unitCount];
-
-            int row = unitCount / maxUnitsInRow;
-            int col = unitCount % maxUnitsInRow;
-
-            float x = startX + (col * spacingX);
-            float y = startY + (row * spacingY);
-
-            frontformationPoint.transform.position = new Vector3((float)x, (float)y, 0);
-
-            frontFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(frontformationPoint);
-            frontFormationFollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
-
-            unitCount++;
-        }*/
     }
 }
