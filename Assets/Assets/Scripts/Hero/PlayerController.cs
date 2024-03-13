@@ -204,6 +204,7 @@ public class PlayerController : MonoBehaviour
                         if(selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget() != null)
                         {
                             selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
+                            //getcomponent in parent
                         }
                         hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnit(selectedUnits[i]);
                     }

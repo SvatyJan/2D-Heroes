@@ -16,9 +16,9 @@ public class ObjectFormationController : MonoBehaviour
     [Header("Formation Settings")]
     [SerializeField] float spacingCircle = 3f;
     [SerializeField] float maxUnitsInCircle = 10;
-    [SerializeField] int maxUnitsInRow = 10;
-    [SerializeField] float startX = 0f;
-    [SerializeField] float startY = 0f;
+    [SerializeField] int maxUnitsInRow = 5;
+    [SerializeField] float startX = -2f;
+    [SerializeField] float startY = 1f;
     [SerializeField] float spacingX = 1f;
     [SerializeField] float spacingY = 1f;
 

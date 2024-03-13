@@ -126,9 +126,9 @@ MonoBehaviour:
   structurePosition: {x: 0, y: 0}
   spacingCircle: 3
   maxUnitsInCircle: 10
-  maxUnitsInRow: 10
-  startX: 0
-  startY: 0
+  maxUnitsInRow: 5
+  startX: -2
+  startY: 1
   spacingX: 1
   spacingY: 1
   circleFormationUnits: []
