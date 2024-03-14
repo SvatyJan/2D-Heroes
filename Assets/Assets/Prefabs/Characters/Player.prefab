@@ -562,7 +562,7 @@ MonoBehaviour:
   spacingCircle: 3
   maxUnitsInCircle: 10
   maxUnitsInRow: 5
-  startX: -2
+  startX: 2
   startY: 1
   spacingX: 1
   spacingY: 1

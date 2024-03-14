@@ -88,6 +88,8 @@ public class UnitController : MonoBehaviour
             float spacingX = ObjectFormationController.GetSpacingX();
             float spacingY = ObjectFormationController.GetSpacingY();
             float spacingCircle = ObjectFormationController.GetSpacingCircle();
+            ObjectFormationController.SetStartX(startX + -2);
+            ObjectFormationController.SetStartY(startY + -2);
             ObjectFormationController.SetSpacingX(spacingX-1);
             ObjectFormationController.SetSpacingY(spacingY-1);
             ObjectFormationController.SetSpacingCircle(spacingCircle-1);

@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7303792611259712029
 SpriteRenderer:
@@ -100,4 +100,4 @@ MonoBehaviour:
   unitPrefab: {fileID: 5167884835933477276, guid: b7d6a7e8dcf696d49a29897ab96d2a61, type: 3}
   spawnInterval: 1
   spawnPoint: {fileID: 6435413684424592760}
-  spawnerActive: 1
+  spawnerActive: 0
