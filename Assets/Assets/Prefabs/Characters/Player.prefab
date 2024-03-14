@@ -491,13 +491,7 @@ MonoBehaviour:
   MainFormationPoint: {fileID: 2143634623864308975}
   formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
   selectedUnits: []
-  followingUnits: []
-  startX: -2
-  startY: -2
-  spacingX: 1
-  spacingY: -1
-  maxUnitsInRow: 5
-  spacingCircle: 3
+  formationSpacing: 3
   playerPosition: {x: 0, y: 0}
   formation: 0
 --- !u!114 &5757847949633642110
@@ -563,8 +557,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainFormationPoint: {fileID: 8920888206443744980}
   formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
-  selectedUnits: []
+  followingUnits: []
   structurePosition: {x: 0, y: 0}
   spacingCircle: 3
   maxUnitsInCircle: 10
-  formation: 0
+  maxUnitsInRow: 5
+  startX: -2
+  startY: 1
+  spacingX: 1
+  spacingY: 1
+  circleFormationUnits: []
+  frontFormationUnits: []
+  backFormationUnits: []
+  leftFormationUnits: []
+  rightFormationUnits: []
+  circleformationPointsList: []
+  frontformationPointsList: []
+  backformationPointsList: []
+  leftformationPointsList: []
+  rightformationPointsList: []
