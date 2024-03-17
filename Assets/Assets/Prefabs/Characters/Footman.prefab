@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 61cea2c929a9a8b459948233c358463e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -310,7 +310,6 @@ MonoBehaviour:
   behavior: 0
   stance: 0
   formation: 1
-  defendingTarget: {fileID: 0}
   followTarget: {fileID: 0}
   attackTarget: {fileID: 0}
   attackTags:
@@ -340,8 +339,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainFormationPoint: {fileID: 5167884835933477276}
   formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
-  selectedUnits: []
+  followingUnits: []
   structurePosition: {x: 0, y: 0}
   spacingCircle: 3
   maxUnitsInCircle: 10
-  formation: 0
+  maxUnitsInRow: 10
+  startX: 2
+  startY: 2
+  spacingX: 2
+  spacingY: 2
+  circleFormationUnits: []
+  frontFormationUnits: []
+  backFormationUnits: []
+  leftFormationUnits: []
+  rightFormationUnits: []
+  circleformationPointsList: []
+  frontformationPointsList: []
+  backformationPointsList: []
+  leftformationPointsList: []
+  rightformationPointsList: []

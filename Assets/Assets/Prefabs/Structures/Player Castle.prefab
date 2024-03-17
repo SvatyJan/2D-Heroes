@@ -77,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.09011213, g: 0.3481095, b: 0.764151, a: 1}
   m_FlipX: 0
@@ -165,6 +165,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8464666498240432988, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4006915390234496347, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
     m_RemovedGameObjects: []
@@ -191,6 +195,10 @@ PrefabInstance:
     - target: {fileID: 1775414797732481991, guid: 909170199e0fa2c4789001870d8af1ce, type: 3}
       propertyPath: m_TagString
       value: Player Structure
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232959245545776790, guid: 909170199e0fa2c4789001870d8af1ce, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8795744704890192682, guid: 909170199e0fa2c4789001870d8af1ce, type: 3}
       propertyPath: m_RootOrder
@@ -278,11 +286,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainFormationPoint: {fileID: 3897154572908814075}
   formationPointPrefab: {fileID: 2746806849855012865, guid: 8a202320acf097b4d9455fca6dcebc29, type: 3}
-  selectedUnits: []
+  followingUnits: []
   structurePosition: {x: 0, y: 0}
   spacingCircle: 5
   maxUnitsInCircle: 10
-  formation: 1
+  maxUnitsInRow: 10
+  startX: 2
+  startY: 2
+  spacingX: 2
+  spacingY: 2
+  circleFormationUnits: []
+  frontFormationUnits: []
+  backFormationUnits: []
+  leftFormationUnits: []
+  rightFormationUnits: []
+  circleformationPointsList: []
+  frontformationPointsList: []
+  backformationPointsList: []
+  leftformationPointsList: []
+  rightformationPointsList: []
 --- !u!4 &7923965628029785284 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8795744704890192682, guid: 909170199e0fa2c4789001870d8af1ce, type: 3}
@@ -364,6 +386,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8464666498240432988, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4006915390234496347, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
     m_RemovedGameObjects: []
@@ -387,6 +413,10 @@ PrefabInstance:
       propertyPath: formation
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 868537710468787499, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: MainFormationPoint
+      value: 
+      objectReference: {fileID: 855240681127317088}
     - target: {fileID: 1325361333806223569, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
       propertyPath: m_Name
       value: Player Tower
@@ -451,12 +481,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8464666498240432988, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4006915390234496347, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+--- !u!1 &855240681127317088 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1325361333806223569, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+  m_PrefabInstance: {fileID: 1854020430403231409}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7825740754704079044 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8439833674784917109, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
@@ -537,6 +576,10 @@ PrefabInstance:
     - target: {fileID: 8439833674784917109, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8464666498240432988, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4006915390234496347, guid: 4ebf956626902d14d8c7df16b703cc97, type: 3}
