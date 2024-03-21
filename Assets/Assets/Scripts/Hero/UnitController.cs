@@ -41,8 +41,11 @@ public class UnitController : MonoBehaviour
 
     public void AddSelectUnit(GameObject unit)
     {
-        selectedUnits.Add(unit);
-        unit.GetComponent<UnitBehavior>().isHighlighted = true;
+        if(!selectedUnits.Contains(unit))
+        {
+            selectedUnits.Add(unit);
+            unit.GetComponent<UnitBehavior>().isHighlighted = true;
+        }
     }
 
     public void RemoveSelectedUnit(GameObject unit)
@@ -55,12 +58,23 @@ public class UnitController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            GameObject[] playerUnits;
-            playerUnits = GameObject.FindGameObjectsWithTag("Player Unit");
-
-            foreach (GameObject playerUnit in playerUnits)
+            GameObject[] allPlayerUnits;
+            allPlayerUnits = GameObject.FindGameObjectsWithTag("Player Unit");
+            if (selectedUnits.Count < allPlayerUnits.Count())
             {
-                playerUnit.GetComponent<UnitBehavior>().isHighlighted = true;
+                foreach (GameObject playerUnit in allPlayerUnits)
+                {
+                    AddSelectUnit(playerUnit);
+                }
+            }
+            else
+            {
+                foreach (GameObject playerUnit in allPlayerUnits)
+                {
+                    RemoveSelectedUnit(playerUnit);
+                }
+                selectedUnits.Clear();
+                allPlayerUnits = null;
             }
         }
     }
