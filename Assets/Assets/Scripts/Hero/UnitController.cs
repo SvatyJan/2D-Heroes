@@ -30,7 +30,8 @@ public class UnitController : MonoBehaviour
 
     private void Update()
     {
-        manipulateCircleFormationSpacing();
+        SelectAllUnits();
+        ManipulateCircleFormationSpacing();
     }
 
     public List<GameObject> GetSelectedUnits()
@@ -50,6 +51,20 @@ public class UnitController : MonoBehaviour
         unit.GetComponent<UnitBehavior>().isHighlighted = false;
     }
 
+    public void SelectAllUnits()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            GameObject[] playerUnits;
+            playerUnits = GameObject.FindGameObjectsWithTag("Player Unit");
+
+            foreach (GameObject playerUnit in playerUnits)
+            {
+                playerUnit.GetComponent<UnitBehavior>().isHighlighted = true;
+            }
+        }
+    }
+
     public void ChangeFormation(Formation chaningFormation)
     {
         formation = chaningFormation;
@@ -63,7 +78,7 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    private void manipulateCircleFormationSpacing()
+    private void ManipulateCircleFormationSpacing()
     {
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
