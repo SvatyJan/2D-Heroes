@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using static UnitBehavior;
@@ -12,6 +14,8 @@ public class UnitController : MonoBehaviour
     [SerializeField] float formationSpacing = 3f;
 
     public Vector2 playerPosition;
+
+    [SerializeField] public List<GameObject> unitGroup1 = new List<GameObject>();
 
     public enum Formation
     {
@@ -32,6 +36,7 @@ public class UnitController : MonoBehaviour
     {
         SelectAllUnits();
         ManipulateCircleFormationSpacing();
+        groupSelectedUnity();
     }
 
     public List<GameObject> GetSelectedUnits()
@@ -123,6 +128,29 @@ public class UnitController : MonoBehaviour
             ObjectFormationController.SetSpacingY(spacingY-1);
             ObjectFormationController.SetSpacingCircle(spacingCircle-1);
             ObjectFormationController.RecalculateFormations();
+        }
+    }
+
+    private void groupSelectedUnity()
+    {
+        KeyCode numberOne = KeyCode.Alpha1;
+        KeyCode shift = KeyCode.LeftShift;
+        if (Input.GetKey(shift) && Input.GetKey(numberOne))
+        {
+            unitGroup1.Clear();
+            foreach(GameObject selectedUnit in selectedUnits)
+            {
+                unitGroup1.Add(selectedUnit);
+            }
+        }
+        else if(Input.GetKey(numberOne))
+        {
+            //TODO: pøi selectu vyber jen ty jednotky, ostatni vyhod z party.
+            selectedUnits.Clear();
+            foreach (GameObject unitInGroup in unitGroup1)
+            {
+                AddSelectUnit(unitInGroup);
+            }
         }
     }
 }

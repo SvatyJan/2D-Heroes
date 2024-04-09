@@ -35,6 +35,14 @@ public class PlayerController : MonoBehaviour
     Ray ray;
     RaycastHit2D hit;
 
+    //ATTACK
+    [SerializeField] float damage;
+    private float timeBtwAttack;
+    [SerializeField] float startTimeBtwAttack;
+
+    public bool blocking = false;
+    public bool attackActive = false;
+
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
@@ -49,6 +57,25 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            PlayerMeleeAttack();
+        }
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            if (!blocking)
+            {
+                blocking = true;
+                animator.SetBool("Blocking", true);
+            }
+            else if (blocking)
+            {
+                blocking = false;
+                animator.SetBool("Blocking", false);
+            }
+        }
+
         Movement();
         Point();
         createFlag();
@@ -215,5 +242,53 @@ public class PlayerController : MonoBehaviour
                 // Zadny objekt nebyl nalezen
             }
         }
+    }
+
+    private void PlayerMeleeAttack()
+    {
+        if (timeBtwAttack <= 0)
+        {
+            animator.SetBool("Attacking", true);
+            //Debug.Log("You melee attack");
+
+            //GameObject slasheffectinstance = Instantiate(slashEffect, transform.position, Quaternion.identity);
+            //Destroy(slasheffectinstance,effectduration);
+
+            /*Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPosition.position, attackRadius, whatIsEnemy);
+            for (int i = 0; i < enemiesToDamage.Length; i++)
+            {
+                //enemiesToDamage[i].GetComponent<Stats>().TakeDamage(damage);
+            }*/
+            timeBtwAttack = startTimeBtwAttack;
+        }
+        else
+        {
+            timeBtwAttack -= Time.deltaTime;
+        }
+
+        if (timeBtwAttack <= 0)
+        {
+            animator.SetBool("Attacking", true);
+        }
+    }
+
+    public void ChangeBlocking()
+    {
+        if (blocking)
+        {
+            animator.SetBool("Blocking", false);
+            blocking = false;
+        }
+        else
+        {
+            animator.SetBool("Blocking", true);
+            blocking = true;
+        }
+    }
+
+    public void SetAttackAnimationFalse()
+    {
+        animator.SetBool("Attacking", false);
+        timeBtwAttack = 0;
     }
 }

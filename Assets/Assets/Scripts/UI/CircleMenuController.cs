@@ -8,7 +8,6 @@ public class CircleMenuController : MonoBehaviour
     public GameObject CursorRootObject;
     public GameObject HighlightRootObject;
 
-    private Vector2 mousePosition;
     public Camera cam;
 
     public TextMeshProUGUI CircleMenuItemLabel;
