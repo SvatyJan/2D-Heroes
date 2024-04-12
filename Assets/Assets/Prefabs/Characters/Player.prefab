@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 3536639781850955944}
   - component: {fileID: 4286115427929416431}
   - component: {fileID: 5491149112654017043}
+  - component: {fileID: 4383239767359000718}
   m_Layer: 6
   m_Name: Character
   m_TagString: Player
@@ -304,7 +305,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb2d: {fileID: 3330377137499774000}
-  moveSpeed: 4
   movement: {x: 0, y: 0}
   mousePosition: {x: 0, y: 0}
   cam: {fileID: 1858540596056266194}
@@ -576,3 +576,22 @@ MonoBehaviour:
   backformationPointsList: []
   leftformationPointsList: []
   rightformationPointsList: []
+--- !u!114 &4383239767359000718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920888206443744980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01b7ae13d8e7de4387ea1a7f8984181, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  maxHealth: 100
+  mana: 100
+  maxMana: 100
+  speed: 8
+  maxSpeed: 10
+  damage: 10

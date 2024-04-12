@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 2972967235923510027}
   - component: {fileID: 8005862675878672984}
   - component: {fileID: 3378347301987294886}
+  - component: {fileID: 26887723158551004}
   m_Layer: 7
   m_Name: Footman
   m_TagString: Player Unit
@@ -358,3 +359,22 @@ MonoBehaviour:
   backformationPointsList: []
   leftformationPointsList: []
   rightformationPointsList: []
+--- !u!114 &26887723158551004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5167884835933477276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01b7ae13d8e7de4387ea1a7f8984181, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  maxHealth: 100
+  mana: 0
+  maxMana: 0
+  speed: 6
+  maxSpeed: 6
+  damage: 10
