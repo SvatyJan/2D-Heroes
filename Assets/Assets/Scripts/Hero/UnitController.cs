@@ -145,12 +145,20 @@ public class UnitController : MonoBehaviour
         }
         else if(Input.GetKey(numberOne))
         {
-            //TODO: pøi selectu vyber jen ty jednotky, ostatni vyhod z party.
-            selectedUnits.Clear();
+            UnselectAllUnits();
             foreach (GameObject unitInGroup in unitGroup1)
             {
                 AddSelectUnit(unitInGroup);
             }
         }
+    }
+
+    private void UnselectAllUnits()
+    {
+        foreach (GameObject selectedUnit in selectedUnits)
+        {
+            selectedUnit.GetComponent<UnitBehavior>().isHighlighted = false;
+        }
+        selectedUnits.Clear();
     }
 }
