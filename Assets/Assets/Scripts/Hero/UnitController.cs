@@ -27,6 +27,14 @@ public class UnitController : MonoBehaviour
     }
     public Formation formation;
 
+    public enum Stance
+    {
+        AGRESSIVE = 1,
+        DEFENSIVE = 2,
+        PASSIVE = 3,
+    }
+    public Stance stance;
+
     void Start()
     {
         formation = Formation.CIRCLE;
@@ -94,6 +102,15 @@ public class UnitController : MonoBehaviour
             {
                 selectedUnit.GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RecalculateFormations();
             }
+        }
+    }
+
+    public void ChangeStance(Stance changingStance)
+    {
+        stance = changingStance;
+        foreach (GameObject selectedUnit in selectedUnits)
+        {
+            selectedUnit.GetComponent<UnitBehavior>().SetBehavior((UnitBehavior.Stance)changingStance);
         }
     }
 
