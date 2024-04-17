@@ -2,56 +2,94 @@ using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
-    [SerializeField] private float health = 100f;
-    [SerializeField] private float maxHealth = 100f;
 
-    [SerializeField] private float mana = 100f;
-    [SerializeField] private float maxMana = 100f;
-
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float maxSpeed = 10f;
-
-    [SerializeField] private float damage = 10f;
-
-    public float Health
+    private static float speed = 100f;
+    private float Speed
     {
-        get { return health; }
-        set { health = value; }
+        get
+        {
+            return speed;
+        }
+        set
+        {
+            speed = value;
+        }
     }
 
-    public float MaxHealth
+    private static float maxSpeed = 100f;
+    private float MaxSpeed
     {
-        get { return maxHealth; }
-        set { maxHealth = value; }
+        get
+        {
+            return maxSpeed;
+        }
+        set
+        {
+            maxSpeed = value;
+        }
     }
 
-    public float Mana
+    private static float damage = 10f;
+    private float Damage
     {
-        get { return mana; }
-        set { mana = value; }
+        get
+        {
+            return damage;
+        }
+        set
+        {
+            damage = value;
+        }
     }
 
-    public float MaxMana
-    {
-        get { return maxMana; }
-        set { maxMana = value; }
+    private static float health = 100f;
+    private float Health {
+        get
+        {
+            return health;
+        }
+        set
+        {
+            health = value;
+        }
     }
 
-    public float Speed
+    private static float maxHealth = 100f;
+    private float MaxHealth
     {
-        get { return speed; }
-        set { speed = value; }
+        get
+        {
+            return maxHealth;
+        }
+        set
+        {
+            maxHealth = value;
+        }
     }
 
-    public float MaxSpeed
+    private static float mana = 100f;
+    private float Mana
     {
-        get { return maxSpeed; }
-        set { maxSpeed = value; }
+        get
+        {
+            return mana;
+        }
+        set
+        {
+            mana = value;
+        }
     }
 
-    public float Damage
+    private static float maxMana = 100f;
+    private float MaxMana
     {
-        get { return damage; }
-        set { damage = value; }
+        get
+        {
+            return maxMana;
+        }
+        set
+        {
+            maxMana = value;
+        }
     }
 }
