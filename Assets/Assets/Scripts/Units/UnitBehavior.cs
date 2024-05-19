@@ -48,6 +48,17 @@ public class UnitBehavior : MonoBehaviour
 
     [SerializeField] GameObject highlightCircle;
     public bool isHighlighted = false;
+    [SerializeField] private bool selectable;
+
+    public void setSelectable(bool selectable)
+    {
+        this.selectable = selectable;
+    }
+
+    public bool getSelectable()
+    {
+        return this.selectable;
+    }
 
     private void Start()
     {

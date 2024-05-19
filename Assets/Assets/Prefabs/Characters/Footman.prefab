@@ -326,6 +326,7 @@ MonoBehaviour:
   directionY: 0
   highlightCircle: {fileID: 4062418303808143613}
   isHighlighted: 0
+  selectable: 1
 --- !u!114 &3378347301987294886
 MonoBehaviour:
   m_ObjectHideFlags: 0

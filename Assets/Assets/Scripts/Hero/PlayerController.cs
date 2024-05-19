@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -57,10 +56,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        /*if (Input.GetButtonDown("Fire1"))
         {
             PlayerMeleeAttack();
-        }
+        }*/
 
         if (Input.GetButtonDown("Fire2"))
         {
@@ -77,7 +76,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Movement();
-        Point();
+        //Point();
         createFlag();
         orderDefend();
     }
@@ -129,6 +128,8 @@ public class PlayerController : MonoBehaviour
         if (horizontalFirepointY <= -1) { horizontalFirepointY = -1; }
     }
 
+    /* Stary point system, nahrazuji za selection system.
+       Soucasti je UnitSelector a UnitDeselector */
     private void Point()
     {
         //musi existovat jen jeden unitselector
