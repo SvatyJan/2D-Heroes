@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -42,6 +43,10 @@ public class PlayerController : MonoBehaviour
     public bool blocking = false;
     public bool attackActive = false;
 
+    private Vector3 startPosition;
+    private Vector3 endPosition;
+    [SerializeField] private Transform selectionAreaTransform;
+
     private enum State
     {
         Normal,
@@ -49,8 +54,9 @@ public class PlayerController : MonoBehaviour
     }
     private State state;
 
-    void Start()
+    void Awake()
     {
+        selectionAreaTransform.gameObject.SetActive(false);
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
@@ -63,29 +69,33 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        /*if (Input.GetButtonDown("Fire1"))
+        Movement();
+        toggleWeaponDraw();
+
+        if (attackActive)
         {
             PlayerMeleeAttack();
-        }*/
-
-        if (Input.GetButtonDown("Fire2"))
-        {
-            if (!blocking)
+            if (Input.GetButtonDown("Fire2"))
             {
-                blocking = true;
-                animator.SetBool("Blocking", true);
-            }
-            else if (blocking)
-            {
-                blocking = false;
-                animator.SetBool("Blocking", false);
+                if (!blocking)
+                {
+                    blocking = true;
+                    animator.SetBool("Blocking", true);
+                }
+                else if (blocking)
+                {
+                    blocking = false;
+                    animator.SetBool("Blocking", false);
+                }
             }
         }
-
-        Movement();
-        //Point();
-        createFlag();
-        orderDefend();
+        else if(!attackActive)
+        {
+            //Point();
+            controlUnits();
+            orderDefend();
+            createFlag();
+        }
     }
 
     private void Movement()
@@ -187,6 +197,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void toggleWeaponDraw()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            attackActive = !attackActive;
+
+            if (attackActive) { cam.orthographicSize = 5f; }
+            else { cam.orthographicSize = 7f; }
+        }
+    }
+
     /** Metoda pro polozeni vlajky na kurzoru hrace. */
     private void createFlag()
     {
@@ -255,42 +276,43 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerMeleeAttack()
     {
-        if (timeBtwAttack <= 0)
+        if (Input.GetButtonDown("Fire1"))
         {
-            animator.SetBool("Attacking", true);
-            //Debug.Log("You melee attack");
-
-            //GameObject slasheffectinstance = Instantiate(slashEffect, transform.position, Quaternion.identity);
-            //Destroy(slasheffectinstance,effectduration);
-
-            /*Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPosition.position, attackRadius, whatIsEnemy);
-            for (int i = 0; i < enemiesToDamage.Length; i++)
+            if (timeBtwAttack <= 0)
             {
-                //enemiesToDamage[i].GetComponent<Stats>().TakeDamage(damage);
-            }*/
+                animator.SetBool("Attacking", true);
+                //Debug.Log("You melee attack");
 
-            //nová logika
-            Vector3 mouseDir = mousePosition.normalized;
-            float attackOffset = 3f;
-            Vector3 attackPosition = transform.position + mouseDir * attackOffset;
-            Debug.Log(attackPosition);
-            state = State.Attacking;
+                //GameObject slasheffectinstance = Instantiate(slashEffect, transform.position, Quaternion.identity);
+                //Destroy(slasheffectinstance,effectduration);
 
-            //TODO: zjisti všechny nepřátele v range, a vyber toho nejblíž a toho targetni.
+                /*Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPosition.position, attackRadius, whatIsEnemy);
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    //enemiesToDamage[i].GetComponent<Stats>().TakeDamage(damage);
+                }*/
 
-            //nová logika
-            timeBtwAttack = startTimeBtwAttack;
+                //nová logika
+                Vector3 mouseDir = mousePosition.normalized;
+                float attackOffset = 3f;
+                Vector3 attackPosition = transform.position + mouseDir * attackOffset;
+                state = State.Attacking;
+
+                //TODO: zjisti všechny nepřátele v range, a vyber toho nejblíž a toho targetni.
+
+                //nová logika
+                timeBtwAttack = startTimeBtwAttack;
+            }
+            else
+            {
+                timeBtwAttack -= Time.deltaTime;
+            }
+
+            if (timeBtwAttack <= 0)
+            {
+                animator.SetBool("Attacking", true);
+            }
         }
-        else
-        {
-            timeBtwAttack -= Time.deltaTime;
-        }
-
-        if (timeBtwAttack <= 0)
-        {
-            animator.SetBool("Attacking", true);
-        }
-
     }
 
     public void ChangeBlocking()
@@ -311,5 +333,55 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetBool("Attacking", false);
         timeBtwAttack = 0;
+    }
+
+    public void controlUnits()
+    {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            startPosition = cam.ScreenToWorldPoint(Input.mousePosition);
+            selectionAreaTransform.gameObject.SetActive(true);
+        }
+
+        if (Input.GetButton("Fire1"))
+        {
+            Vector3 currentMousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 lowerLeft = new Vector3(
+                Mathf.Min(startPosition.x, currentMousePosition.x),
+                Mathf.Min(startPosition.y, currentMousePosition.y)
+                );
+            Vector3 upperRigth = new Vector3(
+                Mathf.Max(startPosition.x, currentMousePosition.x),
+                Mathf.Max(startPosition.y, currentMousePosition.y)
+                );
+            selectionAreaTransform.position = lowerLeft;
+            selectionAreaTransform.localScale = upperRigth - lowerLeft;
+        }
+
+        if (Input.GetButtonUp("Fire1"))
+        {
+            selectionAreaTransform.gameObject.SetActive(false);
+            endPosition = cam.ScreenToWorldPoint(Input.mousePosition);
+
+            Collider2D[] collider2DArray = Physics2D.OverlapAreaAll(startPosition, endPosition);
+            foreach (Collider2D collider2D in collider2DArray)
+            {
+                UnitBehavior unitBehavior = collider2D.GetComponent<UnitBehavior>();
+                if (unitBehavior != null)
+                {
+                    if (unitBehavior.getSelectable())
+                    {
+                        try
+                        {
+                            GetComponent<UnitController>().AddSelectUnit(collider2D.gameObject);
+                        }
+                        catch (Exception e)
+                        {
+                            //Jednotka již existuje v partě hrdiny
+                        }
+                    }
+                }
+            }
+        }
     }
 }
