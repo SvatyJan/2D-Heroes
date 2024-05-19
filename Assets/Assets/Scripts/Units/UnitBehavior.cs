@@ -3,19 +3,11 @@ using UnityEngine;
 
 public class UnitBehavior : MonoBehaviour
 {
-    public enum Behavior
-    {
-        IDLE,
-        ATTACK,
-        GUARD
-    }
-    public Behavior behavior;
-
     public enum Stance
     {
-        PASSIVE,
-        DEFENSIVE,
-        AGRESSIVE
+        AGRESSIVE = 1,
+        DEFENSIVE = 2,
+        PASSIVE = 3,
     }
     public Stance stance;
 
@@ -63,7 +55,7 @@ public class UnitBehavior : MonoBehaviour
     private void Start()
     {
         formation = Formation.CIRCLE;
-        behavior = Behavior.IDLE;
+        stance = Stance.AGRESSIVE;
         animator = GetComponent<Animator>();
     }
 
@@ -72,15 +64,15 @@ public class UnitBehavior : MonoBehaviour
         GetMovementDirection();
         checkForHighlight();
 
-        if (behavior == Behavior.IDLE)
+        if (stance == Stance.PASSIVE)
         {
             Idle();
         }
-        else if(behavior == Behavior.ATTACK)
+        else if(stance == Stance.AGRESSIVE)
         {
             Attack();
         }
-        else if (behavior == Behavior.GUARD)
+        else if (stance == Stance.DEFENSIVE)
         {
             Guard();
         }
@@ -137,14 +129,14 @@ public class UnitBehavior : MonoBehaviour
         this.followTarget = newFollowTarget;
     }
 
-    public Behavior GetBehavior()
+    public Stance GetBehavior()
     {
-        return behavior;
+        return stance;
     }
 
-    public void SetBehavior(Behavior newBehavior)
+    public void SetBehavior(Stance newBehavior)
     {
-        this.behavior = newBehavior;
+        this.stance = newBehavior;
     }
 
     public void Idle()
@@ -175,7 +167,7 @@ public class UnitBehavior : MonoBehaviour
         if(followTarget == null)
         {
             followTarget = null;
-            behavior = Behavior.IDLE;
+            stance = Stance.PASSIVE;
         }
         else
         {
@@ -199,7 +191,7 @@ public class UnitBehavior : MonoBehaviour
         {
             if (Vector2.Distance(transform.position, attackTarget.transform.position) > attackFollowRadius)
             {
-                behavior = Behavior.IDLE;
+                stance = Stance.PASSIVE;
                 
                 attackTarget = null;
                 return;
@@ -211,7 +203,7 @@ public class UnitBehavior : MonoBehaviour
             if (ArrayContainsTag(collider.tag, attackTags))
             {
                 attackTarget = collider.gameObject;
-                behavior = Behavior.ATTACK;
+                stance = Stance.AGRESSIVE;
                 Debug.Log("Menim chovani na utok");
                 break;
             }
@@ -247,7 +239,7 @@ public class UnitBehavior : MonoBehaviour
         if(!newTarget.GetComponent<ObjectFormationController>().GetFollowingUnits().Contains(this.gameObject))
         {
             followTarget = newTarget;
-            behavior = Behavior.GUARD;
+            stance = Stance.DEFENSIVE;
             newTarget.GetComponent<ObjectFormationController>().GetFollowingUnits().Add(this.gameObject);
             newTarget.GetComponent<ObjectFormationController>().RecalculateFormations();
         }

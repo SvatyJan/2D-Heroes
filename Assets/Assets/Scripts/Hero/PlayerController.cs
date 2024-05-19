@@ -42,6 +42,13 @@ public class PlayerController : MonoBehaviour
     public bool blocking = false;
     public bool attackActive = false;
 
+    private enum State
+    {
+        Normal,
+        Attacking
+    }
+    private State state;
+
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
@@ -92,6 +99,7 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("Horizontal", directionX);
             animator.SetFloat("Vertical", movement.y);
         }
+
         if (movement.y != 0)
         {
             directionY = movement.y;
@@ -260,6 +268,17 @@ public class PlayerController : MonoBehaviour
             {
                 //enemiesToDamage[i].GetComponent<Stats>().TakeDamage(damage);
             }*/
+
+            //nová logika
+            Vector3 mouseDir = mousePosition.normalized;
+            float attackOffset = 3f;
+            Vector3 attackPosition = transform.position + mouseDir * attackOffset;
+            Debug.Log(attackPosition);
+            state = State.Attacking;
+
+            //TODO: zjisti všechny nepřátele v range, a vyber toho nejblíž a toho targetni.
+
+            //nová logika
             timeBtwAttack = startTimeBtwAttack;
         }
         else
@@ -271,6 +290,7 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("Attacking", true);
         }
+
     }
 
     public void ChangeBlocking()

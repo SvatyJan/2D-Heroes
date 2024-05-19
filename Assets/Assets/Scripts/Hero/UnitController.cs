@@ -24,6 +24,14 @@ public class UnitController : MonoBehaviour
     }
     public Formation formation;
 
+    public enum Stance
+    {
+        AGRESSIVE = 1,
+        DEFENSIVE = 2,
+        PASSIVE = 3,
+    }
+    public Stance stance;
+
     void Start()
     {
         formation = Formation.CIRCLE;
@@ -94,6 +102,15 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    public void ChangeStance(Stance changingStance)
+    {
+        stance = changingStance;
+        foreach (GameObject selectedUnit in selectedUnits)
+        {
+            selectedUnit.GetComponent<UnitBehavior>().SetBehavior((UnitBehavior.Stance)changingStance);
+        }
+    }
+
     private void ManipulateCircleFormationSpacing()
     {
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
@@ -142,12 +159,20 @@ public class UnitController : MonoBehaviour
         }
         else if(Input.GetKey(numberOne))
         {
-            //TODO: pøi selectu vyber jen ty jednotky, ostatni vyhod z party.
-            selectedUnits.Clear();
+            UnselectAllUnits();
             foreach (GameObject unitInGroup in unitGroup1)
             {
                 AddSelectUnit(unitInGroup);
             }
         }
+    }
+
+    private void UnselectAllUnits()
+    {
+        foreach (GameObject selectedUnit in selectedUnits)
+        {
+            selectedUnit.GetComponent<UnitBehavior>().isHighlighted = false;
+        }
+        selectedUnits.Clear();
     }
 }

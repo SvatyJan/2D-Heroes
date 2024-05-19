@@ -275,7 +275,7 @@ public class ObjectFormationController : MonoBehaviour
             circleFormationPoint.transform.position = new Vector2(structurePosition.x + x, structurePosition.y + y);
 
             circleFormationfollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(circleFormationPoint);
-            circleFormationfollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
+            circleFormationfollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 
@@ -296,7 +296,7 @@ public class ObjectFormationController : MonoBehaviour
             formationPoint.transform.position = transform.position + newPosition;
 
             frontFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
-            frontFormationFollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
+            frontFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 
@@ -317,7 +317,7 @@ public class ObjectFormationController : MonoBehaviour
             formationPoint.transform.position = transform.position + newPosition;
 
             backFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
-            backFormationFollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
+            backFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 
@@ -337,7 +337,7 @@ public class ObjectFormationController : MonoBehaviour
             formationPoint.transform.position = transform.position + newPosition;
 
             leftFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
-            leftFormationFollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
+            leftFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 
@@ -357,7 +357,7 @@ public class ObjectFormationController : MonoBehaviour
             formationPoint.transform.position = transform.position + newPosition;
 
             rightFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
-            rightFormationFollowingUnit.GetComponent<UnitBehavior>().behavior = Behavior.GUARD;
+            rightFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 }
