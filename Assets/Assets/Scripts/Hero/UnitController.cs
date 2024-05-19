@@ -41,7 +41,7 @@ public class UnitController : MonoBehaviour
     {
         SelectAllUnits();
         ManipulateCircleFormationSpacing();
-        groupSelectedUnity();
+        groupSelectedUnits();
     }
 
     public List<GameObject> GetSelectedUnits()
@@ -145,7 +145,7 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    private void groupSelectedUnity()
+    private void groupSelectedUnits()
     {
         KeyCode numberOne = KeyCode.Alpha1;
         KeyCode shift = KeyCode.LeftShift;
@@ -167,7 +167,7 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    private void UnselectAllUnits()
+    public void UnselectAllUnits()
     {
         foreach (GameObject selectedUnit in selectedUnits)
         {

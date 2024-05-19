@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnitBehavior;
 
 public class ObjectFormationController : MonoBehaviour
@@ -33,9 +34,17 @@ public class ObjectFormationController : MonoBehaviour
     [SerializeField] private List<GameObject> leftformationPointsList = new List<GameObject>();
     [SerializeField] private List<GameObject> rightformationPointsList = new List<GameObject>();
 
+    [SerializeField] private bool deleteOnNoFollow = false;
+    private float emptyTime = 0f;
+    private float emptyDuration = 1f;
+
     void Update()
     {
         structurePosition = transform.position;
+        if(deleteOnNoFollow)
+        {
+            deleteOnNoFollowingUnits();
+        }
     }
 
     public List<GameObject> GetFollowingUnits()
@@ -60,6 +69,7 @@ public class ObjectFormationController : MonoBehaviour
         if (!followingUnits.Contains(unit))
         {
             followingUnits.Add(unit);
+            structurePosition = transform.position;
             RecalculateFormations();
         }
     }
@@ -358,6 +368,21 @@ public class ObjectFormationController : MonoBehaviour
 
             rightFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
             rightFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
+        }
+    }
+    private void deleteOnNoFollowingUnits()
+    {
+        if (followingUnits == null || followingUnits.Count == 0)
+        {
+            emptyTime += Time.deltaTime;
+            if (emptyTime >= emptyDuration)
+            {
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            emptyTime = 0f;
         }
     }
 }

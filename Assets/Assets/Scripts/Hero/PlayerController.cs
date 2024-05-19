@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float directionY;
     [SerializeField] GameObject unitSelectorTemplate;
     [SerializeField] GameObject unitDeselectorTemplate;
+    [SerializeField] GameObject moveToPointPrefab;
     private GameObject unitSelectorGameObject;
     private GameObject unitDeselectorGameObject;
 
@@ -93,7 +95,7 @@ public class PlayerController : MonoBehaviour
         {
             //Point();
             controlUnits();
-            orderDefend();
+            orderTarget();
             createFlag();
         }
     }
@@ -239,9 +241,14 @@ public class PlayerController : MonoBehaviour
         Destroy(flag);
     }
 
-    /** Metoda pro prikazani kontrolujicich jednotek k obrane */
-    private void orderDefend()
+    /** Metoda pro prikazani akce jednotkam */
+    private void orderTarget()
     {
+        /* 1. defend
+         * 2. attack
+         * 3. move
+         * */
+
         ray = cam.ScreenPointToRay(Input.mousePosition);
         hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 
@@ -269,7 +276,22 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                // Zadny objekt nebyl nalezen
+                List<GameObject> selectedUnits = GetComponent<UnitController>().GetSelectedUnits();
+
+                GameObject moveToPoint = Instantiate(moveToPointPrefab, new Vector3(mousePosition.x, mousePosition.y, 0f), Quaternion.identity);
+                moveToPoint.transform.position = mousePosition;
+
+                for (int i = 0; i < selectedUnits.Count(); i++)
+                {
+                    if (selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget() != null)
+                    {
+                        selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
+                        //getcomponent in parent
+                    }
+                    moveToPoint.GetComponent<ObjectFormationController>().AddUnit(selectedUnits[i]);
+                }
+
+                moveToPoint.GetComponent<ObjectFormationController>().structurePosition = mousePosition;
             }
         }
     }
@@ -360,10 +382,15 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonUp("Fire1"))
         {
+            if(!Input.GetKey(KeyCode.LeftShift))
+            {
+                GetComponent<UnitController>().UnselectAllUnits();
+            }
             selectionAreaTransform.gameObject.SetActive(false);
             endPosition = cam.ScreenToWorldPoint(Input.mousePosition);
 
             Collider2D[] collider2DArray = Physics2D.OverlapAreaAll(startPosition, endPosition);
+
             foreach (Collider2D collider2D in collider2DArray)
             {
                 UnitBehavior unitBehavior = collider2D.GetComponent<UnitBehavior>();
