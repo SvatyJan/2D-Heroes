@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -51,7 +50,7 @@ public class StanceMenuController : MonoBehaviour
             StanceMenuItemLabel.text = StanceMenuItems[selectedItem].name;
         }
 
-        if (Input.GetKeyUp(KeyCode.F))
+        if (Input.GetKeyUp(KeyCode.G))
         {
             StanceMenuItems[selectedItem].GetComponent<StanceChanger>().ChangeStance(this.gameObject);
             StanceMenuObject.SetActive(false);

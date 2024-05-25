@@ -107,7 +107,7 @@ public class UnitController : MonoBehaviour
         stance = changingStance;
         foreach (GameObject selectedUnit in selectedUnits)
         {
-            selectedUnit.GetComponent<UnitBehavior>().SetBehavior((UnitBehavior.Stance)changingStance);
+            selectedUnit.GetComponent<UnitBehavior>().SetStance((UnitBehavior.Stance)changingStance);
         }
     }
 

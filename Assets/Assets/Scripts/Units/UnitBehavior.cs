@@ -119,6 +119,16 @@ public class UnitBehavior : MonoBehaviour
         this.formation = formation;
     }
 
+    public Stance GetStance()
+    {
+        return stance;
+    }
+
+    public void SetStance(Stance stance)
+    {
+        this.stance = stance;
+    }
+
     public GameObject GetFollowTarget()
     {
         return followTarget;
@@ -127,16 +137,6 @@ public class UnitBehavior : MonoBehaviour
     public void SetFollowTarget(GameObject newFollowTarget)
     {
         this.followTarget = newFollowTarget;
-    }
-
-    public Stance GetBehavior()
-    {
-        return stance;
-    }
-
-    public void SetBehavior(Stance newBehavior)
-    {
-        this.stance = newBehavior;
     }
 
     public void Idle()

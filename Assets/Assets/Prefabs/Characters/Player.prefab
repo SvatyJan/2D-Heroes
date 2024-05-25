@@ -382,6 +382,8 @@ GameObject:
   - component: {fileID: 4286115427929416431}
   - component: {fileID: 5491149112654017043}
   - component: {fileID: 4383239767359000718}
+  - component: {fileID: 8697652652909810656}
+  - component: {fileID: 4973114214612713406}
   m_Layer: 6
   m_Name: Character
   m_TagString: Player
@@ -698,3 +700,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01b7ae13d8e7de4387ea1a7f8984181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8697652652909810656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920888206443744980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e8b178b29680ee40845c77fc9739e2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CirleMenuObject: {fileID: 0}
+  CursorRootObject: {fileID: 0}
+  HighlightRootObject: {fileID: 0}
+  cam: {fileID: 1858540596056266194}
+  CircleMenuItemLabel: {fileID: 0}
+  CirlceMenuItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &4973114214612713406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920888206443744980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16ad7184820457e4594681da60c1ba2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StanceMenuObject: {fileID: 0}
+  CursorRootObject: {fileID: 0}
+  HighlightRootObject: {fileID: 0}
+  cam: {fileID: 1858540596056266194}
+  StanceMenuItemLabel: {fileID: 0}
+  StanceMenuItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
