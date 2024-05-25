@@ -308,7 +308,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f43a5406713ba4599ba0b65b3ceba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behavior: 0
   stance: 0
   formation: 1
   followTarget: {fileID: 0}
@@ -360,6 +359,7 @@ MonoBehaviour:
   backformationPointsList: []
   leftformationPointsList: []
   rightformationPointsList: []
+  deleteOnNoFollow: 0
 --- !u!114 &26887723158551004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,10 +372,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01b7ae13d8e7de4387ea1a7f8984181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 100
-  mana: 0
-  maxMana: 0
-  speed: 6
-  maxSpeed: 6
-  damage: 10

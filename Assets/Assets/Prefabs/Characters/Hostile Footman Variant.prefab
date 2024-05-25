@@ -92,17 +92,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2542374713103764685, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_RootOrder
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 97.53
+      value: 199.9
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 91.88
+      value: 39.5
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -177,10 +181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f43a5406713ba4599ba0b65b3ceba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behavior: 0
   stance: 2
   formation: 0
-  defendingTarget: {fileID: 0}
   followTarget: {fileID: 0}
   attackTarget: {fileID: 0}
   attackTags:
@@ -189,7 +191,6 @@ MonoBehaviour:
   followTags:
   - Player
   moveSpeed: 4
-  followKeepDistance: 3
   guardKeepDistance: 0
   attackFollowRadius: 5
   attackRadius: 2
@@ -197,6 +198,7 @@ MonoBehaviour:
   directionY: 0
   highlightCircle: {fileID: 2606628771789856977}
   isHighlighted: 0
+  selectable: 0
 --- !u!4 &8545074674954254189 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}

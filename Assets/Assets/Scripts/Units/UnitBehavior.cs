@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitBehavior : MonoBehaviour
@@ -76,7 +75,6 @@ public class UnitBehavior : MonoBehaviour
         {
             Guard();
         }
-        //Debug.Log(behavior);
 
         if (stance == Stance.PASSIVE)
         {
@@ -143,6 +141,7 @@ public class UnitBehavior : MonoBehaviour
     {
         animator.SetFloat("Speed", 0);
     }
+
     public void Attack()
     {
         if (attackTarget != null)
@@ -208,7 +207,9 @@ public class UnitBehavior : MonoBehaviour
                 break;
             }
         }
-    }    private bool ArrayContainsTag(string tag, string[] tagArray)
+    }
+
+    private bool ArrayContainsTag(string tag, string[] tagArray)
     {
         foreach (string t in tagArray)
         {
