@@ -176,7 +176,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!50 &3344171570221948115
 Rigidbody2D:
   serializedVersion: 4
@@ -308,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f43a5406713ba4599ba0b65b3ceba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stance: 0
+  stance: 3
   formation: 1
   followTarget: {fileID: 0}
   attackTarget: {fileID: 0}
@@ -318,7 +318,7 @@ MonoBehaviour:
   followTags:
   - Player
   moveSpeed: 3
-  guardKeepDistance: 0
+  lookForAttackTargetRadius: 2
   attackFollowRadius: 5
   attackRadius: 2
   directionX: 0

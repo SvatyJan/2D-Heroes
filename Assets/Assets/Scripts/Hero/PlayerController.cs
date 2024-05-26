@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -93,10 +92,9 @@ public class PlayerController : MonoBehaviour
         }
         else if(!attackActive)
         {
-            //Point();
             controlUnits();
             orderTarget();
-            createFlag();
+            //createFlag();
         }
     }
 
@@ -147,58 +145,6 @@ public class PlayerController : MonoBehaviour
         if (horizontalFirepointY >= 1) { horizontalFirepointY = 1; }
         if (horizontalFirepointY <= -1) { horizontalFirepointY = -1; }
     }
-
-    /* Stary point system, nahrazuji za selection system.
-       Soucasti je UnitSelector a UnitDeselector */
-    private void Point()
-    {
-        //musi existovat jen jeden unitselector
-        if (unitSelectorBool == false)
-        {
-            unitSelectorGameObject = Instantiate(unitSelectorTemplate);
-            unitSelectorGameObject.transform.parent = this.gameObject.transform;
-            unitSelectorGameObject.SetActive(false);
-            unitSelectorBool = true;
-        }
-
-        //musi existovat jen jeden unitdeselector
-        if (unitDeselectorBool == false)
-        {
-            unitDeselectorGameObject = Instantiate(unitDeselectorTemplate);
-            unitDeselectorGameObject.transform.parent = this.gameObject.transform;
-            unitDeselectorGameObject.SetActive(false);
-            unitDeselectorBool = true;
-        }
-
-        KeyCode space = KeyCode.Space;
-        KeyCode shift = KeyCode.LeftShift;
-
-        if (Input.GetKey(shift) && Input.GetKey(space))
-        {
-            animator.SetBool("Pointing", true);
-            unitDeselectorGameObject.SetActive(true);
-            unitDeselectorGameObject.transform.position = mousePosition;
-            unitSelectorGameObject.SetActive(false);
-        }
-        else if (Input.GetKey(space))
-        {
-            animator.SetBool("Pointing", true);
-            unitSelectorGameObject.SetActive(true);
-            unitSelectorGameObject.transform.position = mousePosition;
-            unitDeselectorGameObject.SetActive(false);
-        }
-        else
-        {
-            animator.SetBool("Pointing", false);
-            unitSelectorGameObject.SetActive(false);
-            unitDeselectorGameObject.SetActive(false);
-            Destroy(unitSelectorGameObject);
-            Destroy(unitDeselectorGameObject);
-            unitSelectorBool = false;
-            unitDeselectorBool = false;
-        }
-    }
-
     private void toggleWeaponDraw()
     {
         if (Input.GetKeyDown(KeyCode.X))
@@ -244,11 +190,6 @@ public class PlayerController : MonoBehaviour
     /** Metoda pro prikazani akce jednotkam */
     private void orderTarget()
     {
-        /* 1. defend
-         * 2. attack
-         * 3. move
-         * */
-
         ray = cam.ScreenPointToRay(Input.mousePosition);
         hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 
@@ -268,7 +209,6 @@ public class PlayerController : MonoBehaviour
                         if(selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget() != null)
                         {
                             selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
-                            //getcomponent in parent
                         }
                         hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnit(selectedUnits[i]);
                     }
@@ -286,7 +226,6 @@ public class PlayerController : MonoBehaviour
                     if (selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget() != null)
                     {
                         selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
-                        //getcomponent in parent
                     }
                     moveToPoint.GetComponent<ObjectFormationController>().AddUnit(selectedUnits[i]);
                 }
@@ -303,16 +242,6 @@ public class PlayerController : MonoBehaviour
             if (timeBtwAttack <= 0)
             {
                 animator.SetBool("Attacking", true);
-                //Debug.Log("You melee attack");
-
-                //GameObject slasheffectinstance = Instantiate(slashEffect, transform.position, Quaternion.identity);
-                //Destroy(slasheffectinstance,effectduration);
-
-                /*Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPosition.position, attackRadius, whatIsEnemy);
-                for (int i = 0; i < enemiesToDamage.Length; i++)
-                {
-                    //enemiesToDamage[i].GetComponent<Stats>().TakeDamage(damage);
-                }*/
 
                 //nová logika
                 Vector3 mouseDir = mousePosition.normalized;

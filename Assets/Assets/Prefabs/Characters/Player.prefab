@@ -379,7 +379,6 @@ GameObject:
   - component: {fileID: 4135095544458169589}
   - component: {fileID: 5757847949633642110}
   - component: {fileID: 3536639781850955944}
-  - component: {fileID: 4286115427929416431}
   - component: {fileID: 5491149112654017043}
   - component: {fileID: 4383239767359000718}
   - component: {fileID: 8697652652909810656}
@@ -507,7 +506,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 5
   m_Sprite: {fileID: -570706608, guid: 48ebd1c9f8113b84598f1288e1f7dc6a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -631,29 +630,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
---- !u!114 &4286115427929416431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8920888206443744980}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d23f775909c91546a7b5e5becb77a2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CirleMenuObject: {fileID: 0}
-  CursorRootObject: {fileID: 0}
-  HighlightRootObject: {fileID: 0}
-  cam: {fileID: 1858540596056266194}
-  CircleMenuItemLabel: {fileID: 0}
-  CirlceMenuItems:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &5491149112654017043
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static UnitBehavior;
 
 public class ObjectFormationController : MonoBehaviour
@@ -80,7 +79,6 @@ public class ObjectFormationController : MonoBehaviour
         {
             GameObject oldFollowPoint = unit.GetComponent<UnitBehavior>().GetFollowTarget();
             unit.GetComponent<UnitBehavior>().SetFollowTarget(null);
-            unit.GetComponent<UnitBehavior>().stance = Stance.PASSIVE;
 
             if (circleFormationUnits.Contains(oldFollowPoint))
             {
@@ -285,7 +283,6 @@ public class ObjectFormationController : MonoBehaviour
             circleFormationPoint.transform.position = new Vector2(structurePosition.x + x, structurePosition.y + y);
 
             circleFormationfollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(circleFormationPoint);
-            circleFormationfollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 
@@ -306,7 +303,6 @@ public class ObjectFormationController : MonoBehaviour
             formationPoint.transform.position = transform.position + newPosition;
 
             frontFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
-            frontFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 
@@ -327,7 +323,6 @@ public class ObjectFormationController : MonoBehaviour
             formationPoint.transform.position = transform.position + newPosition;
 
             backFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
-            backFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 
@@ -347,7 +342,6 @@ public class ObjectFormationController : MonoBehaviour
             formationPoint.transform.position = transform.position + newPosition;
 
             leftFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
-            leftFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
 
@@ -367,7 +361,6 @@ public class ObjectFormationController : MonoBehaviour
             formationPoint.transform.position = transform.position + newPosition;
 
             rightFormationFollowingUnit.GetComponent<UnitBehavior>().SetFollowTarget(formationPoint);
-            rightFormationFollowingUnit.GetComponent<UnitBehavior>().stance = Stance.DEFENSIVE;
         }
     }
     private void deleteOnNoFollowingUnits()

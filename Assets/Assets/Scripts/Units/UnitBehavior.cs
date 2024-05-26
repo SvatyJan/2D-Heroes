@@ -27,7 +27,7 @@ public class UnitBehavior : MonoBehaviour
     public string[] followTags = { "Player", "Player Unit", "Player Structure", "Player Flag" };
 
     [SerializeField] float moveSpeed;
-    [SerializeField] float guardKeepDistance = 0f;
+    [SerializeField] float lookForAttackTargetRadius = 5f;
     [SerializeField] float attackFollowRadius = 5f;
     [SerializeField] float attackRadius = 2f;
 
@@ -54,7 +54,6 @@ public class UnitBehavior : MonoBehaviour
     private void Start()
     {
         formation = Formation.CIRCLE;
-        stance = Stance.AGRESSIVE;
         animator = GetComponent<Animator>();
     }
 
@@ -65,29 +64,16 @@ public class UnitBehavior : MonoBehaviour
 
         if (stance == Stance.PASSIVE)
         {
-            Idle();
+            PassiveStanceBehaviour();
         }
-        else if(stance == Stance.AGRESSIVE)
+        else if(stance == Stance.DEFENSIVE)
         {
-            Attack();
-        }
-        else if (stance == Stance.DEFENSIVE)
-        {
-            Guard();
-        }
-
-        if (stance == Stance.PASSIVE)
-        {
-            //do nothing
-        }
-        else if (stance == Stance.DEFENSIVE)
-        {
-            //útoè v malém radiusu, jen když pøijdou do range
+            DefensiveStanceBehaviour();
         }
         else if (stance == Stance.AGRESSIVE)
         {
-            LookForAttackTarget();
-            //útoè ve velkém radiusu na potkání + utika za cilem
+            //TODO:
+            AttackStanceBehaviour();
         }
     }
 
@@ -137,12 +123,45 @@ public class UnitBehavior : MonoBehaviour
         this.followTarget = newFollowTarget;
     }
 
-    public void Idle()
+    public void PassiveStanceBehaviour()
     {
-        animator.SetFloat("Speed", 0);
+        if (followTarget != null)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
+            movement = followTarget.transform.position - transform.position;
+        }
+        else
+        {
+            // nema followTarget
+            movement = new Vector2(0, 0);            
+        }
     }
 
-    public void Attack()
+    public void DefensiveStanceBehaviour()
+    {
+        LookForAttackTarget();
+
+        if(followTarget != null)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
+            movement = followTarget.transform.position - transform.position;
+        }
+
+        if(attackTarget != null)
+        {
+            movement = attackTarget.transform.position - transform.position;
+            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackRadius)
+            {
+                animator.SetBool("Attacking", true);
+            }
+            else
+            {
+                animator.SetBool("Attacking", false);
+            }
+        }
+    }
+
+    public void AttackStanceBehaviour()
     {
         if (attackTarget != null)
         {
@@ -161,37 +180,15 @@ public class UnitBehavior : MonoBehaviour
             }
         }
     }
-    public void Guard()
-    {
-        if(followTarget == null)
-        {
-            followTarget = null;
-            stance = Stance.PASSIVE;
-        }
-        else
-        {
-            if (Vector2.Distance(transform.position, followTarget.transform.position) > guardKeepDistance)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
-                movement = followTarget.transform.position - transform.position;
-            }
-            else if (Vector2.Distance(transform.position, followTarget.transform.position) == guardKeepDistance)
-            {
-                movement = new Vector2(0, 0);
-            }
-        }        
-    }
 
     public void LookForAttackTarget()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, attackFollowRadius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, lookForAttackTargetRadius);
 
         if (attackTarget != null)
         {
-            if (Vector2.Distance(transform.position, attackTarget.transform.position) > attackFollowRadius)
-            {
-                stance = Stance.PASSIVE;
-                
+            if (Vector2.Distance(transform.position, attackTarget.transform.position) >= lookForAttackTargetRadius)
+            {                
                 attackTarget = null;
                 return;
             }
@@ -202,8 +199,6 @@ public class UnitBehavior : MonoBehaviour
             if (ArrayContainsTag(collider.tag, attackTags))
             {
                 attackTarget = collider.gameObject;
-                stance = Stance.AGRESSIVE;
-                Debug.Log("Menim chovani na utok");
                 break;
             }
         }
@@ -285,11 +280,10 @@ public class UnitBehavior : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        // Set the color of the Gizmo
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackFollowRadius);
-        Gizmos.color = Color.magenta;
+
+        // Draw a wire sphere at the position of the GameObject this script is attached to
         Gizmos.DrawWireSphere(transform.position, attackRadius);
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, attackRadius + (attackRadius / 100 * 20));
     }
 }
