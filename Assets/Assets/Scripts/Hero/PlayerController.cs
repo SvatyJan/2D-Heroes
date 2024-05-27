@@ -206,9 +206,9 @@ public class PlayerController : MonoBehaviour
 
                     for (int i = 0; i < selectedUnits.Count(); i++)
                     {
-                        if(selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget() != null)
+                        if(selectedUnits[i].GetComponent<UnitBehavior>().getFollowTarget() != null)
                         {
-                            selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
+                            selectedUnits[i].GetComponent<UnitBehavior>().getFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
                         }
                         hit.collider.gameObject.GetComponent<ObjectFormationController>().AddUnit(selectedUnits[i]);
                     }
@@ -223,9 +223,9 @@ public class PlayerController : MonoBehaviour
 
                 for (int i = 0; i < selectedUnits.Count(); i++)
                 {
-                    if (selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget() != null)
+                    if (selectedUnits[i].GetComponent<UnitBehavior>().getFollowTarget() != null)
                     {
-                        selectedUnits[i].GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
+                        selectedUnits[i].GetComponent<UnitBehavior>().getFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RemoveUnit(selectedUnits[i]);
                     }
                     moveToPoint.GetComponent<ObjectFormationController>().AddUnit(selectedUnits[i]);
                 }
@@ -331,7 +331,7 @@ public class PlayerController : MonoBehaviour
                         {
                             GetComponent<UnitController>().AddSelectUnit(collider2D.gameObject);
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                             //Jednotka již existuje v partě hrdiny
                         }

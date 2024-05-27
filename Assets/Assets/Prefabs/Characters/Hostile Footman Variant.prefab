@@ -190,10 +190,12 @@ MonoBehaviour:
   - Player Unit
   followTags:
   - Player
-  moveSpeed: 4
-  lookForAttackTargetRadius: 3
+  moveSpeed: 3
+  currentMoveSpeed: 0
+  defendRadius: 3
   attackFollowRadius: 5
   attackRadius: 2
+  retreatRadius: 10
   directionX: 0
   directionY: 0
   highlightCircle: {fileID: 2606628771789856977}

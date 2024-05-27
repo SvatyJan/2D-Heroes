@@ -8,7 +8,8 @@ public class FormationChanger : MonoBehaviour
         FRONT = 2,
         BACK = 3,
         LEFT = 4,
-        RIGHT = 5
+        RIGHT = 5,
+        CENTER = 6
     }
 
     [SerializeField] public Formation formation;

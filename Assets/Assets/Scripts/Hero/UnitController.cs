@@ -19,7 +19,8 @@ public class UnitController : MonoBehaviour
         FRONT = 2,
         BACK = 3,
         LEFT = 4,
-        RIGHT = 5
+        RIGHT = 5,
+        CENTER = 6
     }
     public Formation formation;
 
@@ -93,10 +94,10 @@ public class UnitController : MonoBehaviour
         formation = chaningFormation;
         foreach (GameObject selectedUnit in selectedUnits)
         {
-            selectedUnit.GetComponent<UnitBehavior>().SetFormation((UnitBehavior.Formation)chaningFormation);
-            if(selectedUnit.GetComponent<UnitBehavior>().GetFollowTarget() != null)
+            selectedUnit.GetComponent<UnitBehavior>().setFormation((UnitBehavior.Formation)chaningFormation);
+            if(selectedUnit.GetComponent<UnitBehavior>().getFollowTarget() != null)
             {
-                selectedUnit.GetComponent<UnitBehavior>().GetFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RecalculateFormations();
+                selectedUnit.GetComponent<UnitBehavior>().getFollowTarget().transform.parent.GetComponent<ObjectFormationController>().RecalculateFormations();
             }
         }
     }
@@ -106,7 +107,7 @@ public class UnitController : MonoBehaviour
         stance = changingStance;
         foreach (GameObject selectedUnit in selectedUnits)
         {
-            selectedUnit.GetComponent<UnitBehavior>().SetStance((UnitBehavior.Stance)changingStance);
+            selectedUnit.GetComponent<UnitBehavior>().setStance((UnitBehavior.Stance)changingStance);
         }
     }
 

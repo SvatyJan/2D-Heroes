@@ -318,9 +318,14 @@ MonoBehaviour:
   followTags:
   - Player
   moveSpeed: 3
-  lookForAttackTargetRadius: 3
+  currentMoveSpeed: 0
+  defendRadius: 3
   attackFollowRadius: 5
   attackRadius: 2
+  retreatRadius: 10
+  attackSpeedTime: 2
+  attackingState: 0
+  retreatingState: 0
   directionX: 0
   directionY: 0
   highlightCircle: {fileID: 4062418303808143613}

@@ -17,7 +17,8 @@ public class UnitBehavior : MonoBehaviour
         FRONT = 2,
         BACK = 3,
         LEFT = 4,
-        RIGHT = 5
+        RIGHT = 5,
+        CENTER = 6
     }
     public Formation formation;
 
@@ -28,10 +29,15 @@ public class UnitBehavior : MonoBehaviour
     public string[] followTags = { "Player", "Player Unit", "Player Structure", "Player Flag" };
 
     [SerializeField] float moveSpeed;
+    [SerializeField] float currentMoveSpeed;
     [SerializeField] float defendRadius = 3f;
     [SerializeField] float attackFollowRadius = 5f;
     [SerializeField] float attackRadius = 2f;
     [SerializeField] float retreatRadius = 10f;
+
+    [SerializeField] float attackSpeedTime = 2f;
+    [SerializeField] private bool attackingState = false;
+    [SerializeField] private bool retreatingState = false;
 
     //pohyb a animace
     Animator animator;
@@ -57,28 +63,29 @@ public class UnitBehavior : MonoBehaviour
     {
         formation = Formation.CIRCLE;
         animator = GetComponent<Animator>();
+        currentMoveSpeed = moveSpeed;
     }
 
     void Update()
     {
-        GetMovementDirection();
+        getMovementDirection();
         checkForHighlight();
 
         if (stance == Stance.PASSIVE)
         {
-            PassiveStanceBehaviour();
+            passiveStanceBehaviour();
         }
         else if(stance == Stance.DEFENSIVE)
         {
-            DefensiveStanceBehaviour();
+            defensiveStanceBehaviour();
         }
         else if (stance == Stance.AGRESSIVE)
         {
-            AttackStanceBehaviour();
+            attackStanceBehaviour();
         }
     }
 
-    public void AddToGroup(GameObject controllingObject)
+    public void addToGroup(GameObject controllingObject)
     {
         if(followTarget != null)
         {
@@ -87,146 +94,75 @@ public class UnitBehavior : MonoBehaviour
         controllingObject.GetComponent<ObjectFormationController>().AddUnit(this.gameObject);
     }
 
-    public void RemoveFromGroup(GameObject controllingObject)
+    public void removeFromGroup(GameObject controllingObject)
     {
         controllingObject.GetComponent<UnitController>().RemoveSelectedUnit(this.gameObject);
         followTarget = null;
         this.isHighlighted = false;
     }
 
-    public Formation GetFormation()
+    public Formation getFormation()
     {
         return formation;
     }
 
-    public void SetFormation(Formation formation)
+    public void setFormation(Formation formation)
     {
         this.formation = formation;
     }
 
-    public Stance GetStance()
+    public Stance getStance()
     {
         return stance;
     }
 
-    public void SetStance(Stance stance)
+    public void setStance(Stance stance)
     {
         this.stance = stance;
     }
 
-    public GameObject GetFollowTarget()
+    public GameObject getFollowTarget()
     {
         return followTarget;
     }
 
-    public void SetFollowTarget(GameObject newFollowTarget)
+    public void setFollowTarget(GameObject newFollowTarget)
     {
         this.followTarget = newFollowTarget;
     }
 
-    public void PassiveStanceBehaviour()
+    public void passiveStanceBehaviour()
     {
-        if (followTarget != null)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
-            movement = followTarget.transform.position - transform.position;
-        }
-        else
-        {
-            // nema followTarget
-            movement = new Vector2(0, 0);            
-        }
+        followTargetObject(followTarget);
     }
 
-    public void DefensiveStanceBehaviour()
+    public void defensiveStanceBehaviour()
     {
-        LookForAttackTarget(defendRadius);
-
-        if(followTarget != null)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
-            movement = followTarget.transform.position - transform.position;
-        }
-
-        if(attackTarget != null)
-        {
-            movement = attackTarget.transform.position - transform.position;
-            if (Vector2.Distance(transform.position, attackTarget.transform.position) < attackRadius)
-            {
-                animator.SetBool("Attacking", true);
-            }
-            else
-            {
-                animator.SetBool("Attacking", false);
-            }
-        }
+        lookForAttackTarget(defendRadius);
+        followTargetObject(followTarget);
+        lookAtTargetobject(attackTarget);
+        attackTargetObject(attackTarget);
     }
 
-    public void AttackStanceBehaviour()
+    public void attackStanceBehaviour()
     {
-        if (Vector2.Distance(transform.position, followTarget.transform.position) >= retreatRadius)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
-            movement = followTarget.transform.position - transform.position;
-            attackTarget = null;
-            animator.SetBool("Attacking", false);
-            return;
-        }
-
-        LookForAttackTarget(attackFollowRadius);
-
-        if (attackTarget != null && followTarget != null)
-        {
-            
-            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackFollowRadius 
-                && Vector2.Distance(transform.position, attackTarget.transform.position) > attackRadius)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, attackTarget.transform.position, moveSpeed * Time.deltaTime);
-                movement = attackTarget.transform.position - transform.position;
-                if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackRadius)
-                {
-                    animator.SetBool("Attacking", true);
-                }
-                else
-                {
-                    animator.SetBool("Attacking", false);
-                }
-            }
-        }
-        else if (followTarget != null)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
-            movement = followTarget.transform.position - transform.position;
-        }
-        else if (attackTarget != null)
-        {
-            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackFollowRadius
-                 && Vector2.Distance(transform.position, attackTarget.transform.position) > attackRadius)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, attackTarget.transform.position, moveSpeed * Time.deltaTime);
-                movement = attackTarget.transform.position - transform.position;
-                if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackRadius)
-                {
-                    animator.SetBool("Attacking", true);
-                }
-                else
-                {
-                    animator.SetBool("Attacking", false);
-                }
-            }
-        }
+        lookForAttackTarget(defendRadius);
+        attackAndMoveTowardsTargetObject(attackTarget);
     }
 
-    public void LookForAttackTarget(float lookForAttackTargetRadius)
+    public void lookForAttackTarget(float lookForAttackTargetRadius)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, lookForAttackTargetRadius);
 
         if (attackTarget != null)
         {
-            if (Vector2.Distance(transform.position, attackTarget.transform.position) >= lookForAttackTargetRadius)
-            {                
-                attackTarget = null;
+            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= lookForAttackTargetRadius)
+            {
                 return;
+            }
+            else
+            {
+                attackTarget = null;
             }
         }
 
@@ -277,7 +213,7 @@ public class UnitBehavior : MonoBehaviour
         }
     }
 
-    public void GetMovementDirection()
+    public void getMovementDirection()
     {
         if (movement.x != 0)
         {
@@ -311,6 +247,96 @@ public class UnitBehavior : MonoBehaviour
         else
         {
             highlightCircle.SetActive(false);
+        }
+    }
+
+    private void followTargetObject(GameObject target)
+    {
+        if(target != null && attackingState == false)
+        {
+            animator.SetBool("Attacking", false);
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, currentMoveSpeed * Time.deltaTime);
+            movement = target.transform.position - transform.position;
+        }
+        else
+        {
+            movement = new Vector2(0, 0);
+        }
+    }
+
+    private void attackTargetObject(GameObject target)
+    {
+        if (target != null)
+        {
+            if (Vector2.Distance(transform.position, target.transform.position) <= attackRadius)
+            {
+                retreatingState = false;
+                StartCoroutine(attackRoutine());
+            }
+        }
+    }
+
+    private void attackAndMoveTowardsTargetObject(GameObject target)
+    {
+        if (followTarget != null && Vector2.Distance(transform.position, followTarget.transform.position) <= 1f)
+        {
+            retreatingState = false;
+        }
+
+        if (retreatingState == true && followTarget != null)
+        {
+            followTargetObject(followTarget);
+            return;
+        }
+
+        if (followTarget != null && Vector2.Distance(transform.position, followTarget.transform.position) >= retreatRadius)
+        {
+            retreatingState = true;
+            return;
+        }
+
+        if (target != null)
+        {
+            if (Vector2.Distance(transform.position, target.transform.position) <= attackFollowRadius 
+                && Vector2.Distance(transform.position, target.transform.position) > attackRadius)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, target.transform.position, currentMoveSpeed * Time.deltaTime);
+                movement = target.transform.position - transform.position;
+            }
+            else if(Vector2.Distance(transform.position, target.transform.position) < attackRadius)
+            {
+                StartCoroutine(attackRoutine());
+            }
+        }
+        else if (followTarget != null)
+        {
+            followTargetObject(followTarget);
+        }
+    }
+
+    private void lookAtTargetobject(GameObject target)
+    {
+        if(target != null && movement.x == 0 && movement.y == 0)
+        {
+            movement = target.transform.position - transform.position;
+            animator.SetFloat("Vertical", movement.y);
+            animator.SetFloat("Horizontal", movement.x);
+            movement = new Vector2(0, 0);
+            animator.SetBool("Attacking", true);
+        }
+    }
+
+    private IEnumerator attackRoutine()
+    {
+        if(attackingState == false)
+        {
+            attackingState = true;
+            currentMoveSpeed = 0f;
+            animator.SetBool("Attacking", true);
+            yield return new WaitForSeconds(attackSpeedTime);
+            currentMoveSpeed = moveSpeed;
+            animator.SetBool("Attacking", false);
+            attackingState = false;
         }
     }
 
