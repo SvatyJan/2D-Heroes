@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class UnitBehavior : MonoBehaviour
@@ -27,9 +28,10 @@ public class UnitBehavior : MonoBehaviour
     public string[] followTags = { "Player", "Player Unit", "Player Structure", "Player Flag" };
 
     [SerializeField] float moveSpeed;
-    [SerializeField] float lookForAttackTargetRadius = 5f;
+    [SerializeField] float defendRadius = 3f;
     [SerializeField] float attackFollowRadius = 5f;
     [SerializeField] float attackRadius = 2f;
+    [SerializeField] float retreatRadius = 10f;
 
     //pohyb a animace
     Animator animator;
@@ -72,7 +74,6 @@ public class UnitBehavior : MonoBehaviour
         }
         else if (stance == Stance.AGRESSIVE)
         {
-            //TODO:
             AttackStanceBehaviour();
         }
     }
@@ -139,7 +140,7 @@ public class UnitBehavior : MonoBehaviour
 
     public void DefensiveStanceBehaviour()
     {
-        LookForAttackTarget();
+        LookForAttackTarget(defendRadius);
 
         if(followTarget != null)
         {
@@ -150,7 +151,7 @@ public class UnitBehavior : MonoBehaviour
         if(attackTarget != null)
         {
             movement = attackTarget.transform.position - transform.position;
-            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackRadius)
+            if (Vector2.Distance(transform.position, attackTarget.transform.position) < attackRadius)
             {
                 animator.SetBool("Attacking", true);
             }
@@ -163,13 +164,48 @@ public class UnitBehavior : MonoBehaviour
 
     public void AttackStanceBehaviour()
     {
-        if (attackTarget != null)
+        if (Vector2.Distance(transform.position, followTarget.transform.position) >= retreatRadius)
         {
-            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackFollowRadius && Vector2.Distance(transform.position, attackTarget.transform.position) >= attackRadius)
+            transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
+            movement = followTarget.transform.position - transform.position;
+            attackTarget = null;
+            animator.SetBool("Attacking", false);
+            return;
+        }
+
+        LookForAttackTarget(attackFollowRadius);
+
+        if (attackTarget != null && followTarget != null)
+        {
+            
+            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackFollowRadius 
+                && Vector2.Distance(transform.position, attackTarget.transform.position) > attackRadius)
             {
                 transform.position = Vector2.MoveTowards(transform.position, attackTarget.transform.position, moveSpeed * Time.deltaTime);
                 movement = attackTarget.transform.position - transform.position;
-                if (Vector2.Distance(transform.position, attackTarget.transform.position) < attackRadius+(attackRadius/100*20))
+                if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackRadius)
+                {
+                    animator.SetBool("Attacking", true);
+                }
+                else
+                {
+                    animator.SetBool("Attacking", false);
+                }
+            }
+        }
+        else if (followTarget != null)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, followTarget.transform.position, moveSpeed * Time.deltaTime);
+            movement = followTarget.transform.position - transform.position;
+        }
+        else if (attackTarget != null)
+        {
+            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackFollowRadius
+                 && Vector2.Distance(transform.position, attackTarget.transform.position) > attackRadius)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, attackTarget.transform.position, moveSpeed * Time.deltaTime);
+                movement = attackTarget.transform.position - transform.position;
+                if (Vector2.Distance(transform.position, attackTarget.transform.position) <= attackRadius)
                 {
                     animator.SetBool("Attacking", true);
                 }
@@ -181,7 +217,7 @@ public class UnitBehavior : MonoBehaviour
         }
     }
 
-    public void LookForAttackTarget()
+    public void LookForAttackTarget(float lookForAttackTargetRadius)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, lookForAttackTargetRadius);
 
@@ -280,10 +316,11 @@ public class UnitBehavior : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Set the color of the Gizmo
-        Gizmos.color = Color.red;
-
-        // Draw a wire sphere at the position of the GameObject this script is attached to
+        Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, attackRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackFollowRadius);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, retreatRadius);
     }
 }

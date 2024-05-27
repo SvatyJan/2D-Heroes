@@ -318,7 +318,7 @@ MonoBehaviour:
   followTags:
   - Player
   moveSpeed: 3
-  lookForAttackTargetRadius: 2
+  lookForAttackTargetRadius: 3
   attackFollowRadius: 5
   attackRadius: 2
   directionX: 0

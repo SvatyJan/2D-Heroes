@@ -102,11 +102,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 199.9
+      value: 18.74
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 39.5
+      value: 81.39
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f43a5406713ba4599ba0b65b3ceba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stance: 2
+  stance: 3
   formation: 0
   followTarget: {fileID: 0}
   attackTarget: {fileID: 0}
@@ -191,7 +191,7 @@ MonoBehaviour:
   followTags:
   - Player
   moveSpeed: 4
-  guardKeepDistance: 0
+  lookForAttackTargetRadius: 3
   attackFollowRadius: 5
   attackRadius: 2
   directionX: 0
