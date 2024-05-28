@@ -359,11 +359,13 @@ MonoBehaviour:
   backFormationUnits: []
   leftFormationUnits: []
   rightFormationUnits: []
+  starFormationUnits: []
   circleformationPointsList: []
   frontformationPointsList: []
   backformationPointsList: []
   leftformationPointsList: []
   rightformationPointsList: []
+  starformationPointsList: []
   deleteOnNoFollow: 0
 --- !u!114 &26887723158551004
 MonoBehaviour:

@@ -20,7 +20,8 @@ public class UnitController : MonoBehaviour
         BACK = 3,
         LEFT = 4,
         RIGHT = 5,
-        CENTER = 6
+        CENTER = 6,
+        STAR = 7
     }
     public Formation formation;
 

@@ -26,6 +26,7 @@ public class ObjectFormationController : MonoBehaviour
     [SerializeField] private List<GameObject> backFormationUnits = new List<GameObject>();
     [SerializeField] private List<GameObject> leftFormationUnits = new List<GameObject>();
     [SerializeField] private List<GameObject> rightFormationUnits = new List<GameObject>();
+    [SerializeField] private List<GameObject> starFormationUnits = new List<GameObject>();
     [SerializeField] private List<GameObject> centerFormationUnits = new List<GameObject>();
 
     [SerializeField] private List<GameObject> circleformationPointsList = new List<GameObject>();
@@ -33,6 +34,7 @@ public class ObjectFormationController : MonoBehaviour
     [SerializeField] private List<GameObject> backformationPointsList = new List<GameObject>();
     [SerializeField] private List<GameObject> leftformationPointsList = new List<GameObject>();
     [SerializeField] private List<GameObject> rightformationPointsList = new List<GameObject>();
+    [SerializeField] private List<GameObject> starformationPointsList = new List<GameObject>();
     [SerializeField] private List<GameObject> centerformationPointsList = new List<GameObject>();
 
     [SerializeField] private bool deleteOnNoFollow = false;
@@ -102,6 +104,10 @@ public class ObjectFormationController : MonoBehaviour
             {
                 rightFormationUnits.Remove(oldFollowPoint);
             }
+            else if (starFormationUnits.Contains(oldFollowPoint))
+            {
+                starFormationUnits.Remove(oldFollowPoint);
+            }
             else if (centerFormationUnits.Contains(oldFollowPoint))
             {
                 centerFormationUnits.Remove(oldFollowPoint);
@@ -130,6 +136,10 @@ public class ObjectFormationController : MonoBehaviour
             else if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.RIGHT && rightFormationUnits.Contains(unit))
             {
                 rightFormationUnits.Remove(unit);
+            }
+            else if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.STAR && starFormationUnits.Contains(unit))
+            {
+                starFormationUnits.Remove(unit);
             }
             else if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.CENTER && centerFormationUnits.Contains(unit))
             {
@@ -205,6 +215,7 @@ public class ObjectFormationController : MonoBehaviour
             leftFormationUnits.Clear();
             rightFormationUnits.Clear();
             circleformationPointsList.Clear();
+            starformationPointsList.Clear();
             centerformationPointsList.Clear();
         }
         else if (followingUnits.Count() > 0)
@@ -214,6 +225,7 @@ public class ObjectFormationController : MonoBehaviour
             backFormationUnits.Clear();
             leftFormationUnits.Clear();
             rightFormationUnits.Clear();
+            starFormationUnits.Clear();
             centerFormationUnits.Clear();
 
             foreach (GameObject followingUnit in followingUnits)
@@ -237,6 +249,10 @@ public class ObjectFormationController : MonoBehaviour
                 else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.RIGHT)
                 {
                     rightFormationUnits.Add(followingUnit);
+                }
+                else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.STAR)
+                {
+                    starFormationUnits.Add(followingUnit);
                 }
                 else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.CENTER)
                 {
@@ -262,6 +278,9 @@ public class ObjectFormationController : MonoBehaviour
 
             SetFormationRecalculatedPointsList(rightformationPointsList, rightFormationUnits);
             rightFormationPointsSort();
+
+            SetFormationRecalculatedPointsList(starformationPointsList, starFormationUnits);
+            starFormationPointsSort();
 
             SetFormationRecalculatedPointsList(centerformationPointsList, centerFormationUnits);
             centerFormationPointsSort();
@@ -303,6 +322,109 @@ public class ObjectFormationController : MonoBehaviour
 
             circleFormationfollowingUnit.GetComponent<UnitBehavior>().setFollowTarget(circleFormationPoint);
         }
+    }
+
+    private void starFormationPointsSort()
+    {
+        List<Vector2> offsets = GetStarFormationDynamicOffsets(starFormationUnits.Count);
+
+        for (int i = 0; i < starFormationUnits.Count; i++)
+        {
+            GameObject starformationFollowingUnit = starFormationUnits[i];
+            GameObject starformationPoint = starformationPointsList[i];
+
+            starformationPoint.name = starformationPoint.name + ' ' + starformationFollowingUnit.name;
+
+            Vector2 offset = offsets[i];
+
+            starformationPoint.transform.position = new Vector2(structurePosition.x + offset.x, structurePosition.y + offset.y);
+
+            starformationFollowingUnit.GetComponent<UnitBehavior>().setFollowTarget(starformationPoint);
+        }
+    }
+
+    private List<Vector2> GetStarFormationDynamicOffsets(int unitCount)
+    {
+        List<Vector2> offsets = new List<Vector2>();
+        int layer = 1; // Vrstva, zaèíná od 1
+
+        offsets.Add(new Vector2(-1 * spacingX, 0));
+        offsets.Add(new Vector2(0, 1 * spacingX));
+        offsets.Add(new Vector2(1 * spacingX, 0));
+        offsets.Add(new Vector2(0, -1 * spacingX));
+
+        while (offsets.Count < unitCount)
+        {
+            float distance = layer * spacingX;
+
+            // Pøidání rohù
+            offsets.Add(new Vector2(-distance, distance));
+            offsets.Add(new Vector2(distance, distance));
+            offsets.Add(new Vector2(distance, -distance));
+            offsets.Add(new Vector2(-distance, -distance));
+
+            layer++;
+            distance = layer * spacingX;
+
+            // Pøidání dalších jednotek na ose x a y
+            offsets.Add(new Vector2(-distance, 0));
+            offsets.Add(new Vector2(0, distance));
+            offsets.Add(new Vector2(distance, 0));
+            offsets.Add(new Vector2(0, -distance));
+        }
+
+        return offsets;
+    }
+
+    private void centerFormationPointsSort()
+    {
+        List<Vector2> offsets = GetCenterFormationDynamicOffsets(centerFormationUnits.Count);
+
+        for (int i = 0; i < centerFormationUnits.Count; i++)
+        {
+            GameObject centerformationFollowingUnit = centerFormationUnits[i];
+            GameObject centerformationPoint = centerformationPointsList[i];
+
+            centerformationPoint.name = centerformationPoint.name + ' ' + centerformationFollowingUnit.name;
+
+            Vector2 offset = offsets[i];
+
+            centerformationPoint.transform.position = new Vector2(structurePosition.x + offset.x, structurePosition.y + offset.y);
+
+            centerformationFollowingUnit.GetComponent<UnitBehavior>().setFollowTarget(centerformationPoint);
+        }
+    }
+
+    private List<Vector2> GetCenterFormationDynamicOffsets(int unitCount)
+    {
+        List<Vector2> offsets = new List<Vector2>();
+        int layer = 1;
+        int unitsInLayer = 8;
+
+        while (offsets.Count < unitCount)
+        {
+            float angleStep = 2 * Mathf.PI / unitsInLayer;
+            float radius = layer * spacingX;
+
+            for (int i = 0; i < unitsInLayer; i++)
+            {
+                float angle = i * angleStep;
+                float x = Mathf.Cos(angle) * radius;
+                float y = Mathf.Sin(angle) * radius;
+                offsets.Add(new Vector2(x, y));
+
+                if (offsets.Count >= unitCount)
+                {
+                    break;
+                }
+            }
+
+            // Zvýšíme poèet jednotek pro další vrstvu
+            layer++;
+            unitsInLayer += 6 * (layer - 1); // Poèet jednotek v další vrstvì
+        }
+
+        return offsets;
     }
 
     private void frontFormationPointsSort()
@@ -381,24 +503,6 @@ public class ObjectFormationController : MonoBehaviour
 
             rightFormationFollowingUnit.GetComponent<UnitBehavior>().setFollowTarget(formationPoint);
         }
-    }
-
-    private void centerFormationPointsSort()
-    {
-        //TODO: doladit
-        List<Vector3> positionList = new List<Vector3>();
-        for (int i = 0; i < centerformationPointsList.Count; i++)
-        {
-            float angle = i * (360f / centerformationPointsList.Count);
-            Vector3 dir = ApplyRotationToVector(new Vector3(1, 0), angle);
-            Vector3 position = transform.position + dir * spacingX;
-            positionList.Add(position);
-        }
-    }
-
-    private Vector3 ApplyRotationToVector(Vector3 vec, float angle)
-    {
-        return Quaternion.Euler(0, 0, angle) * vec;
     }
 
     private void deleteOnNoFollowingUnits()
