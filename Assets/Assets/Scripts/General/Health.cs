@@ -40,6 +40,6 @@ public class Health : MonoBehaviour
     public void Die()
     {
         Debug.Log(this.gameObject + " has died.");
-        Destroy(this.gameObject, 5);
+        Destroy(this.gameObject);
     }
 }

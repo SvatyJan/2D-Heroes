@@ -320,7 +320,7 @@ MonoBehaviour:
   moveSpeed: 3
   currentMoveSpeed: 0
   defendRadius: 3
-  attackFollowRadius: 5
+  attackFollowRadius: 10
   attackRadius: 2
   retreatRadius: 10
   attackSpeedTime: 2
@@ -360,12 +360,14 @@ MonoBehaviour:
   leftFormationUnits: []
   rightFormationUnits: []
   starFormationUnits: []
+  centerFormationUnits: []
   circleformationPointsList: []
   frontformationPointsList: []
   backformationPointsList: []
   leftformationPointsList: []
   rightformationPointsList: []
   starformationPointsList: []
+  centerformationPointsList: []
   deleteOnNoFollow: 0
 --- !u!114 &26887723158551004
 MonoBehaviour:

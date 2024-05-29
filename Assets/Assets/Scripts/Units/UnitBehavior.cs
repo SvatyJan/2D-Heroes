@@ -50,6 +50,9 @@ public class UnitBehavior : MonoBehaviour
     public bool isHighlighted = false;
     [SerializeField] private bool selectable;
 
+    [SerializeField] private bool lockActions = false;
+    private Vector2 attackingPoint;
+
     public void setSelectable(bool selectable)
     {
         this.selectable = selectable;
@@ -65,24 +68,28 @@ public class UnitBehavior : MonoBehaviour
         formation = Formation.CIRCLE;
         animator = GetComponent<Animator>();
         currentMoveSpeed = moveSpeed;
+        lockActions = false;
     }
 
     void Update()
     {
-        getMovementDirection();
         checkForHighlight();
+        getMovementDirection();
 
-        if (stance == Stance.PASSIVE)
+        if (lockActions == false)
         {
-            passiveStanceBehaviour();
-        }
-        else if(stance == Stance.DEFENSIVE)
-        {
-            defensiveStanceBehaviour();
-        }
-        else if (stance == Stance.AGRESSIVE)
-        {
-            attackStanceBehaviour();
+            if (stance == Stance.PASSIVE)
+            {
+                passiveStanceBehaviour();
+            }
+            else if (stance == Stance.DEFENSIVE)
+            {
+                defensiveStanceBehaviour();
+            }
+            else if (stance == Stance.AGRESSIVE)
+            {
+                attackStanceBehaviour();
+            }
         }
     }
 
@@ -147,7 +154,7 @@ public class UnitBehavior : MonoBehaviour
 
     public void attackStanceBehaviour()
     {
-        lookForAttackTarget(defendRadius);
+        lookForAttackTarget(attackFollowRadius);
         attackAndMoveTowardsTargetObject(attackTarget);
     }
 
@@ -299,7 +306,7 @@ public class UnitBehavior : MonoBehaviour
         if (target != null)
         {
             if (Vector2.Distance(transform.position, target.transform.position) <= attackFollowRadius 
-                && Vector2.Distance(transform.position, target.transform.position) > attackRadius)
+                && Vector2.Distance(transform.position, target.transform.position) >= attackRadius)
             {
                 transform.position = Vector2.MoveTowards(transform.position, target.transform.position, currentMoveSpeed * Time.deltaTime);
                 movement = target.transform.position - transform.position;
@@ -339,6 +346,44 @@ public class UnitBehavior : MonoBehaviour
             animator.SetBool("Attacking", false);
             attackingState = false;
         }
+    }
+
+    public void attackPreparation()
+    {
+        if(attackTarget != null)
+        {
+            attackingPoint = new Vector2(attackTarget.transform.position.x, attackTarget.transform.position.y);
+            currentMoveSpeed = 0f;
+            lockActions = true;
+        }
+        else
+        {
+            currentMoveSpeed = moveSpeed;
+            lockActions = false;
+        }
+    }
+
+    public void attackFinish()
+    {
+        if (attackingPoint != null && Vector2.Distance(transform.position, attackingPoint) <= attackRadius)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(attackingPoint, 1f);
+
+            foreach (Collider2D collider in colliders)
+            {
+                if (ArrayContainsTag(collider.tag, attackTags))
+                {
+                    float damage = GetComponent<Damage>().damage;
+                    GetComponent<Damage>().DealDamage(damage, attackTarget);
+                    break;
+                }
+            }
+        }
+
+        movement.x = 0f;
+        movement.y = 0f;
+        currentMoveSpeed = moveSpeed;
+        lockActions = false;
     }
 
     private void OnDrawGizmos()

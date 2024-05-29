@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinemachine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,13 +14,15 @@ public class PlayerController : MonoBehaviour
     public Vector2 movement;
     public Vector2 mousePosition;
     public Camera cam;
+    [SerializeField] CinemachineVirtualCamera cinemachineVirtualCamera;
+    [SerializeField] float orthoSize = 10f;
+    [SerializeField] float orthoSizeWeaponDrawn = 6f;
+
     [SerializeField] float directionX;
     [SerializeField] float directionY;
     [SerializeField] GameObject unitSelectorTemplate;
     [SerializeField] GameObject unitDeselectorTemplate;
     [SerializeField] GameObject moveToPointPrefab;
-    private GameObject unitSelectorGameObject;
-    private GameObject unitDeselectorGameObject;
 
     [SerializeField] GameObject flagTemplate;
     [SerializeField] public int maxFlags = 3;
@@ -28,10 +31,6 @@ public class PlayerController : MonoBehaviour
 
     //ANIMATOR
     Animator animator;
-
-    //UNIT SELECTOR
-    private bool unitSelectorBool = false;
-    private bool unitDeselectorBool = false;
 
     Ray ray;
     RaycastHit2D hit;
@@ -151,8 +150,10 @@ public class PlayerController : MonoBehaviour
         {
             attackActive = !attackActive;
 
-            if (attackActive) { cam.orthographicSize = 5f; }
-            else { cam.orthographicSize = 7f; }
+            /*if (attackActive) { cam.orthographicSize = 5f; }
+            else { cam.orthographicSize = 7f; }*/
+            if(attackActive) { cinemachineVirtualCamera.m_Lens.OrthographicSize = orthoSizeWeaponDrawn; }
+            else { cinemachineVirtualCamera.m_Lens.OrthographicSize = orthoSize; }
         }
     }
 
