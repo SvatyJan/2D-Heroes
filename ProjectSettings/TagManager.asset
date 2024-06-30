@@ -3,18 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Player Unit
-  - PlayerMainFormationPoint
-  - Enemy
-  - Enemy Unit
-  - UnitSelector
-  - UnitDeselector
-  - Player Structure
-  - Enemy Structure
-  - Player Flag
-  - Enemy Flag
-  - Formation Point
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -22,13 +11,13 @@ TagManager:
   - 
   - Water
   - UI
-  - Player
-  - PlayerUnit
-  - PlayerStructure
-  - Enemy
-  - EnemyUnit
-  - EnemyStructure
-  - Ground
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
