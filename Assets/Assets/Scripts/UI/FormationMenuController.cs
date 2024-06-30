@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class FormationMenuController : MonoBehaviour
 {
-    public GameObject CirleMenuObject;
-    public GameObject CursorRootObject;
-    public GameObject HighlightRootObject;
+    public GameObject Menu;
+    public GameObject Cursor;
+    public GameObject RootHighlight;
 
     public Camera cam;
 
@@ -17,14 +17,14 @@ public class FormationMenuController : MonoBehaviour
 
     private void Start()
     {
-        CirleMenuObject.SetActive(false);
+        Menu.SetActive(false);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            CirleMenuObject.SetActive(true);
+            Menu.SetActive(true);
         }
 
         if (Input.GetKey(KeyCode.F))
@@ -36,13 +36,13 @@ public class FormationMenuController : MonoBehaviour
             int itemChangeAngle = (int)Mathf.Round(360 / CirlceMenuItems.Count);
 
             float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg - 90f;
-            CursorRootObject.transform.rotation = Quaternion.Euler(0, 0, angle);
+            Cursor.transform.rotation = Quaternion.Euler(0, 0, angle);
             angle += 360;
             angle = angle % 360;
 
             float highlightAngle = Mathf.Round(angle / itemChangeAngle) * itemChangeAngle;
             highlightAngle += 360 / CirlceMenuItems.Count;
-            HighlightRootObject.transform.rotation = Quaternion.Euler(0, 0, highlightAngle);
+            RootHighlight.transform.rotation = Quaternion.Euler(0, 0, highlightAngle);
 
             selectedItem = (int)Mathf.Round(angle / itemChangeAngle);
             selectedItem = selectedItem % (CirlceMenuItems.Count);
@@ -53,7 +53,7 @@ public class FormationMenuController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.F))
         {
             CirlceMenuItems[selectedItem].GetComponent<FormationChanger>().ChangeFormation(this.gameObject);
-            CirleMenuObject.SetActive(false);
+            Menu.SetActive(false);
         }
     }
 }
