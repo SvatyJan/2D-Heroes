@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 180521580462840262}
   - component: {fileID: 6371893157042454533}
   - component: {fileID: 3784341224343215915}
+  - component: {fileID: 7690080862584028521}
   m_Layer: 0
   m_Name: Barracks
   m_TagString: Untagged
@@ -32,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 4801886383399455518}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6371893157042454533
 SpriteRenderer:
@@ -99,7 +100,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 6371893157042454533}
+  buildingAvailableArrowIndicator: {fileID: 3576331491521838514}
   isBuilt: 0
+  isHeroNearby: 0
+  buildKey: 98
+--- !u!58 &7690080862584028521
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3271254998470532534}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.5
 --- !u!1 &3576331491521838514
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +150,7 @@ GameObject:
   - component: {fileID: 4801886383399455518}
   - component: {fileID: 6495990195185421425}
   m_Layer: 0
-  m_Name: Square
+  m_Name: ArrowIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

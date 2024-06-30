@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BuildingSystemController : MonoBehaviour
@@ -28,11 +27,8 @@ public class BuildingSystemController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("OnCollisionEnter called with: " + collision.gameObject.name);
-
         if (collision.gameObject.CompareTag("Player") && !isBuilt)
         {
-            Debug.Log("Player collided with the building.");
             buildingAvailableArrowIndicator.SetActive(true);
             isHeroNearby = true;
         }
@@ -40,11 +36,8 @@ public class BuildingSystemController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("OnCollisionExit called with: " + collision.gameObject.name);
-
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player stopped colliding with the building.");
             buildingAvailableArrowIndicator.SetActive(false);
             isHeroNearby = false;
         }
@@ -66,5 +59,4 @@ public class BuildingSystemController : MonoBehaviour
         color.a = alpha / 255f;
         spriteRenderer.color = color;
     }
-
 }

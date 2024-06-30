@@ -30,7 +30,7 @@ Transform:
   m_Children:
   - {fileID: 4272272126915377920}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3046480632065664710
 GameObject:
@@ -53,7 +53,8 @@ GameObject:
   - component: {fileID: 693244902138395467}
   - component: {fileID: 1313266176342833522}
   - component: {fileID: 8406809272688307669}
-  m_Layer: 6
+  - component: {fileID: 5021713046975026580}
+  m_Layer: 0
   m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -68,7 +69,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3046480632065664710}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -27.03, y: -1.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -158,7 +159,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -274,8 +275,8 @@ MonoBehaviour:
   formationSpacing: 3
   playerPosition: {x: 0, y: 0}
   unitGroup1: []
-  formation: 0
-  stance: 0
+  formation: 7
+  stance: 2
 --- !u!114 &1685295009698883946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,9 +365,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8b178b29680ee40845c77fc9739e2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CirleMenuObject: {fileID: 0}
-  CursorRootObject: {fileID: 0}
-  HighlightRootObject: {fileID: 0}
+  Menu: {fileID: 0}
+  Cursor: {fileID: 0}
+  RootHighlight: {fileID: 0}
   cam: {fileID: 0}
   CircleMenuItemLabel: {fileID: 0}
   CirlceMenuItems:
@@ -396,6 +397,38 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &5021713046975026580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3046480632065664710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000
+  m_ShapePath:
+  - {x: -0.4332695, y: -1.476387, z: 0}
+  - {x: -0.43327713, y: -0.97942543, z: 0}
+  - {x: -0.003730774, y: -0.70396805, z: 0}
+  - {x: 0.50411224, y: -0.95581055, z: 0}
+  - {x: 0.48050308, y: -1.476387, z: 0}
+  - {x: -0.05096054, y: -1.6485119, z: 0}
+  m_ShapePathHash: -181368611
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 32328
+  m_LocalBounds:
+    m_Center: {x: 0.035417557, y: -1.17624, z: 0}
+    m_Extent: {x: 0.4686947, y: 0.47227192, z: 0}
 --- !u!1 &5844461067911657547
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +438,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2940260956950886249}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: FormationPoints
   m_TagString: PlayerMainFormationPoint
   m_Icon: {fileID: 0}
@@ -554,7 +587,7 @@ GameObject:
   - component: {fileID: 7917721943752327815}
   - component: {fileID: 2877617646751113821}
   - component: {fileID: 1509679756365457088}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: PlayerAttackHitbox
   m_TagString: Player
   m_Icon: {fileID: 0}
