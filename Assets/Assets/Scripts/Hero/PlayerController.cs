@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IController
 {
     //COMPONENTY
     [SerializeField] Rigidbody2D rb2d;
@@ -61,14 +61,10 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    private void FixedUpdate()
+    void IController.Controll()
     {
         LookAtMouse();
-    }
 
-    void Update()
-    {
         Movement();
         toggleWeaponDraw();
 
@@ -89,7 +85,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        else if(!attackActive)
+        else if (!attackActive)
         {
             controlUnits();
             orderTarget();
@@ -97,7 +93,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Movement()
+    public void Movement()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
@@ -126,7 +122,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void LookAtMouse()
+    public void LookAtMouse()
     {
         mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
 
