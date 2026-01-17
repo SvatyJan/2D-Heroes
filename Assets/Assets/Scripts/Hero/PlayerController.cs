@@ -58,7 +58,18 @@ public class PlayerController : MonoBehaviour, IController
     {
         selectionAreaTransform.gameObject.SetActive(false);
         rb2d = GetComponent<Rigidbody2D>();
+        rb2d.interpolation = RigidbodyInterpolation2D.Interpolate;
         animator = GetComponent<Animator>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (movement.sqrMagnitude > 0.001f)
+        {
+            rb2d.MovePosition(
+                rb2d.position + movement.normalized * moveSpeed * Time.fixedDeltaTime
+            );
+        }
     }
 
     void IController.Controll()
@@ -120,13 +131,14 @@ public class PlayerController : MonoBehaviour, IController
         {
             animator.SetFloat("Speed", 0);
         }
+
+        movement = movement.normalized;
     }
 
     public void LookAtMouse()
     {
         mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
 
-        rb2d.MovePosition(rb2d.position + movement * moveSpeed * Time.deltaTime);
         Vector2 lookDirection = mousePosition - rb2d.position;
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg - 90f;
 

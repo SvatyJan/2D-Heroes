@@ -5,7 +5,7 @@ public class Controller : MonoBehaviour
 {
     [SerializeField] public GameObject controllingObject;
 
-    private void FixedUpdate()
+    private void Update()
     {
         Controll();
     }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 621363484950154205}
   - component: {fileID: 1754445973759910095}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: unit highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 8005862675878672984}
   - component: {fileID: 3378347301987294886}
   - component: {fileID: 26887723158551004}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Footman
   m_TagString: Player Unit
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ Transform:
   m_Children:
   - {fileID: 621363484950154205}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5687622096052753363
 SpriteRenderer:
@@ -165,7 +165,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 0
   m_Sprite: {fileID: 1459065595, guid: 839188c2e596f1c4b9a50476a1e60c58, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
