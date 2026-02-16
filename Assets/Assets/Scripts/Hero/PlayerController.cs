@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour, IController
         {
             controlUnits();
             orderTarget();
-            //createFlag();
+            createFlag();
         }
     }
 

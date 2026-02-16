@@ -386,6 +386,11 @@ public class UnitBehavior : MonoBehaviour
         lockActions = false;
     }
 
+    public void SetAttackAnimationFalse()
+    {
+        animator.SetBool("Attacking", false);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;

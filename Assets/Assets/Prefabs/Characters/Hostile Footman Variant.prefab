@@ -93,20 +93,32 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2542374713103764685, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2542374713103764685, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2542374713103764685, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_SpriteSortPoint
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2542374713103764685, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.74
+      value: 86.62173
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 81.39
+      value: -5.333332
       objectReference: {fileID: 0}
     - target: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -196,11 +208,15 @@ MonoBehaviour:
   attackFollowRadius: 5
   attackRadius: 2
   retreatRadius: 10
+  attackSpeedTime: 2
+  attackingState: 0
+  retreatingState: 0
   directionX: 0
   directionY: 0
   highlightCircle: {fileID: 2606628771789856977}
   isHighlighted: 0
   selectable: 0
+  lockActions: 0
 --- !u!4 &8545074674954254189 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6430805479719104854, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
