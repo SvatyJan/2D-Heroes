@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class UnitBehavior : MonoBehaviour
 {
+    public Stance stance;
     public enum Stance
     {
         AGRESSIVE = 1,
         DEFENSIVE = 2,
         PASSIVE = 3,
     }
-    public Stance stance;
 
+
+    public Formation formation;
     public enum Formation
     {
         CIRCLE = 1,
@@ -21,7 +23,7 @@ public class UnitBehavior : MonoBehaviour
         CENTER = 6,
         STAR = 7
     }
-    public Formation formation;
+
 
     [SerializeField] private GameObject followTarget;
     [SerializeField] private GameObject attackTarget;
@@ -39,6 +41,7 @@ public class UnitBehavior : MonoBehaviour
     [SerializeField] float attackSpeedTime = 2f;
     [SerializeField] private bool attackingState = false;
     [SerializeField] private bool retreatingState = false;
+    private float lastAttackTime = -999f;
 
     //pohyb a animace
     Animator animator;
@@ -52,6 +55,9 @@ public class UnitBehavior : MonoBehaviour
 
     [SerializeField] private bool lockActions = false;
     private Vector2 attackingPoint;
+
+    private AttackBehaviour attackBehaviour;
+
 
     public void setSelectable(bool selectable)
     {
@@ -69,6 +75,12 @@ public class UnitBehavior : MonoBehaviour
         animator = GetComponent<Animator>();
         currentMoveSpeed = moveSpeed;
         lockActions = false;
+
+        attackBehaviour = GetComponent<AttackBehaviour>();
+        if(attackBehaviour == null)
+        {
+            Debug.LogError("UnitBehavior: No AttackBehaviour component found on this unit!");
+        }
     }
 
     void Update()
@@ -148,8 +160,9 @@ public class UnitBehavior : MonoBehaviour
     {
         lookForAttackTarget(defendRadius);
         followTargetObject(followTarget);
-        lookAtTargetobject(attackTarget);
-        attackTargetObject(attackTarget);
+        //lookAtTargetobject(attackTarget);
+        //attackTargetObject(attackTarget);
+        handleAttack(attackTarget);
     }
 
     public void attackStanceBehaviour()
@@ -160,19 +173,13 @@ public class UnitBehavior : MonoBehaviour
 
     public void lookForAttackTarget(float lookForAttackTargetRadius)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, lookForAttackTargetRadius);
+        if (attackTarget != null &&
+            Vector2.Distance(transform.position, attackTarget.transform.position) <= lookForAttackTargetRadius)
+            return;
 
-        if (attackTarget != null)
-        {
-            if (Vector2.Distance(transform.position, attackTarget.transform.position) <= lookForAttackTargetRadius)
-            {
-                return;
-            }
-            else
-            {
-                attackTarget = null;
-            }
-        }
+        attackTarget = null;
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, lookForAttackTargetRadius);
 
         foreach (Collider2D collider in colliders)
         {
@@ -221,6 +228,40 @@ public class UnitBehavior : MonoBehaviour
         }
     }
 
+    private void handleAttack(GameObject target)
+    {
+        if (target == null) return;
+
+        float dist = Vector2.Distance(transform.position, target.transform.position);
+
+        if (dist > attackRadius)
+            return;
+
+        if (Time.time < lastAttackTime + attackSpeedTime)
+            return;
+
+        lastAttackTime = Time.time;
+
+        currentMoveSpeed = 0f;
+        animator.SetBool("Attacking", true);
+
+        Vector2 dir = target.transform.position - transform.position;
+        animator.SetFloat("Horizontal", dir.x);
+        animator.SetFloat("Vertical", dir.y);
+    }
+
+    public void OnAttackHitFrame()
+    {
+        if (attackBehaviour != null)
+            attackBehaviour.ExecuteAttack(attackTarget);
+    }
+
+    public void OnAttackFinished()
+    {
+        animator.SetBool("Attacking", false);
+        currentMoveSpeed = moveSpeed;
+    }
+
     public void getMovementDirection()
     {
         if (movement.x != 0)
@@ -260,15 +301,18 @@ public class UnitBehavior : MonoBehaviour
 
     private void followTargetObject(GameObject target)
     {
-        if(target != null && attackingState == false)
+        if (target != null && !animator.GetBool("Attacking"))
         {
-            animator.SetBool("Attacking", false);
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, currentMoveSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(
+                transform.position,
+                target.transform.position,
+                currentMoveSpeed * Time.deltaTime);
+
             movement = target.transform.position - transform.position;
         }
         else
         {
-            movement = new Vector2(0, 0);
+            movement = Vector2.zero;
         }
     }
 
@@ -286,39 +330,26 @@ public class UnitBehavior : MonoBehaviour
 
     private void attackAndMoveTowardsTargetObject(GameObject target)
     {
-        if (followTarget != null && Vector2.Distance(transform.position, followTarget.transform.position) <= 1f)
-        {
-            retreatingState = false;
-        }
-
-        if (retreatingState == true && followTarget != null)
+        if (target == null)
         {
             followTargetObject(followTarget);
             return;
         }
 
-        if (followTarget != null && Vector2.Distance(transform.position, followTarget.transform.position) >= retreatRadius)
-        {
-            retreatingState = true;
-            return;
-        }
+        float dist = Vector2.Distance(transform.position, target.transform.position);
 
-        if (target != null)
+        if (dist > attackRadius && dist <= attackFollowRadius)
         {
-            if (Vector2.Distance(transform.position, target.transform.position) <= attackFollowRadius 
-                && Vector2.Distance(transform.position, target.transform.position) >= attackRadius)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, target.transform.position, currentMoveSpeed * Time.deltaTime);
-                movement = target.transform.position - transform.position;
-            }
-            else if(Vector2.Distance(transform.position, target.transform.position) < attackRadius)
-            {
-                StartCoroutine(attackRoutine());
-            }
+            transform.position = Vector2.MoveTowards(
+                transform.position,
+                target.transform.position,
+                currentMoveSpeed * Time.deltaTime);
+
+            movement = target.transform.position - transform.position;
         }
-        else if (followTarget != null)
+        else if (dist <= attackRadius)
         {
-            followTargetObject(followTarget);
+            handleAttack(target);
         }
     }
 
