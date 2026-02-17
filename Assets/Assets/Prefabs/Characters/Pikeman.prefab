@@ -336,7 +336,7 @@ MonoBehaviour:
   currentMoveSpeed: 0
   defendRadius: 3
   attackFollowRadius: 10
-  attackRadius: 2
+  attackRadius: 3
   retreatRadius: 10
   attackSpeedTime: 2
   attackingState: 0

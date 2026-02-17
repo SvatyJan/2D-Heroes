@@ -336,7 +336,7 @@ MonoBehaviour:
   currentMoveSpeed: 0
   defendRadius: 3
   attackFollowRadius: 10
-  attackRadius: 2
+  attackRadius: 10
   retreatRadius: 10
   attackSpeedTime: 2
   attackingState: 0
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3affc59db64cf5b45be5bfbda98a7eb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RangedAttack
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 8217041878003684187, guid: cd03d33735938c649ba0858b811c2ee7, type: 3}
   firePoint: {fileID: 8754615855310949073}
 --- !u!114 &2948303315386585928
 MonoBehaviour:
