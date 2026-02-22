@@ -8,15 +8,19 @@ public class HeroMana : MonoBehaviour
     {
         public ManaType type;
 
-        [Header("Base Values")]
+        [Header("Base (Hero Identity)")]
         public float baseMaxMana = 100f;
         public float baseRegen = 0f;
 
-        [Header("Runtime")]
+        [Header("Runtime Bonuses (Shrines etc.)")]
         public float bonusMaxMana = 0f;
+        public float bonusRegen = 0f;
+
+        [Header("Runtime State")]
         public float currentMana = 0f;
 
         public float MaxMana => baseMaxMana + bonusMaxMana;
+        public float Regen => baseRegen + bonusRegen;
     }
 
     [SerializeField]
@@ -33,63 +37,61 @@ public class HeroMana : MonoBehaviour
             if (!manaLookup.ContainsKey(mana.type))
                 manaLookup.Add(mana.type, mana);
 
-            // clamp při startu
             mana.currentMana = Mathf.Clamp(mana.currentMana, 0f, mana.MaxMana);
         }
     }
 
     private void Update()
     {
-        RegenerateBase();
+        Regenerate();
     }
 
-    private void RegenerateBase()
+    private void Regenerate()
     {
         foreach (var mana in manaTypes)
         {
             if (mana.MaxMana <= 0f)
                 continue;
 
-            if (mana.baseRegen <= 0f)
+            if (mana.Regen <= 0f)
                 continue;
 
-            mana.currentMana += mana.baseRegen * Time.deltaTime;
+            mana.currentMana += mana.Regen * Time.deltaTime;
             mana.currentMana = Mathf.Min(mana.currentMana, mana.MaxMana);
         }
     }
 
-    public void AddMaxMana(ManaType type, float amount)
-    {
-        if (!manaLookup.ContainsKey(type))
-            return;
+    // --------------------------
+    // Shrine Bonuses
+    // --------------------------
 
-        var mana = manaLookup[type];
-        mana.bonusMaxMana += amount;
+    public void AddBonus(ManaType type, float maxMana, float regen)
+    {
+        var mana = GetOrCreateMana(type);
+
+        mana.bonusMaxMana += maxMana;
+        mana.bonusRegen += regen;
     }
 
-    public void RemoveMaxMana(ManaType type, float amount)
+    public void RemoveBonus(ManaType type, float maxMana, float regen)
     {
         if (!manaLookup.ContainsKey(type))
             return;
 
         var mana = manaLookup[type];
-        mana.bonusMaxMana -= amount;
+
+        mana.bonusMaxMana -= maxMana;
+        mana.bonusRegen -= regen;
+
         mana.bonusMaxMana = Mathf.Max(0f, mana.bonusMaxMana);
+        mana.bonusRegen = Mathf.Max(0f, mana.bonusRegen);
 
-        // clamp current mana pokud jsme přes nový max
         mana.currentMana = Mathf.Min(mana.currentMana, mana.MaxMana);
     }
 
-    public void AddMana(ManaType type, float amount)
-    {
-        if (!manaLookup.ContainsKey(type))
-            return;
-
-        var mana = manaLookup[type];
-
-        mana.currentMana += amount;
-        mana.currentMana = Mathf.Min(mana.currentMana, mana.MaxMana);
-    }
+    // --------------------------
+    // Mana Spending
+    // --------------------------
 
     public bool SpendMana(ManaType type, float amount)
     {
@@ -104,6 +106,18 @@ public class HeroMana : MonoBehaviour
         mana.currentMana -= amount;
         return true;
     }
+
+    public void AddMana(ManaType type, float amount)
+    {
+        var mana = GetOrCreateMana(type);
+
+        mana.currentMana += amount;
+        mana.currentMana = Mathf.Min(mana.currentMana, mana.MaxMana);
+    }
+
+    // --------------------------
+    // Getters
+    // --------------------------
 
     public float GetMana(ManaType type)
     {
@@ -132,5 +146,30 @@ public class HeroMana : MonoBehaviour
             return 0f;
 
         return mana.currentMana / mana.MaxMana;
+    }
+
+    // --------------------------
+    // Utility
+    // --------------------------
+
+    public ManaData GetOrCreateMana(ManaType type)
+    {
+        if (manaLookup.ContainsKey(type))
+            return manaLookup[type];
+
+        ManaData newMana = new ManaData
+        {
+            type = type,
+            baseMaxMana = 0f,
+            baseRegen = 0f,
+            bonusMaxMana = 0f,
+            bonusRegen = 0f,
+            currentMana = 0f
+        };
+
+        manaTypes.Add(newMana);
+        manaLookup.Add(type, newMana);
+
+        return newMana;
     }
 }

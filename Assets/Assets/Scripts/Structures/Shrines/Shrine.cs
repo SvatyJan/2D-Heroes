@@ -3,7 +3,7 @@ using UnityEngine;
 public class Shrine : MonoBehaviour, IOwned
 {
     [Header("Ownership")]
-    [SerializeField] private Player owner;
+    [SerializeField] public Player owner;
     public Player Owner => owner;
 
     [Header("Mana")]
@@ -29,21 +29,18 @@ public class Shrine : MonoBehaviour, IOwned
 
     public void SetOwner(Player newOwner)
     {
-        // odebrat bonus starému ownerovi
-        if (owner != null && bonusApplied)
+        if (owner != null)
         {
-            owner.Mana.RemoveMaxMana(manaType, bonusMaxMana);
-            bonusApplied = false;
-            owner.UnregisterShrine(this);
+            owner.GetComponent<HeroMana>()
+                .RemoveBonus(manaType, bonusMaxMana, nearRegen);
         }
 
         owner = newOwner;
 
         if (owner != null)
         {
-            owner.RegisterShrine(this);
-            owner.Mana.AddMaxMana(manaType, bonusMaxMana);
-            bonusApplied = true;
+            owner.GetComponent<HeroMana>()
+                .AddBonus(manaType, bonusMaxMana, nearRegen);
         }
 
         UpdateVisual();
