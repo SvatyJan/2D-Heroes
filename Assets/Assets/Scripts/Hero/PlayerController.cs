@@ -41,7 +41,6 @@ public class PlayerController : MonoBehaviour, IController
     [SerializeField] float startTimeBtwAttack;
 
     public bool blocking = false;
-    public bool attackActive = false;
 
     private Vector3 startPosition;
     private Vector3 endPosition;
@@ -50,9 +49,14 @@ public class PlayerController : MonoBehaviour, IController
     private enum State
     {
         Normal,
-        Attacking
+        Attacking,
+        SpellTargeting
     }
     private State state;
+
+    // SPELLS
+    [SerializeField] private SpellCaster spellCaster;
+    [SerializeField] private Player player;
 
     void Awake()
     {
@@ -60,6 +64,8 @@ public class PlayerController : MonoBehaviour, IController
         rb2d = GetComponent<Rigidbody2D>();
         rb2d.interpolation = RigidbodyInterpolation2D.Interpolate;
         animator = GetComponent<Animator>();
+        spellCaster = GetComponent<SpellCaster>();
+        player = GetComponent<Player>();
     }
 
     private void FixedUpdate()
@@ -79,29 +85,115 @@ public class PlayerController : MonoBehaviour, IController
         Movement();
         toggleWeaponDraw();
 
-        if (attackActive)
+        switch (state)
         {
-            PlayerMeleeAttack();
-            if (Input.GetButtonDown("Fire2"))
-            {
-                if (!blocking)
-                {
-                    blocking = true;
-                    animator.SetBool("Blocking", true);
-                }
-                else if (blocking)
-                {
-                    blocking = false;
-                    animator.SetBool("Blocking", false);
-                }
-            }
+            case State.Normal:
+                cinemachineVirtualCamera.m_Lens.OrthographicSize = orthoSize;
+                HandleNormal();
+                break;
+
+            case State.Attacking:
+            cinemachineVirtualCamera.m_Lens.OrthographicSize = orthoSizeWeaponDrawn;
+                HandleAttackMode();
+                break;
+
+            case State.SpellTargeting:
+                HandleSpellTargeting();
+                break;
         }
-        else if (!attackActive)
+    }
+
+    private void HandleNormal()
+    {
+        controlUnits();
+        orderTarget();
+        createFlag();
+    }
+
+    private void HandleAttackMode()
+    {
+        PlayerMeleeAttack();
+        if (Input.GetButtonDown("Fire2"))
         {
-            controlUnits();
-            orderTarget();
-            createFlag();
+            ChangeBlocking();
         }
+    }
+
+    private void HandleSpellTargeting()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+           CastSelectedSpell();
+        }
+
+        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            CancelSpell();
+        }
+    }
+
+    public void EnterSpellMode()
+    {
+        state = State.SpellTargeting;
+    }
+
+    private void CastSelectedSpell()
+    {
+        if (spellCaster == null)
+            return;
+
+        Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+
+        spellCaster.CastCurrentSpell(player, worldPos);
+
+        CancelSpell();
+    }
+
+    private void TryConvertSoul()
+    {
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+
+        if (hit.collider == null)
+        {
+            CancelSpell();
+            return;
+        }
+
+        UnitBehavior unit = hit.collider.GetComponent<UnitBehavior>();
+        if (unit == null)
+        {
+            CancelSpell();
+            return;
+        }
+
+        // nesmíš konvertovat vlastní jednotku
+        if (unit.Owner == GetComponent<Player>())
+        {
+            CancelSpell();
+            return;
+        }
+
+        // změna ownera
+        unit.SetOwner(GetComponent<Player>());
+
+        Debug.Log("Unit converted.");
+
+        CancelSpell();
+    }
+
+    private void CancelSpell()
+    {
+        SpellCaster spellCaster = GetComponent<SpellCaster>();
+
+        if (spellCaster != null)
+        {
+            spellCaster.ClearSpell();
+        }
+
+        state = State.Normal;
+
+        Debug.Log("Spell cancelled");
     }
 
     public void Movement()
@@ -156,12 +248,14 @@ public class PlayerController : MonoBehaviour, IController
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            attackActive = !attackActive;
-
-            /*if (attackActive) { cam.orthographicSize = 5f; }
-            else { cam.orthographicSize = 7f; }*/
-            if(attackActive) { cinemachineVirtualCamera.m_Lens.OrthographicSize = orthoSizeWeaponDrawn; }
-            else { cinemachineVirtualCamera.m_Lens.OrthographicSize = orthoSize; }
+            if (state == State.Attacking)
+            {
+                state = State.Normal;
+            }
+            else
+            {
+                state = State.Attacking;
+            }
         }
     }
 

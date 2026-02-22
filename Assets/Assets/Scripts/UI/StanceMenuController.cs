@@ -52,7 +52,19 @@ public class StanceMenuController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.G))
         {
-            StanceMenuItems[selectedItem].GetComponent<StanceChanger>().ChangeStance(this.gameObject);
+            if (this == null || gameObject == null)
+                return;
+
+            if (StanceMenuItems[selectedItem] == null)
+                return;
+
+            var changer = StanceMenuItems[selectedItem].GetComponent<StanceChanger>();
+            if (changer == null)
+                return;
+
+            if (changer != null)
+                changer.ChangeStance(gameObject);
+
             StanceMenuObject.SetActive(false);
         }
     }

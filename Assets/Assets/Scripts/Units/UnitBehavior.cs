@@ -1,8 +1,34 @@
 using System.Collections;
 using UnityEngine;
 
-public class UnitBehavior : MonoBehaviour
+public class UnitBehavior : MonoBehaviour, IOwned
 {
+    [SerializeField] private Player owner;
+
+    public Player Owner => owner;
+
+    public void SetOwner(Player newOwner)
+    {
+        if (owner != null)
+            owner.UnregisterUnit(this);
+
+        owner = newOwner;
+
+        if (owner != null)
+            owner.RegisterUnit(this);
+
+        UpdateVisualOwnerColor();
+    }
+
+    private void UpdateVisualOwnerColor()
+    {
+        if (owner == null) return;
+
+        var sr = GetComponent<SpriteRenderer>();
+        if (sr != null)
+            sr.color = owner.PlayerColor;
+    }
+    
     public Stance stance;
     public enum Stance
     {
@@ -71,6 +97,8 @@ public class UnitBehavior : MonoBehaviour
 
     private void Start()
     {
+        SetOwner(Owner);
+
         formation = Formation.CIRCLE;
         animator = GetComponent<Animator>();
         currentMoveSpeed = moveSpeed;
