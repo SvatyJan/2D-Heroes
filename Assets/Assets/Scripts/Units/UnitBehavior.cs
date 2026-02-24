@@ -450,6 +450,13 @@ public class UnitBehavior : MonoBehaviour, IOwned
         animator.SetBool("Attacking", false);
     }
 
+    // TODO: přepsat na attribut
+    public void ModifyMoveSpeed(float multiplier)
+    {
+        moveSpeed *= multiplier;
+        currentMoveSpeed = moveSpeed;
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;

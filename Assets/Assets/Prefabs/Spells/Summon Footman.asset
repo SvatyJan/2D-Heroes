@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ff4b43b8b9e58a40b1614c9046524d6, type: 3}
+  m_Name: Summon Footman
+  m_EditorClassIdentifier: Assembly-CSharp::SummonFootmanSpell
+  spellName: Summon Footman
+  soulCost: 1
+  lightManaCost: 20
+  secondaryManaCost: 20
+  footmanPrefab: {fileID: 5167884835933477276, guid: b7d6a7e8dcf696d49a29897ab96d2a61, type: 3}
