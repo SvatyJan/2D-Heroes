@@ -1,38 +1,39 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Spells/Summon Footman")]
-public class SummonFootmanSpell : Spell
+[CreateAssetMenu(menuName = "Spells/Summon Unit")]
+public class SummonSpell : Spell
 {
-    public int soulCost = 1;
-    public float requiredLight = 20f;
-    public float requiredAny = 20f;
-
-    public GameObject footmanPrefab;
+    [Header("Summon")]
+    public GameObject unitPrefab;
     public float castRange = 6f;
+
+    [Header("Costs")]
+    public int soulCost = 0;
+    public ManaCostEntry[] manaCosts;
 
     public override void Cast(Player caster, Vector2 worldPosition)
     {
         var souls = caster.GetComponent<SoulResource>();
         var mana = caster.GetComponent<HeroMana>();
 
-        if (!souls.CanSpend(soulCost))
+        if (souls == null || mana == null)
+            return;
+
+        // --- Souls ---
+        if (soulCost > 0 && !souls.CanSpend(soulCost))
         {
             Debug.Log("Not enough souls.");
             return;
         }
 
-        var manaCheck = ManaUtility.CanPayLightPlusAny(
-            mana,
-            requiredLight,
-            requiredAny
-        );
-
-        if (manaCheck != ManaCostResult.Success)
+        // --- Mana ---
+        if (!ManaUtility.CanPayCosts(mana, manaCosts))
         {
-            Debug.Log(manaCheck.ToString());
+            Debug.Log("Not enough mana.");
             return;
         }
 
+        // --- Range ---
         float distance = Vector2.Distance(
             caster.transform.position,
             worldPosition
@@ -45,12 +46,14 @@ public class SummonFootmanSpell : Spell
         }
 
         // PAY
-        souls.SpendSouls(soulCost);
-        ManaUtility.PayLightPlusAny(mana, requiredLight, requiredAny);
+        if (soulCost > 0)
+            souls.SpendSouls(soulCost);
+
+        ManaUtility.PayCosts(mana, manaCosts);
 
         // SPAWN
         GameObject unit = Instantiate(
-            footmanPrefab,
+            unitPrefab,
             worldPosition,
             Quaternion.identity
         );
@@ -59,6 +62,6 @@ public class SummonFootmanSpell : Spell
         if (unitBehavior != null)
             unitBehavior.SetOwner(caster);
 
-        Debug.Log("Footman summoned.");
+        Debug.Log("Unit summoned.");
     }
 }
