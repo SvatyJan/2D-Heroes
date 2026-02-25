@@ -1,45 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Health : MonoBehaviour
 {
-    [Header("Attributes")]
-    [SerializeField] public float health = 100f;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float currentHealth = 100f;
 
-    void Start()
+    public float MaxHealth => maxHealth;
+    public float CurrentHealth => currentHealth;
+    public bool IsAlive => currentHealth > 0f;
+
+    public event Action OnDeath;
+
+    private void Awake()
     {
-        
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
     }
-    void Update()
-    {
-        
-    }
 
-    public float TakeDamage(float damage)
+    public void TakeDamage(float amount)
     {
-        if (health > 0)
-        {
-            health -= damage;
-            //knockback a hit effect
-        }
+        if (!IsAlive)
+            return;
 
-        if (health <= 0)
+        currentHealth -= amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        if (currentHealth <= 0f)
         {
-            health = 0;
             Die();
         }
-        return health;
     }
 
-    public float GetHealth()
+    public void Heal(float amount)
     {
-        return health;
+        if (!IsAlive)
+            return;
+
+        if (amount <= 0f)
+            return;
+
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
     }
 
-    public void Die()
+    public void SetMaxHealth(float value)
     {
-        Debug.Log(this.gameObject + " has died.");
-        Destroy(this.gameObject);
+        maxHealth = Mathf.Max(1f, value);
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+    }
+
+    public void SetCurrentHealth(float value)
+    {
+        currentHealth = Mathf.Clamp(value, 0f, maxHealth);
+
+        if (currentHealth <= 0f)
+            Die();
+    }
+
+    private void Die()
+    {
+        OnDeath?.Invoke();
+
+        // MVP: znič objekt
+        Destroy(gameObject);
     }
 }
