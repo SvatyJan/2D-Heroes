@@ -25,6 +25,8 @@ GameObject:
   - component: {fileID: 5927756866261236054}
   - component: {fileID: 8171265766878295395}
   - component: {fileID: 3918621202213542443}
+  - component: {fileID: 7785446370103667642}
+  - component: {fileID: 6546717404017299429}
   m_Layer: 6
   m_Name: Character
   m_TagString: Player
@@ -179,7 +181,7 @@ Animator:
   m_GameObject: {fileID: 390970642506756671}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cd9bac7aba125f8419354faaf7e15b8d, type: 2}
+  m_Controller: {fileID: 9100000, guid: cae09ef3b2a2345479c662a7f5f775ca, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -282,7 +284,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e25d98263114576419dc9358b1cc58bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  soulValue: 1
+  soulOrbPrefab: {fileID: 0}
+  maxHealth: 100
+  currentHealth: 100
 --- !u!114 &3433720759234629297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,6 +453,7 @@ MonoBehaviour:
     baseMaxMana: 100
     baseRegen: 1
     bonusMaxMana: 0
+    bonusRegen: 0
     currentMana: 100
 --- !u!114 &8171265766878295395
 MonoBehaviour:
@@ -463,8 +469,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerId: 0
   playerColor: {r: 0, g: 0, b: 1, a: 1}
-  heroTransform: {fileID: 0}
-  heroMana: {fileID: 0}
+  heroTransform: {fileID: 4870919588690035505}
+  heroMana: {fileID: 5927756866261236054}
   units: []
   shrines: []
 --- !u!114 &3918621202213542443
@@ -480,6 +486,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellCaster
   selectedSpell: {fileID: 0}
+--- !u!114 &7785446370103667642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390970642506756671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f387e00a7d3c99c49a2866731bd15635, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoulResource
+  maxSouls: 99
+  currentSouls: 4
+--- !u!114 &6546717404017299429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390970642506756671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a22cd43da6eba4d9c1d6b67a49534d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoulCollector
 --- !u!1 &534551646625811359
 GameObject:
   m_ObjectHideFlags: 0

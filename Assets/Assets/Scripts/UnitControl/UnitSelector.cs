@@ -5,7 +5,7 @@ using UnityEngine;
 public class UnitSelector : MonoBehaviour
 {
     /**
-     * Metoda pro select jednotky pøi kolizi se selectorem.
+     * Metoda pro select jednotky pÅ™i kolizi se selectorem.
      * */
     private void OnTriggerEnter2D(Collider2D collision)
     {

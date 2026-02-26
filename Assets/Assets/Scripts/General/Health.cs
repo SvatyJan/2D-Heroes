@@ -3,6 +3,11 @@ using System;
 
 public class Health : MonoBehaviour
 {
+    [Header("Soul Drop")]
+    [SerializeField] private int soulValue = 1;
+    [SerializeField] private GameObject soulOrbPrefab;
+
+    [Header("Health")]
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth = 100f;
 
@@ -61,7 +66,38 @@ public class Health : MonoBehaviour
     {
         OnDeath?.Invoke();
 
-        // MVP: znič objekt
+        SpawnSouls();
+
         Destroy(gameObject);
+    }
+
+    private void SpawnSouls()
+    {
+        if (soulOrbPrefab == null)
+            return;
+
+        if (soulValue <= 0)
+            return;
+
+        UnitBehavior unitBehavior = GetComponent<UnitBehavior>();
+        if (unitBehavior == null)
+            return;
+
+        for (int i = 0; i < soulValue; i++)
+        {
+            Vector2 offset = UnityEngine.Random.insideUnitCircle * 0.5f;
+
+            GameObject orb = Instantiate(
+                soulOrbPrefab,
+                (Vector2)transform.position + offset,
+                Quaternion.identity
+            );
+
+            SoulOrb soul = orb.GetComponent<SoulOrb>();
+            if (soul != null)
+            {
+                soul.Initialize(unitBehavior.Owner, 1);
+            }
+        }
     }
 }

@@ -40,6 +40,8 @@ public class UnitController : MonoBehaviour
 
     private void Update()
     {
+        selectedUnits.RemoveAll(unit => unit == null);
+
         SelectAllUnits();
         ManipulateCircleFormationSpacing();
         groupSelectedUnits();
@@ -61,8 +63,14 @@ public class UnitController : MonoBehaviour
 
     public void RemoveSelectedUnit(GameObject unit)
     {
+        if (unit == null)
+            return;
+
         selectedUnits.Remove(unit);
-        unit.GetComponent<UnitBehavior>().isHighlighted = false;
+
+        UnitBehavior ub = unit.GetComponent<UnitBehavior>();
+        if (ub != null)
+            ub.isHighlighted = false;
     }
 
     public void SelectAllUnits()

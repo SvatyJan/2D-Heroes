@@ -98,6 +98,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 474247770296698142, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
+      propertyPath: soulOrbPrefab
+      value: 
+      objectReference: {fileID: 5244555431749158616, guid: cf6c9dfd037b1a643a0e78a28669e448, type: 3}
     - target: {fileID: 2542374713103764685, guid: 664f3a72e3987d9429cc3ce5548206fd, type: 3}
       propertyPath: m_Color.b
       value: 0
@@ -206,6 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f43a5406713ba4599ba0b65b3ceba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   stance: 3
   formation: 0
   followTarget: {fileID: 0}

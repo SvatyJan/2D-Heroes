@@ -310,7 +310,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e25d98263114576419dc9358b1cc58bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  soulOrbPrefab: {fileID: 5244555431749158616, guid: cf6c9dfd037b1a643a0e78a28669e448, type: 3}
+  maxHealth: 100
+  currentHealth: 100
 --- !u!114 &8005862675878672984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,7 +325,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f43a5406713ba4599ba0b65b3ceba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stance: 3
+  owner: {fileID: 0}
+  stance: 2
   formation: 1
   followTarget: {fileID: 0}
   attackTarget: {fileID: 0}

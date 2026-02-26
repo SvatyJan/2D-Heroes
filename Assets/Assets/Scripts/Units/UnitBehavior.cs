@@ -95,6 +95,31 @@ public class UnitBehavior : MonoBehaviour, IOwned
         return this.selectable;
     }
 
+    private void Awake()
+    {
+        Health health = GetComponent<Health>();
+        if (health != null)
+        {
+            health.OnDeath += HandleDeath;
+        }
+    }
+
+    private void HandleDeath()
+    {
+        // pokud je označená, zruš highlight
+        isHighlighted = false;
+
+        // informuj owner controller
+        if (Owner != null)
+        {
+            UnitController controller = Owner.GetComponent<UnitController>();
+            if (controller != null)
+            {
+                controller.RemoveSelectedUnit(gameObject);
+            }
+        }
+    }
+
     private void Start()
     {
         SetOwner(Owner);
