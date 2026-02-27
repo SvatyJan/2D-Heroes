@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour, IController
     [SerializeField] GameObject flagTemplate;
     [SerializeField] public int maxFlags = 3;
     private int flagsPutDown = 0;
+    
     public List<GameObject> flagList = new List<GameObject>();
 
     //ANIMATOR
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour, IController
 
     //ATTACK
     [SerializeField] float damage;
+    [SerializeField] private float attackRange = 2f;
     private float timeBtwAttack;
     [SerializeField] float startTimeBtwAttack;
 
@@ -60,7 +62,7 @@ public class PlayerController : MonoBehaviour, IController
     [SerializeField] private SpellCaster spellCaster;
     [SerializeField] private Player player;
 
-    void Awake()
+    private void Awake()
     {
         selectionAreaTransform.gameObject.SetActive(false);
         rb2d = GetComponent<Rigidbody2D>();
@@ -342,33 +344,47 @@ public class PlayerController : MonoBehaviour, IController
 
     private void PlayerMeleeAttack()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (timeBtwAttack > 0)
+            timeBtwAttack -= Time.deltaTime;
+
+        if (!Input.GetButtonDown("Fire1"))
+            return;
+
+        if (timeBtwAttack > 0)
+            return;
+
+        animator.SetBool("Attacking", true);
+
+        timeBtwAttack = startTimeBtwAttack;
+    }
+
+    public void OnAttackHitFrame()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange);
+
+        foreach (var hit in hits)
         {
-            if (timeBtwAttack <= 0)
+            UnitBehavior unit = hit.GetComponent<UnitBehavior>();
+            if (unit == null)
+                continue;
+
+            if (unit.Owner == player)
+                continue;
+
+            Damage dmg = unit.GetComponent<Damage>();
+            if (dmg != null)
             {
-                animator.SetBool("Attacking", true);
-
-                //nová logika
-                Vector3 mouseDir = mousePosition.normalized;
-                float attackOffset = 3f;
-                Vector3 attackPosition = transform.position + mouseDir * attackOffset;
-                state = State.Attacking;
-
-                //TODO: zjisti všechny nepřátele v range, a vyber toho nejblíž a toho targetni.
-
-                //nová logika
-                timeBtwAttack = startTimeBtwAttack;
-            }
-            else
-            {
-                timeBtwAttack -= Time.deltaTime;
-            }
-
-            if (timeBtwAttack <= 0)
-            {
-                animator.SetBool("Attacking", true);
+                dmg.DealDamage(damage, unit.gameObject);
             }
         }
+    }
+
+    public void OnAttackFinished()
+    {
+        animator.SetBool("Attacking", false);
+
+        // pokud chceš, můžeš zde resetnout i blokování útoku
+        // nebo jen nechat cooldown běžet samostatně
     }
 
     public void ChangeBlocking()
