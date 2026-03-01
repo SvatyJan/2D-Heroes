@@ -5,17 +5,11 @@ public class EnemyAIController : MonoBehaviour
 {
     public enum StrategicState
     {
-        Farm,
-        CaptureShrine,
-        AttackPlayer,
-        AttackHeart
-    }
-
-    public enum AIProfile
-    {
-        Aggressive,
-        Defensive,
-        Balanced
+        Idle,
+        MovingToShrine,
+        CapturingShrine,
+        AttackingPlayer,
+        AttackingHeart
     }
 
     [Header("Hero")]
@@ -35,12 +29,14 @@ public class EnemyAIController : MonoBehaviour
     [SerializeField] private List<Spell> availableSpells = new();
 
     [Header("AI Settings")]
-    public AIProfile profile = AIProfile.Balanced;
     public float decisionInterval = 0.5f;
     public float moveSpeed = 3f;
+    public float shrineCaptureRadius = 5f;
 
-    private StrategicState currentState;
+    private StrategicState currentState = StrategicState.Idle;
     private float decisionTimer;
+
+    private Shrine currentTargetShrine;
 
     private void Update()
     {
@@ -52,103 +48,143 @@ public class EnemyAIController : MonoBehaviour
         if (decisionTimer >= decisionInterval)
         {
             decisionTimer = 0f;
-
-            EvaluateDecision();
-            EvaluateSpells();
+            EvaluateHighLevelDecision();
         }
 
         ExecuteState();
         ControlUnits();
     }
 
-    #region DECISION
+    #region HIGH LEVEL DECISION
 
-    void EvaluateDecision()
+    void EvaluateHighLevelDecision()
     {
-        float myPower = CalculatePower(selfPlayer);
-        float enemyPower = CalculatePower(enemyPlayer);
+        if (currentTargetShrine != null &&
+            currentTargetShrine.Owner == null)
+        {
+            currentState = StrategicState.MovingToShrine;
+            return;
+        }
 
-        float powerRatio = myPower / Mathf.Max(enemyPower, 1f);
+        currentTargetShrine = FindClosestNeutralShrine();
 
-        float shrineScore = CountNeutralShrines() * 5f;
-        float attackScore = 0f;
+        if (currentTargetShrine != null)
+        {
+            Debug.Log("[AI] Targeting shrine: " + currentTargetShrine.name);
+            currentState = StrategicState.MovingToShrine;
+            return;
+        }
 
-        if (powerRatio > 1.2f)
-            attackScore = 10f;
+        if (enemyPlayer != null)
+        {
+            currentState = StrategicState.AttackingPlayer;
+            return;
+        }
 
-        float max = Mathf.Max(shrineScore, attackScore);
-
-        if (max == shrineScore)
-            currentState = StrategicState.CaptureShrine;
-        else
-            currentState = StrategicState.AttackPlayer;
-
-        Debug.Log($"[AI] State -> {currentState}");
+        currentState = StrategicState.Idle;
     }
 
     #endregion
 
-    #region EXECUTION
+    #region STATE EXECUTION
 
     void ExecuteState()
     {
         switch (currentState)
         {
-            case StrategicState.CaptureShrine:
-                Shrine shrine = FindClosestNeutralShrine();
-                if (shrine != null)
-                    MoveHeroTo(shrine.transform.position);
+            case StrategicState.MovingToShrine:
+                HandleMoveToShrine();
                 break;
 
-            case StrategicState.AttackPlayer:
+            case StrategicState.CapturingShrine:
+                HandleCaptureShrine();
+                break;
+
+            case StrategicState.AttackingPlayer:
                 if (enemyPlayer != null)
                     MoveHeroTo(enemyPlayer.transform.position);
                 break;
 
-            case StrategicState.AttackHeart:
+            case StrategicState.AttackingHeart:
                 if (enemyHeart != null)
                     MoveHeroTo(enemyHeart.position);
                 break;
         }
     }
 
-    #endregion
-
-    #region SPELL AI
-
-    void EvaluateSpells()
+    void HandleMoveToShrine()
     {
-        if (spellCaster == null || heroMana == null)
-            return;
-
-        Shrine neutralShrine = FindClosestNeutralShrine();
-
-        if (neutralShrine == null)
-            return;
-
-        foreach (var spell in availableSpells)
+        if (currentTargetShrine == null)
         {
-            if (spell == null)
-                continue;
-
-            // Hledáme convert shrine spell (podle názvu)
-            if (!spell.name.ToLower().Contains("convert"))
-                continue;
-
-            if (!heroMana.CanAfford(spell))
-            {
-                Debug.Log("[AI] Not enough mana for Convert Shrine.");
-                continue;
-            }
-
-            Debug.Log("[AI] Casting Convert Shrine on: " + neutralShrine.name);
-
-            spellCaster.SelectSpell(spell);
-            spellCaster.CastCurrentSpell(selfPlayer, neutralShrine.transform.position);
-            spellCaster.ClearSpell();
-
-            break; // castíme jen jeden spell za tick
+            currentState = StrategicState.Idle;
+            return;
         }
+
+        if (currentTargetShrine.Owner != null)
+        {
+            Debug.Log("[AI] Shrine already taken.");
+            currentTargetShrine = null;
+            currentState = StrategicState.Idle;
+            return;
+        }
+
+        float distance = Vector2.Distance(
+            heroTransform.position,
+            currentTargetShrine.transform.position
+        );
+
+        if (distance > shrineCaptureRadius)
+        {
+            MoveHeroTo(currentTargetShrine.transform.position);
+        }
+        else
+        {
+            Debug.Log("[AI] In range of shrine. Switching to capture.");
+            currentState = StrategicState.CapturingShrine;
+        }
+    }
+
+    void HandleCaptureShrine()
+    {
+        if (currentTargetShrine == null)
+        {
+            currentState = StrategicState.Idle;
+            return;
+        }
+
+        if (currentTargetShrine.Owner != null)
+        {
+            Debug.Log("[AI] Shrine captured.");
+            currentTargetShrine = null;
+            currentState = StrategicState.Idle;
+            return;
+        }
+
+        Spell convertSpell = GetConvertShrineSpell();
+
+        if (convertSpell == null)
+        {
+            Debug.Log("[AI] No Convert Shrine spell available.");
+            return;
+        }
+
+        if (!heroMana.CanAfford(convertSpell))
+        {
+            Debug.Log("[AI] Not enough mana.");
+            return;
+        }
+
+        if (spellCaster.IsOnCooldown(convertSpell))
+        {
+            Debug.Log("[AI] Convert spell on cooldown.");
+            return;
+        }
+
+        Debug.Log("[AI] Casting Convert Shrine on " + currentTargetShrine.name);
+
+        spellCaster.SelectSpell(convertSpell);
+        spellCaster.CastCurrentSpell(selfPlayer, currentTargetShrine.transform.position);
+        spellCaster.ClearSpell();
     }
 
     #endregion
@@ -158,13 +194,11 @@ public class EnemyAIController : MonoBehaviour
     void ControlUnits()
     {
         List<UnitBehavior> units = selfPlayer.GetUnits();
-        if (units == null || units.Count == 0)
-            return;
+        if (units == null) return;
 
         foreach (var unit in units)
         {
-            if (unit == null)
-                continue;
+            if (unit == null) continue;
 
             unit.setFollowTarget(heroTransform.gameObject);
             unit.setStance(UnitBehavior.Stance.DEFENSIVE);
@@ -175,51 +209,6 @@ public class EnemyAIController : MonoBehaviour
 
     #region HELPERS
 
-    float CalculatePower(Player player)
-    {
-        if (player == null)
-            return 0f;
-
-        float power = 0f;
-
-        Health heroHealth = player.GetComponent<Health>();
-        if (heroHealth != null)
-            power += heroHealth.CurrentHealth;
-
-        List<UnitBehavior> units = player.GetUnits();
-
-        if (units != null)
-        {
-            foreach (var unit in units)
-            {
-                if (unit == null)
-                    continue;
-
-                Health h = unit.GetComponent<Health>();
-                if (h != null)
-                    power += h.CurrentHealth;
-            }
-        }
-
-        return power;
-    }
-
-    int CountNeutralShrines()
-    {
-        int count = 0;
-
-        foreach (var shrine in shrines)
-        {
-            if (shrine == null)
-                continue;
-
-            if (shrine.Owner == null)
-                count++;
-        }
-
-        return count;
-    }
-
     Shrine FindClosestNeutralShrine()
     {
         Shrine closest = null;
@@ -227,11 +216,8 @@ public class EnemyAIController : MonoBehaviour
 
         foreach (var shrine in shrines)
         {
-            if (shrine == null)
-                continue;
-
-            if (shrine.Owner != null)
-                continue;
+            if (shrine == null) continue;
+            if (shrine.Owner != null) continue;
 
             float dist = Vector2.Distance(
                 heroTransform.position,
@@ -248,12 +234,27 @@ public class EnemyAIController : MonoBehaviour
         return closest;
     }
 
+    Spell GetConvertShrineSpell()
+    {
+        foreach (var spell in availableSpells)
+        {
+            if (spell != null &&
+                spell.name.ToLower().Contains("convert"))
+            {
+                return spell;
+            }
+        }
+
+        return null;
+    }
+
     void MoveHeroTo(Vector2 position)
     {
         heroTransform.position = Vector2.MoveTowards(
             heroTransform.position,
             position,
-            moveSpeed * Time.deltaTime);
+            moveSpeed * Time.deltaTime
+        );
     }
 
     #endregion

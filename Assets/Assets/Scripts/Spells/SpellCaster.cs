@@ -44,4 +44,13 @@ public class SpellCaster : MonoBehaviour
         float lastCastTime = cooldownTimers[spell];
         return Time.time >= lastCastTime + spell.cooldown;
     }
+
+    public bool IsOnCooldown(Spell spell)
+    {
+        if (!cooldownTimers.ContainsKey(spell))
+            return false;
+
+        float lastCastTime = cooldownTimers[spell];
+        return Time.time < lastCastTime + spell.cooldown;
+    }
 }

@@ -4,27 +4,35 @@ using UnityEngine;
 public class ConvertShrineSpell : Spell
 {
     public float castRange = 5f;
+    public float detectionRadius = 1.2f;
 
     public override void Cast(Player caster, Vector2 worldPosition)
     {
-        Collider2D hit = Physics2D.OverlapPoint(worldPosition);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(worldPosition, detectionRadius);
 
-        if (hit == null)
-            return;
+        Shrine targetShrine = null;
 
-        Shrine shrine = hit.GetComponent<Shrine>();
-        if (shrine == null)
+        foreach (var hit in hits)
+        {
+            Shrine shrine = hit.GetComponent<Shrine>();
+            if (shrine != null)
+            {
+                targetShrine = shrine;
+                break;
+            }
+        }
+
+        if (targetShrine == null)
             return;
 
         float distance = Vector2.Distance(
             caster.transform.position,
-            shrine.transform.position
+            targetShrine.transform.position
         );
 
         if (distance > castRange)
             return;
 
-        shrine.SetOwner(caster);
-        Debug.Log("Shrine converted.");
+        targetShrine.SetOwner(caster);
     }
 }

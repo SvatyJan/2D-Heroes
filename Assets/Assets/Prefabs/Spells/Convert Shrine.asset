@@ -10,7 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef6523c516d200143a720e9778c30825, type: 3}
-  m_Name: 
+  m_Name: Convert Shrine
   m_EditorClassIdentifier: Assembly-CSharp::ConvertShrineSpell
   spellName: Convert Shrine
-  castRange: 5
+  cooldown: 1
+  soulCost: 0
+  manaCosts:
+  - isAnyType: 1
+    type: 0
+    amount: 10
+  castRange: 10
