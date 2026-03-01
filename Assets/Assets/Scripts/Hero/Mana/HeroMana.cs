@@ -172,4 +172,35 @@ public class HeroMana : MonoBehaviour
 
         return newMana;
     }
+
+    public bool CanAfford(Spell spell)
+    {
+        if (spell == null)
+            return false;
+
+        if (spell.manaCosts != null)
+        {
+            foreach (var cost in spell.manaCosts)
+            {
+                if (!manaLookup.ContainsKey(cost.type))
+                    return false;
+
+                if (manaLookup[cost.type].currentMana < cost.amount)
+                    return false;
+            }
+        }
+
+        if (spell.soulCost > 0)
+        {
+            Player player = GetComponent<Player>();
+            SoulResource soulResource = GetComponent<SoulResource>();
+            if (player == null)
+                return false;
+
+            if (soulResource == null || soulResource.CurrentSouls < spell.soulCost)
+                return false;
+        }
+
+        return true;
+    }
 }

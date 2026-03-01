@@ -7,10 +7,6 @@ public class SummonSpell : Spell
     public GameObject unitPrefab;
     public float castRange = 6f;
 
-    [Header("Costs")]
-    public int soulCost = 0;
-    public ManaCostEntry[] manaCosts;
-
     public override void Cast(Player caster, Vector2 worldPosition)
     {
         var souls = caster.GetComponent<SoulResource>();

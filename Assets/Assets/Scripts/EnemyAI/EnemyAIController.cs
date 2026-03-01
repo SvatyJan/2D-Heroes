@@ -18,22 +18,26 @@ public class EnemyAIController : MonoBehaviour
         Balanced
     }
 
-    [Header("Hero Reference")]
+    [Header("Hero")]
     public Transform heroTransform;
     public Player selfPlayer;
 
-    [Header("Enemy References")]
+    [Header("Enemy")]
     public Player enemyPlayer;
     public Transform enemyHeart;
 
     [Header("World")]
     public List<Shrine> shrines = new();
 
+    [Header("Spell System")]
+    public SpellCaster spellCaster;
+    public HeroMana heroMana;
+    [SerializeField] private List<Spell> availableSpells = new();
+
     [Header("AI Settings")]
     public AIProfile profile = AIProfile.Balanced;
     public float decisionInterval = 0.5f;
     public float moveSpeed = 3f;
-    public float neutralSearchRadius = 20f;
 
     private StrategicState currentState;
     private float decisionTimer;
@@ -48,7 +52,9 @@ public class EnemyAIController : MonoBehaviour
         if (decisionTimer >= decisionInterval)
         {
             decisionTimer = 0f;
+
             EvaluateDecision();
+            EvaluateSpells();
         }
 
         ExecuteState();
@@ -64,29 +70,20 @@ public class EnemyAIController : MonoBehaviour
 
         float powerRatio = myPower / Mathf.Max(enemyPower, 1f);
 
-        float farmScore = FindClosestNeutralUnit() != null ? 5f : 0f;
-        float shrineScore = CountNeutralShrines() * 3f;
+        float shrineScore = CountNeutralShrines() * 5f;
         float attackScore = 0f;
 
         if (powerRatio > 1.2f)
-            attackScore = 15f;
-        else if (powerRatio > 1.0f)
-            attackScore = 8f;
+            attackScore = 10f;
 
-        if (profile == AIProfile.Aggressive)
-            attackScore *= 1.5f;
+        float max = Mathf.Max(shrineScore, attackScore);
 
-        if (profile == AIProfile.Defensive)
-            farmScore *= 1.5f;
-
-        float max = Mathf.Max(farmScore, shrineScore, attackScore);
-
-        if (max == attackScore)
-            currentState = StrategicState.AttackPlayer;
-        else if (max == shrineScore)
+        if (max == shrineScore)
             currentState = StrategicState.CaptureShrine;
         else
-            currentState = StrategicState.Farm;
+            currentState = StrategicState.AttackPlayer;
+
+        Debug.Log($"[AI] State -> {currentState}");
     }
 
     #endregion
@@ -97,12 +94,6 @@ public class EnemyAIController : MonoBehaviour
     {
         switch (currentState)
         {
-            case StrategicState.Farm:
-                UnitBehavior neutralUnit = FindClosestNeutralUnit();
-                if (neutralUnit != null)
-                    MoveHeroTo(neutralUnit.transform.position);
-                break;
-
             case StrategicState.CaptureShrine:
                 Shrine shrine = FindClosestNeutralShrine();
                 if (shrine != null)
@@ -123,16 +114,57 @@ public class EnemyAIController : MonoBehaviour
 
     #endregion
 
+    #region SPELL AI
+
+    void EvaluateSpells()
+    {
+        if (spellCaster == null || heroMana == null)
+            return;
+
+        Shrine neutralShrine = FindClosestNeutralShrine();
+
+        if (neutralShrine == null)
+            return;
+
+        foreach (var spell in availableSpells)
+        {
+            if (spell == null)
+                continue;
+
+            // Hledáme convert shrine spell (podle názvu)
+            if (!spell.name.ToLower().Contains("convert"))
+                continue;
+
+            if (!heroMana.CanAfford(spell))
+            {
+                Debug.Log("[AI] Not enough mana for Convert Shrine.");
+                continue;
+            }
+
+            Debug.Log("[AI] Casting Convert Shrine on: " + neutralShrine.name);
+
+            spellCaster.SelectSpell(spell);
+            spellCaster.CastCurrentSpell(selfPlayer, neutralShrine.transform.position);
+            spellCaster.ClearSpell();
+
+            break; // castíme jen jeden spell za tick
+        }
+    }
+
+    #endregion
+
     #region UNIT CONTROL
 
     void ControlUnits()
     {
         List<UnitBehavior> units = selfPlayer.GetUnits();
-        if (units == null || units.Count == 0) return;
+        if (units == null || units.Count == 0)
+            return;
 
         foreach (var unit in units)
         {
-            if (unit == null) continue;
+            if (unit == null)
+                continue;
 
             unit.setFollowTarget(heroTransform.gameObject);
             unit.setStance(UnitBehavior.Stance.DEFENSIVE);
@@ -145,7 +177,8 @@ public class EnemyAIController : MonoBehaviour
 
     float CalculatePower(Player player)
     {
-        if (player == null) return 0f;
+        if (player == null)
+            return 0f;
 
         float power = 0f;
 
@@ -154,11 +187,13 @@ public class EnemyAIController : MonoBehaviour
             power += heroHealth.CurrentHealth;
 
         List<UnitBehavior> units = player.GetUnits();
+
         if (units != null)
         {
             foreach (var unit in units)
             {
-                if (unit == null) continue;
+                if (unit == null)
+                    continue;
 
                 Health h = unit.GetComponent<Health>();
                 if (h != null)
@@ -175,7 +210,9 @@ public class EnemyAIController : MonoBehaviour
 
         foreach (var shrine in shrines)
         {
-            if (shrine == null) continue;
+            if (shrine == null)
+                continue;
+
             if (shrine.Owner == null)
                 count++;
         }
@@ -190,37 +227,21 @@ public class EnemyAIController : MonoBehaviour
 
         foreach (var shrine in shrines)
         {
-            if (shrine == null) continue;
-            if (shrine.Owner != null) continue;
+            if (shrine == null)
+                continue;
 
-            float dist = Vector2.Distance(heroTransform.position, shrine.transform.position);
+            if (shrine.Owner != null)
+                continue;
+
+            float dist = Vector2.Distance(
+                heroTransform.position,
+                shrine.transform.position
+            );
+
             if (dist < minDist)
             {
                 minDist = dist;
                 closest = shrine;
-            }
-        }
-
-        return closest;
-    }
-
-    UnitBehavior FindClosestNeutralUnit()
-    {
-        UnitBehavior[] allUnits = GameObject.FindObjectsOfType<UnitBehavior>();
-
-        float minDist = float.MaxValue;
-        UnitBehavior closest = null;
-
-        foreach (var unit in allUnits)
-        {
-            if (unit == null) continue;
-            if (unit.Owner != null) continue;
-
-            float dist = Vector2.Distance(heroTransform.position, unit.transform.position);
-            if (dist < minDist)
-            {
-                minDist = dist;
-                closest = unit;
             }
         }
 
