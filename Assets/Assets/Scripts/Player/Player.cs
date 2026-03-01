@@ -51,4 +51,9 @@ public class Player : MonoBehaviour
     {
         shrines.Remove(shrine);
     }
+
+    public List<UnitBehavior> GetUnits()
+    {
+        return units;
+    }
 }
