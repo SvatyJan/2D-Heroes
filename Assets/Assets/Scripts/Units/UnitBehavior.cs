@@ -54,7 +54,6 @@ public class UnitBehavior : MonoBehaviour, IOwned
     [SerializeField] private GameObject followTarget;
     [SerializeField] private GameObject attackTarget;
 
-    public string[] attackTags = { "Enemy Unit", "Enemy" };
     public string[] followTags = { "Player", "Player Unit", "Player Structure", "Player Flag" };
 
     [SerializeField] float moveSpeed;
@@ -224,24 +223,60 @@ public class UnitBehavior : MonoBehaviour, IOwned
         attackAndMoveTowardsTargetObject(attackTarget);
     }
 
-    public void lookForAttackTarget(float lookForAttackTargetRadius)
+    public void lookForAttackTarget(float radius)
     {
-        if (attackTarget != null &&
-            Vector2.Distance(transform.position, attackTarget.transform.position) <= lookForAttackTargetRadius)
-            return;
+        if (attackTarget != null)
+        {
+            float dist = Vector2.Distance(transform.position, attackTarget.transform.position);
+
+            if (dist <= radius)
+            {
+                IOwned owned = attackTarget.GetComponent<IOwned>();
+                Health health = attackTarget.GetComponent<Health>();
+
+                if (owned != null && owned.Owner != Owner && health != null)
+                    return;
+            }
+        }
 
         attackTarget = null;
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, lookForAttackTargetRadius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius);
+
+        float closestDist = float.MaxValue;
+        GameObject bestTarget = null;
 
         foreach (Collider2D collider in colliders)
         {
-            if (ArrayContainsTag(collider.tag, attackTags))
+            if (collider.gameObject == gameObject)
+                continue;
+
+            IOwned owned = collider.GetComponent<IOwned>();
+            if (owned == null)
+                continue;
+
+            // ignore same owner
+            if (owned.Owner == Owner)
+                continue;
+
+            // musí mít Health
+            Health health = collider.GetComponent<Health>();
+            if (health == null)
+                continue;
+
+            float dist = Vector2.Distance(
+                transform.position,
+                collider.transform.position
+            );
+
+            if (dist < closestDist)
             {
-                attackTarget = collider.gameObject;
-                break;
+                closestDist = dist;
+                bestTarget = collider.gameObject;
             }
         }
+
+        attackTarget = bestTarget;
     }
 
     private bool ArrayContainsTag(string tag, string[] tagArray)
@@ -455,10 +490,12 @@ public class UnitBehavior : MonoBehaviour, IOwned
 
             foreach (Collider2D collider in colliders)
             {
-                if (ArrayContainsTag(collider.tag, attackTags))
+                IOwned owned = collider.GetComponent<IOwned>();
+
+                if (owned != null && owned.Owner != Owner)
                 {
                     float damage = GetComponent<Damage>().damage;
-                    GetComponent<Damage>().DealDamage(damage, attackTarget);
+                    GetComponent<Damage>().DealDamage(damage, collider.gameObject);
                     break;
                 }
             }

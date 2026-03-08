@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IOwned
 {
+    public Player Owner => this;
+
     [Header("Identity")]
     [SerializeField] private int playerId;
     [SerializeField] private Color playerColor = Color.blue;
@@ -20,6 +22,13 @@ public class Player : MonoBehaviour
     public Color PlayerColor => playerColor;
     public Transform HeroTransform => heroTransform;
     public HeroMana Mana => heroMana;
+
+    public void SetOwner(Player newOwner)
+    {
+        // Player je sám sobě owner, takže to nedává smysl měnit.
+        // Metoda existuje jen kvůli IOwned interface.
+        Debug.LogWarning("Player.SetOwner() called. Player cannot change owner.");
+    }
 
     void Awake()
     {

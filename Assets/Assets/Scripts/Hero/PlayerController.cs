@@ -364,17 +364,27 @@ public class PlayerController : MonoBehaviour, IController
 
         foreach (var hit in hits)
         {
-            UnitBehavior unit = hit.GetComponent<UnitBehavior>();
-            if (unit == null)
+            if (hit.gameObject == gameObject)
                 continue;
 
-            if (unit.Owner == player)
+            // musí mít Health
+            Health health = hit.GetComponent<Health>();
+            if (health == null)
                 continue;
 
-            Damage dmg = unit.GetComponent<Damage>();
+            // musí být IOwned
+            IOwned owned = hit.GetComponent<IOwned>();
+            if (owned == null)
+                continue;
+
+            // neútočit na vlastní
+            if (owned.Owner == player)
+                continue;
+
+            Damage dmg = GetComponent<Damage>();
             if (dmg != null)
             {
-                dmg.DealDamage(damage, unit.gameObject);
+                dmg.DealDamage(dmg.damage, hit.gameObject);
             }
         }
     }
