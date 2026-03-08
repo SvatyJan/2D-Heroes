@@ -65,4 +65,11 @@ public class Player : MonoBehaviour, IOwned
     {
         return units;
     }
+
+    public static void UpdateVisualOwnerColor(GameObject gameObject, Player owner)
+    {
+        var sr = gameObject.GetComponent<SpriteRenderer>();
+        if (sr != null)
+            sr.color = owner.PlayerColor;
+    }
 }

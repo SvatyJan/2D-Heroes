@@ -1,0 +1,34 @@
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
+{
+    // TODO: předělat
+    public static GameManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public void PlayerDefeated(Player defeated)
+    {
+        Debug.Log("Player defeated: " + defeated.name);
+
+        Player winner = FindWinner(defeated);
+
+        Debug.Log("Winner: " + winner.name);
+    }
+
+    private Player FindWinner(Player defeated)
+    {
+        Player[] players = FindObjectsOfType<Player>();
+
+        foreach (var p in players)
+        {
+            if (p != defeated)
+                return p;
+        }
+
+        return null;
+    }
+}

@@ -13,17 +13,11 @@ public class SoulOrb : MonoBehaviour, IOwned
     {
         owner = newOwner;
         soulValue = value;
-        UpdateVisual();
     }
 
     public void SetOwner(Player newOwner)
     {
         owner = newOwner;
-        UpdateVisual();
-    }
-
-    private void UpdateVisual()
-    {
-        // TODO: barva podle ownera
+        Player.UpdateVisualOwnerColor(this.gameObject, owner);
     }
 }

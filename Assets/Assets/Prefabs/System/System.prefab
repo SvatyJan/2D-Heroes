@@ -1,5 +1,69 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7458314493753986796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5949243327096242619}
+  - component: {fileID: 8399123570417038320}
+  m_Layer: 0
+  m_Name: EnemyAIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5949243327096242619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7458314493753986796}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5589009091250622660}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8399123570417038320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7458314493753986796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a55d9712add51f4ea2d1225d420c827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAIController
+  heroTransform: {fileID: 0}
+  selfPlayer: {fileID: 0}
+  enemyPlayer: {fileID: 0}
+  enemyHeart: {fileID: 0}
+  shrines:
+  - {fileID: 0}
+  spellCaster: {fileID: 0}
+  heroMana: {fileID: 0}
+  availableSpells:
+  - {fileID: 11400000, guid: 3386d029e0f349948a784886aa05e053, type: 2}
+  - {fileID: 11400000, guid: 32402ca83aa1bc4428d71be819db77ba, type: 2}
+  - {fileID: 11400000, guid: 1645c93c929a58242ab3cb301fa32960, type: 2}
+  - {fileID: 11400000, guid: 31f3a7fc81325a245964625868cc1e22, type: 2}
+  - {fileID: 11400000, guid: 33398b4c88c38514bb770f40bdafdc66, type: 2}
+  - {fileID: 11400000, guid: 57f49970f842ba9408fbefa60db24947, type: 2}
+  - {fileID: 11400000, guid: 95d4e707e65a2dc4aa610e13aa1124ad, type: 2}
+  - {fileID: 11400000, guid: 1bddb868cc3d6cd45a84c7db6dcb343b, type: 2}
+  decisionInterval: 0.5
+  moveSpeed: 3
+  shrineCaptureRadius: 5
 --- !u!1 &8591614390352661333
 GameObject:
   m_ObjectHideFlags: 0
@@ -32,6 +96,7 @@ Transform:
   - {fileID: 6444862234012726146}
   - {fileID: 3302159959838329213}
   - {fileID: 3137161705443547364}
+  - {fileID: 5949243327096242619}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &86280236812554444

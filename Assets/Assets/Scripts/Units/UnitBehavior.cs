@@ -17,16 +17,7 @@ public class UnitBehavior : MonoBehaviour, IOwned
         if (owner != null)
             owner.RegisterUnit(this);
 
-        UpdateVisualOwnerColor();
-    }
-
-    private void UpdateVisualOwnerColor()
-    {
-        if (owner == null) return;
-
-        var sr = GetComponent<SpriteRenderer>();
-        if (sr != null)
-            sr.color = owner.PlayerColor;
+        Player.UpdateVisualOwnerColor(this.gameObject, owner);
     }
     
     public Stance stance;
