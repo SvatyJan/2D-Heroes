@@ -17,9 +17,12 @@ public class Health : MonoBehaviour
 
     public event Action OnDeath;
 
+    Animator animator;
+
     private void Awake()
     {
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        animator = this.GetComponent<Animator>();
     }
 
     public void TakeDamage(float amount)
@@ -68,7 +71,18 @@ public class Health : MonoBehaviour
 
         SpawnSouls();
 
-        Destroy(gameObject);
+        if (animator != null)        {
+            animator.SetBool("Dead", true);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void AfterDeathAnimation()
+    {
+        this.gameObject.SetActive(false);
     }
 
     private void SpawnSouls()
