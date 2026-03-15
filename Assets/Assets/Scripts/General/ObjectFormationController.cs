@@ -79,10 +79,18 @@ public class ObjectFormationController : MonoBehaviour
 
     public void RemoveUnit(GameObject unit)
     {
-        if(unit.GetComponent<UnitBehavior>().getFollowTarget() != null)
+        if (unit == null)
         {
-            GameObject oldFollowPoint = unit.GetComponent<UnitBehavior>().getFollowTarget();
-            unit.GetComponent<UnitBehavior>().setFollowTarget(null);
+            RemoveDestroyedReferences();
+            RecalculateFormations();
+            return;
+        }
+
+        UnitBehavior unitBehavior = unit.GetComponent<UnitBehavior>();
+        if (unitBehavior != null && unitBehavior.getFollowTarget() != null)
+        {
+            GameObject oldFollowPoint = unitBehavior.getFollowTarget();
+            unitBehavior.setFollowTarget(null);
 
             if (circleFormationUnits.Contains(oldFollowPoint))
             {
@@ -112,38 +120,45 @@ public class ObjectFormationController : MonoBehaviour
             {
                 centerFormationUnits.Remove(oldFollowPoint);
             }
-            Destroy(oldFollowPoint.gameObject);
+
+            if (oldFollowPoint != null)
+            {
+                Destroy(oldFollowPoint.gameObject);
+            }
         }
 
         if (followingUnits.Contains(unit))
         {
-            if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.CIRCLE && circleFormationUnits.Contains(unit))
+            if (unitBehavior != null)
             {
-                circleFormationUnits.Remove(unit);
-            }
-            else if(unit.GetComponent<UnitBehavior>().getFormation() == Formation.FRONT && frontFormationUnits.Contains(unit))
-            {
-                frontFormationUnits.Remove(unit);
-            }
-            else if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.BACK && backFormationUnits.Contains(unit))
-            {
-                backFormationUnits.Remove(unit);
-            }
-            else if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.LEFT && leftFormationUnits.Contains(unit))
-            {
-                leftFormationUnits.Remove(unit);
-            }
-            else if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.RIGHT && rightFormationUnits.Contains(unit))
-            {
-                rightFormationUnits.Remove(unit);
-            }
-            else if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.STAR && starFormationUnits.Contains(unit))
-            {
-                starFormationUnits.Remove(unit);
-            }
-            else if (unit.GetComponent<UnitBehavior>().getFormation() == Formation.CENTER && centerFormationUnits.Contains(unit))
-            {
-                centerFormationUnits.Remove(unit);
+                if (unitBehavior.getFormation() == Formation.CIRCLE && circleFormationUnits.Contains(unit))
+                {
+                    circleFormationUnits.Remove(unit);
+                }
+                else if(unitBehavior.getFormation() == Formation.FRONT && frontFormationUnits.Contains(unit))
+                {
+                    frontFormationUnits.Remove(unit);
+                }
+                else if (unitBehavior.getFormation() == Formation.BACK && backFormationUnits.Contains(unit))
+                {
+                    backFormationUnits.Remove(unit);
+                }
+                else if (unitBehavior.getFormation() == Formation.LEFT && leftFormationUnits.Contains(unit))
+                {
+                    leftFormationUnits.Remove(unit);
+                }
+                else if (unitBehavior.getFormation() == Formation.RIGHT && rightFormationUnits.Contains(unit))
+                {
+                    rightFormationUnits.Remove(unit);
+                }
+                else if (unitBehavior.getFormation() == Formation.STAR && starFormationUnits.Contains(unit))
+                {
+                    starFormationUnits.Remove(unit);
+                }
+                else if (unitBehavior.getFormation() == Formation.CENTER && centerFormationUnits.Contains(unit))
+                {
+                    centerFormationUnits.Remove(unit);
+                }
             }
 
             followingUnits.Remove(unit);
@@ -206,6 +221,8 @@ public class ObjectFormationController : MonoBehaviour
      * */
     public void RecalculateFormations()
     {
+        RemoveDestroyedReferences();
+
         if (followingUnits.Count() == 0)
         {
             followingUnits.Clear();
@@ -230,31 +247,42 @@ public class ObjectFormationController : MonoBehaviour
 
             foreach (GameObject followingUnit in followingUnits)
             {
-                if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.CIRCLE)
+                if (followingUnit == null)
+                {
+                    continue;
+                }
+
+                UnitBehavior unitBehavior = followingUnit.GetComponent<UnitBehavior>();
+                if (unitBehavior == null)
+                {
+                    continue;
+                }
+
+                if (unitBehavior.getFormation() == (UnitBehavior.Formation)Formation.CIRCLE)
                 {
                     circleFormationUnits.Add(followingUnit);
                 }
-                else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.FRONT)
+                else if (unitBehavior.getFormation() == (UnitBehavior.Formation)Formation.FRONT)
                 {
                     frontFormationUnits.Add(followingUnit);
                 }
-                else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.BACK)
+                else if (unitBehavior.getFormation() == (UnitBehavior.Formation)Formation.BACK)
                 {
                     backFormationUnits.Add(followingUnit);
                 }
-                else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.LEFT)
+                else if (unitBehavior.getFormation() == (UnitBehavior.Formation)Formation.LEFT)
                 {
                     leftFormationUnits.Add(followingUnit);
                 }
-                else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.RIGHT)
+                else if (unitBehavior.getFormation() == (UnitBehavior.Formation)Formation.RIGHT)
                 {
                     rightFormationUnits.Add(followingUnit);
                 }
-                else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.STAR)
+                else if (unitBehavior.getFormation() == (UnitBehavior.Formation)Formation.STAR)
                 {
                     starFormationUnits.Add(followingUnit);
                 }
-                else if (followingUnit.GetComponent<UnitBehavior>().getFormation() == (UnitBehavior.Formation)Formation.CENTER)
+                else if (unitBehavior.getFormation() == (UnitBehavior.Formation)Formation.CENTER)
                 {
                     centerFormationUnits.Add(followingUnit);
                 }
@@ -287,11 +315,35 @@ public class ObjectFormationController : MonoBehaviour
         }
     }
 
+    private void RemoveDestroyedReferences()
+    {
+        followingUnits.RemoveAll(unit => unit == null);
+
+        circleFormationUnits.RemoveAll(unit => unit == null);
+        frontFormationUnits.RemoveAll(unit => unit == null);
+        backFormationUnits.RemoveAll(unit => unit == null);
+        leftFormationUnits.RemoveAll(unit => unit == null);
+        rightFormationUnits.RemoveAll(unit => unit == null);
+        starFormationUnits.RemoveAll(unit => unit == null);
+        centerFormationUnits.RemoveAll(unit => unit == null);
+
+        circleformationPointsList.RemoveAll(point => point == null);
+        frontformationPointsList.RemoveAll(point => point == null);
+        backformationPointsList.RemoveAll(point => point == null);
+        leftformationPointsList.RemoveAll(point => point == null);
+        rightformationPointsList.RemoveAll(point => point == null);
+        starformationPointsList.RemoveAll(point => point == null);
+        centerformationPointsList.RemoveAll(point => point == null);
+    }
+
     private void SetFormationRecalculatedPointsList(List<GameObject> formationPointsList, List<GameObject> formationUnits)
     {
         foreach (GameObject point in formationPointsList)
         {
-            Destroy(point);
+            if (point != null)
+            {
+                Destroy(point);
+            }
         }
 
         formationPointsList.Clear();
@@ -346,7 +398,7 @@ public class ObjectFormationController : MonoBehaviour
     private List<Vector2> GetStarFormationDynamicOffsets(int unitCount)
     {
         List<Vector2> offsets = new List<Vector2>();
-        int layer = 1; // Vrstva, zaèíná od 1
+        int layer = 1;
 
         offsets.Add(new Vector2(-1 * spacingX, 0));
         offsets.Add(new Vector2(0, 1 * spacingX));
@@ -357,7 +409,6 @@ public class ObjectFormationController : MonoBehaviour
         {
             float distance = layer * spacingX;
 
-            // Pøidání rohù
             offsets.Add(new Vector2(-distance, distance));
             offsets.Add(new Vector2(distance, distance));
             offsets.Add(new Vector2(distance, -distance));
@@ -366,7 +417,6 @@ public class ObjectFormationController : MonoBehaviour
             layer++;
             distance = layer * spacingX;
 
-            // Pøidání dalších jednotek na ose x a y
             offsets.Add(new Vector2(-distance, 0));
             offsets.Add(new Vector2(0, distance));
             offsets.Add(new Vector2(distance, 0));
@@ -419,9 +469,8 @@ public class ObjectFormationController : MonoBehaviour
                 }
             }
 
-            // Zvýšíme poèet jednotek pro další vrstvu
             layer++;
-            unitsInLayer += 6 * (layer - 1); // Poèet jednotek v další vrstvì
+            unitsInLayer += 6 * (layer - 1);
         }
 
         return offsets;
